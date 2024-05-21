@@ -1,0 +1,23 @@
+{
+  "name": "traineesemana5",
+  "version": "1.0.0",
+  "description": "Este é o projeto para a atividade \"Mãos à obra\" da semana 5 do Trainee",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "ts-node /index.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^20.12.12",
+    "prisma": "^5.14.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.5"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.14.0",
+    "node": "^22.2.0"
+  }
+}
