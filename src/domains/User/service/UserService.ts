@@ -62,6 +62,23 @@ class UserService {
         }
     }
 
+    async linkMusic(idUser: number, idMusic: number) 
+    {
+        const link = await prisma.user.update({
+            data: {
+                music: {
+                    connect: {
+                        id: idMusic,
+                    },
+                },
+            },
+            where: {
+                id: idUser,
+            }
+        })
+        return link;
+    }
+
     async delete(wantedId: number) 
     {
         const user = await prisma.user.delete({ where: {id: wantedId}});

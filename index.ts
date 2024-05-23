@@ -51,6 +51,9 @@ async function main() {
 
     // const deleteArtist = await ArtistService.delete(3);
     // console.log(deleteArtist)
+
+    // const linkUserMusic = await UserService.linkMusic(4, 7);
+    // console.log(linkUserMusic);
 }
 
 main()
