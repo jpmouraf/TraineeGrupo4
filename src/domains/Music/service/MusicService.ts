@@ -3,7 +3,7 @@ import { Music } from "@prisma/client";
 
 class MusicService {
     async create(body: Music) {
-        await prisma.music.create
+        const music = await prisma.music.create
             ({
                 data: {
                     name: body.name,
@@ -16,6 +16,7 @@ class MusicService {
                     }
                 }
             })
+        return music;
     }
 
     async getMusicbyId(wantedId: number) {
@@ -60,6 +61,12 @@ class MusicService {
         } catch (error) {
             console.log("Erro ao atualizar a música", error);
         }
+    }
+
+    async delete(wantedId: number) 
+    {
+        const music = await prisma.music.delete({ where: {id: wantedId}});
+        return music;
     }
 }
 
