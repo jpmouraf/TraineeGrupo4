@@ -1,5 +1,7 @@
 import prisma from "../../../../config/prismaClient";
 import { User } from "@prisma/client";
+import {selectItems} from './excludeAttributes'
+
 
 class UserService {
     async create(body: User) {
@@ -21,7 +23,8 @@ class UserService {
             const user = await prisma.user.findFirst({
                 where: {
                     id: wantedId,
-                }
+                },
+                select: selectItems
             })
             return user;
         } catch (error) {
@@ -34,7 +37,8 @@ class UserService {
             const users = await prisma.user.findMany({
                 orderBy: {
                     name: "asc",
-                }
+                },
+                select: selectItems
             })
             return users;
         } catch (error) {
