@@ -62,6 +62,7 @@ class UserService {
         }
     }
 
+    //alteração para comitar
     async linkMusic(idUser: number, idMusic: number) 
     {
         const link = await prisma.user.update({
