@@ -1,6 +1,12 @@
 import prisma from "../../../../config/prismaClient";
 import { User } from "@prisma/client";
 
+const itensPermitidos = ['id', 'email', 'name', 'photo', 'role']
+
+export const selectItems = Object.fromEntries(
+    itensPermitidos.map(item => [item, true])
+);
+
 class UserService {
     async create(body: User) {
         const user = await prisma.user.create
@@ -21,7 +27,8 @@ class UserService {
             const user = await prisma.user.findFirst({
                 where: {
                     id: wantedId,
-                }
+                },
+                select: selectItems
             })
             return user;
         } catch (error) {
@@ -34,7 +41,8 @@ class UserService {
             const users = await prisma.user.findMany({
                 orderBy: {
                     name: "asc",
-                }
+                },
+                select: selectItems
             })
             return users;
         } catch (error) {

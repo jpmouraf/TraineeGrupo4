@@ -6,54 +6,74 @@ async function main() {
     // const body = {
     //     id: 0,
     //     name: "Pedro",
-    //     email: "Pedro@gmail.com.br",
+    //     email: "pedro@gmail.com",
     //     photo: null,
     //     password: "123456",
     //     role: "admin"
     // }
 
-    //const user = await UserService.create(body)
-    //console.log(user);
+    // const user = await UserService.create(body)
+    // console.log(user);
 
-    //const findUser = await UserService.getUserbyId(3)
+    //const findUser = await UserService.getUserbyId(5)
     //console.log(findUser);
 
     //const findUsers = await UserService.getUsers()
     //console.log(findUsers);
 
-    //const updateUser = await UserService.updateUser(3, body)
-    //console.log(updateUser);
+    // const updateUser = await UserService.updateUser(, body)
+    // console.log(updateUser);
 
-    // const deleteUser = await UserService.delete(7)
+    // const deleteUser = await UserService.delete()
     // console.log(deleteUser)
 
-    // const newMusic = {
-    //     id: 0,
-    //     name: "Nome da Música",
-    //     genre: "Gênero da Música",
-    //     album: "Nome do Álbum",
-    //     artistId: 2 
-    // };
+    const newArtist = {
+        id: 0,
+        name: "Bruno",
+        photo: null,
+        streams: 150
+ }
+
+    //const createArtist = await ArtistService.create(newArtist);
+    //console.log(createArtist);
+
+    //const getArtistbyId = await ArtistService.getArtistbyId(5)
+    //console.log(getArtistbyId);
+
+    //const getArtists = await ArtistService.getArtists();
+    //console.log(getArtists);
+
+    //const updateArtists = await ArtistService.updateArtist(5 , newArtist);
+    //console.log(updateArtists);
+
+    // const deleteArtist = await ArtistService.delete(5);
+    // console.log(deleteArtist);
+
+    const newMusic = {
+        id: 0,
+        name: "Galooo",
+        genre: "Rap",
+        album: "Always",
+        artistId: 5 
+ };
 
     //const music = await MusicService.create(newMusic);
+    //console.log(music);
 
-    //const findMusic = await MusicService.getMusicbyId(0);
+    //const findMusic = await MusicService.getMusicbyId(8);
     //console.log(findMusic);
 
     //const findMusics = await MusicService.getMusics();
     //console.log(findMusics);
 
-    //const updateMusic = await MusicService.updateMusic(0, newMusic)
+    //const updateMusic = await MusicService.updateMusic(8, newMusic)
     //console.log(updateMusic);
 
     //const deleteMusic = await MusicService.delete(7);
-    //console.log(deleteMusic)
+    //console.log(deleteMusic);
 
-    // const deleteArtist = await ArtistService.delete(3);
-    // console.log(deleteArtist)
-
-    // const linkUserMusic = await UserService.linkMusic(4, 7);
-    // console.log(linkUserMusic);
+    //const linkUserMusic = await UserService.linkMusic(5, 8);
+    //console.log(linkUserMusic);
 }
 
 main()
