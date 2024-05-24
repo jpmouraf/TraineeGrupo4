@@ -3,7 +3,7 @@ import { User } from "@prisma/client";
 
 class UserService {
     async create(body: User) {
-        await prisma.user.create
+        const user = await prisma.user.create
             ({
                 data: {
                     email: body.email,
@@ -13,6 +13,7 @@ class UserService {
                     role: body.role,
                 }
             })
+        return user;
     }
 
     async getUserbyId(wantedId: number) {
@@ -59,6 +60,29 @@ class UserService {
         } catch (error) {
             console.log("Erro ao atualizar usuário: ", error);
         }
+    }
+
+    async linkMusic(idUser: number, idMusic: number) 
+    {
+        const link = await prisma.user.update({
+            data: {
+                music: {
+                    connect: {
+                        id: idMusic,
+                    },
+                },
+            },
+            where: {
+                id: idUser,
+            }
+        })
+        return link;
+    }
+
+    async delete(wantedId: number) 
+    {
+        const user = await prisma.user.delete({ where: {id: wantedId}});
+        return user;
     }
 }
 

@@ -3,7 +3,7 @@ import { Artist } from "@prisma/client";
 
 class ArtistService {
     async create(body: Artist) {
-        await prisma.artist.create
+        const artist = await prisma.artist.create
             ({
                 data: {
                     name: body.name,
@@ -11,6 +11,7 @@ class ArtistService {
                     streams: body.streams,
                 }
             })
+        return artist;
     }
 
     async getArtistbyId(wantedId: number) {
@@ -55,6 +56,12 @@ class ArtistService {
         } catch (error) {
             console.log("Erro ao atualizar o artista", error)
         }
+    }
+
+    async delete(wantedId: number) 
+    {
+        const artist = await prisma.artist.delete({ where: {id: wantedId}});
+        return artist;
     }
 }
 
