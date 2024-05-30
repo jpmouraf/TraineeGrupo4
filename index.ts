@@ -4,12 +4,12 @@
 
 // async function main() {
 //     // const body = {
-//     //     id: 0,
-//     //     name: "Pedro",
-//     //     email: "pedro@gmail.com",
-//     //     photo: null,
-//     //     password: "123456",
-//     //     role: "admin"
+       //     id: 0,
+       //     name: "Pedro",
+       //     email: "pedro@gmail.com",
+       //     photo: null,
+       //     password: "123456",
+       //     role: "admin"
 //     // }
 
 //     // const user = await UserService.create(body)

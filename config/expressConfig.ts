@@ -1,6 +1,7 @@
 import dotenv from "dotenv";
 import express, { Express } from "express";
 import cors, { CorsOptions } from "cors";
+import UserRouter from "../src/domains/User/controllers";
 
 dotenv.config();
 
@@ -17,4 +18,5 @@ app.use(express.urlencoded({
     extended: true,
 }));
 
-//adicionar aqui as rotas das entidades 
+//adicionar aqui as rotas das entidades
+app.use("/api/users", UserRouter);

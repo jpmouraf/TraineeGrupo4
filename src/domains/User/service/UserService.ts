@@ -19,51 +19,39 @@ class UserService {
     }
 
     async getUserbyId(wantedId: number) {
-        try {
-            const user = await prisma.user.findFirst({
-                where: {
-                    id: wantedId,
-                },
-                select: selectItems
-            })
-            return user;
-        } catch (error) {
-            console.log("Erro ao procurar usuário: ", error);
-        }
+        const user = await prisma.user.findFirst({
+            where: {
+                id: wantedId,
+            },
+            select: selectItems
+        })
+        return user;
     }
 
     async getUsers() {
-        try {
-            const users = await prisma.user.findMany({
-                orderBy: {
-                    name: "asc",
-                },
-                select: selectItems
-            })
-            return users;
-        } catch (error) {
-            console.log("Erro ao procurar usuários: ", error);
-        }
+        const users = await prisma.user.findMany({
+            orderBy: {
+                name: "asc",
+            },
+            select: selectItems
+        })
+        return users;
     }
 
     async updateUser(id: number, body: User) {
-        try {
-            const updatedUser = await prisma.user.update({
-                data: {
-                    email: body.email,
-                    name: body.name,
-                    password: body.password,
-                    photo: body.photo,
-                    role: body.role,
-                },
-                where: {
-                    id: id,
-                }
-            })
-            return updatedUser;
-        } catch (error) {
-            console.log("Erro ao atualizar usuário: ", error);
-        }
+        const updatedUser = await prisma.user.update({
+            data: {
+                email: body.email,
+                name: body.name,
+                password: body.password,
+                photo: body.photo,
+                role: body.role,
+            },
+            where: {
+                id: id,
+            }
+        })
+        return updatedUser;
     }
 
     //alteração para comitar
