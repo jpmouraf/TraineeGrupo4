@@ -6,6 +6,7 @@ import statusCodes from "../../utils/constants/statusCodes";
 import { User } from "@prisma/client";
 import { sign, verify } from "jsonwebtoken";
 import cookieParser from "cookie-parser";
+import { TokenError } from "../../errors/TokenError";
 
 function generateJWT(user: User, res: Response){
     const body = {
@@ -21,7 +22,7 @@ function generateJWT(user: User, res: Response){
         httpOnly: true,
         secure: process.env.NODE_ENV !== "development",
     });
-}
+};
 
 function cookieExtractor(req: Request){
     let token = null;
@@ -31,7 +32,7 @@ function cookieExtractor(req: Request){
     }
 
     return token;
-}
+};
 
 export async function login(req: Request, res: Response, next: NextFunction) {
     try {
@@ -60,5 +61,23 @@ export async function login(req: Request, res: Response, next: NextFunction) {
 
         next(error);
 
-    }
-}
+    };
+};
+
+export async function notLoggedIn(req: Request, res: Response, next: NextFunction) {
+    try {
+        
+        const token = cookieExtractor(req);
+
+        if(token){
+            throw new TokenError("Você já está logado!");
+        };
+
+        next();
+
+    } catch (error) {
+        
+        next(error);
+
+    };
+};
