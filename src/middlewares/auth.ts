@@ -55,7 +55,7 @@ export async function login(req: Request, res: Response, next: NextFunction) {
 
         generateJWT(user, res);
 
-        res.status(statusCodes.NO_CONTENT).json("Login realizado com sucesso!");
+        res.status(statusCodes.SUCCESS).json("Login realizado com sucesso!");
 
     } catch (error) {
 
