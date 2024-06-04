@@ -70,6 +70,7 @@ export async function notLoggedIn(req: Request, res: Response, next: NextFunctio
         const token = cookieExtractor(req);
 
         if(token){
+            res.status(400);
             throw new TokenError("Você já está logado!");
         };
 
