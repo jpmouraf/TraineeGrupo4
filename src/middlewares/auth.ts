@@ -23,6 +23,16 @@ function generateJWT(user: User, res: Response){
     });
 }
 
+function cookieExtractor(req: Request){
+    let token = null;
+
+    if(req.cookies){
+        token = req.cookies["jwt"];
+    }
+
+    return token;
+}
+
 export async function login(req: Request, res: Response, next: NextFunction) {
     try {
         
