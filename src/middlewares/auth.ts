@@ -7,9 +7,8 @@ import { User } from "@prisma/client";
 import { sign, verify } from "jsonwebtoken";
 import cookieParser from "cookie-parser";
 import { TokenError } from "../../errors/TokenError";
-import { userRoles} from "../../utils/constants/userRoles";
 
-function generateJWT(user: User, res: Response) {
+function generateJWT(user: User, res: Response){
 	const body = {
 		id: user.id,
 		email: user.email,
@@ -17,7 +16,7 @@ function generateJWT(user: User, res: Response) {
 		name: user.name,
 	};
 
-	const token = sign({ user: body }, process.env.SECRET_KEY || "", { expiresIn: process.env.JWT_EXPIRATION });
+	const token = sign({user: body}, process.env.SECRET_KEY || "", {expiresIn: process.env.JWT_EXPIRATION});
 
 	res.cookie("jwt", token, {
 		httpOnly: true,
@@ -25,10 +24,10 @@ function generateJWT(user: User, res: Response) {
 	});
 }
 
-function cookieExtractor(req: Request) {
+function cookieExtractor(req: Request){
 	let token = null;
 
-	if (req.cookies) {
+	if(req.cookies){
 		token = req.cookies["jwt"];
 	}
 
@@ -37,20 +36,20 @@ function cookieExtractor(req: Request) {
 
 export async function login(req: Request, res: Response, next: NextFunction) {
 	try {
-
+        
 		const user = await prisma.user.findUnique({
 			where: {
 				email: req.body.email
 			}
 		});
 
-		if (!user) {
+		if(!user) {
 			throw new PermissionError("Email e/ou senha incorretos!");
 		}
 
 		const match = compare(req.body.password, user.password);
 
-		if (!match) {
+		if(!match){
 			throw new PermissionError("Email e/ou senha incorretos!");
 		}
 
@@ -67,10 +66,10 @@ export async function login(req: Request, res: Response, next: NextFunction) {
 
 export async function notLoggedIn(req: Request, res: Response, next: NextFunction) {
 	try {
-
+        
 		const token = cookieExtractor(req);
 
-		if (token) {
+		if(token){
 			res.status(400);
 			throw new TokenError("Você já está logado!");
 		}
@@ -78,7 +77,7 @@ export async function notLoggedIn(req: Request, res: Response, next: NextFunctio
 		next();
 
 	} catch (error) {
-
+        
 		next(error);
 
 	}
@@ -91,7 +90,7 @@ export function checkRole(allowedRoles: string[]) {
 
 			if (!user) {
 				res.status(statusCodes.UNAUTHORIZED);
-				throw new Error("Usuário não autenticado");
+				throw new Error("Usuário não autenticado!");
 			}
 			const hasPermission = allowedRoles.some(role => role === user.role);
 			if (!hasPermission) {
