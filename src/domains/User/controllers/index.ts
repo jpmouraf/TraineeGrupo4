@@ -1,4 +1,4 @@
-import { Router, Request, Response, NextFunction, response } from 'express';
+import { Router, Request, Response, NextFunction } from "express";
 import UserService from "../service/UserService";
 
 const UserRouter = Router();

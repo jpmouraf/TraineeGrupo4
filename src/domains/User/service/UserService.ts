@@ -1,3 +1,4 @@
+/* eslint-disable no-unexpected-multiline */
 import prisma from "../../../../config/prismaClient";
 import { User } from "@prisma/client";
 import {selectItems} from "./excludeAttributes";
