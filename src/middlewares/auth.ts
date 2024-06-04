@@ -91,7 +91,7 @@ export function checkRole(allowedRoles: string[]) {
 
 			if (!user) {
 				res.status(statusCodes.UNAUTHORIZED);
-				throw new Error("Usuário não autenticado!");
+				throw new Error("Usuário não autenticado");
 			}
 			const hasPermission = allowedRoles.some(role => role === user.role);
 			if (!hasPermission) {
