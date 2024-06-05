@@ -65,7 +65,7 @@ export async function login(req: Request, res: Response, next: NextFunction) {
 			throw new PermissionError("Email e/ou senha incorretos!");
 		}
 
-		const match = compare(req.body.password, user.password);
+		const match = await compare(req.body.password, user.password);
 
 		if(!match){
 			throw new PermissionError("Email e/ou senha incorretos!");
