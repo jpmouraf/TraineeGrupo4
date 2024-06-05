@@ -77,14 +77,7 @@ class UserService {
 			where: {
 				id: idUser,
 			},
-			select: {
-				id: true,
-				email: true,
-				name: true,
-				photo: true,
-				role: true,
-				password: false
-			}
+			select: selectItems
 		});
 		return link;
 	}
@@ -101,16 +94,21 @@ class UserService {
 			where: {
 				id: idUser,
 			},
-			select: {
-				id: true,
-				email: true,
-				name: true,
-				photo: true,
-				role: true,
-				password: false
-			}
+			select: selectItems
 		});
 		return unlink;
+	}
+
+	async listenedMusics(wantedId: number) {
+		const listened = await prisma.user.findFirst({
+		    where: {
+				id: wantedId,
+			},
+			select: {
+			    music: true
+			}
+		});
+		return listened;
 	}
 
 	async delete(wantedId: number) 
