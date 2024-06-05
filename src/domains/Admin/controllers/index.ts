@@ -44,7 +44,7 @@ AdminRouter.delete("/account/delete", verifyJWT, checkRole(["admin"]), verifyJWT
 AdminRouter.get("/account", verifyJWT, checkRole(["admin"]), verifyJWT, async (req: Request, res: Response, next: NextFunction) => {
 	try {
 		
-		const user = await UserService.getMyUser(Number(req.user.id));
+		const user = await UserService.getUserbyId(Number(req.user.id));
 		res.json(user);
 
 	} catch (error) {
