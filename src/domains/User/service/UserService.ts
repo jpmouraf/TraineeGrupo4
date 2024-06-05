@@ -21,7 +21,7 @@ class UserService {
 				name: body.name,
 				password: encrypted,
 				photo: body.photo,
-				role: body.role,
+				role: "user",
 			}
 		});
 		return user;
