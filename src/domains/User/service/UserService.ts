@@ -49,11 +49,12 @@ class UserService {
 	}
 
 	async updateUser(id: number, body: User) {
+		const encrypted = await this.encryptPassword(body.password);
 		const updatedUser = await prisma.user.update({
 			data: {
 				email: body.email,
 				name: body.name,
-				password: body.password,
+				password: encrypted,
 				photo: body.photo,
 				role: "user",
 			},
