@@ -7,6 +7,7 @@ import { User } from "@prisma/client";
 import { JwtPayload, sign, verify } from "jsonwebtoken";
 import cookieParser from "cookie-parser";
 import { TokenError } from "../../errors/TokenError";
+import { userRoles} from "../../utils/constants/userRoles";
 
 function generateJWT(user: User, res: Response){
 	const body = {
@@ -114,4 +115,26 @@ export async function logout (req: Request, res: Response, next: NextFunction) {
 	} catch (error) {
 		next(error);
 	}
+
+}
+
+export function checkRole(allowedRoles: string[]) {
+	return (req: Request, res: Response, next: NextFunction) => {
+		try {
+			const user = req.user as User;
+
+			if (!user) {
+				res.status(statusCodes.UNAUTHORIZED);
+				throw new Error("Usuário não autenticado");
+			}
+			const hasPermission = allowedRoles.some(role => role === user.role);
+			if (!hasPermission) {
+				res.status(statusCodes.FORBIDDEN);
+				throw new Error("Você não tem permissão para acessar essa rota!");
+			}
+			next();
+		} catch (error) {
+			next(error);
+		}
+	};
 }
