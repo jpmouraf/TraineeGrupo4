@@ -16,6 +16,7 @@ class AdminService {
 			}
 		});
 		return updatedUser;
+	
 	}
 }
 

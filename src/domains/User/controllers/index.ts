@@ -30,7 +30,7 @@ UserRouter.post("/create", async (req: Request, res: Response, next: NextFunctio
 UserRouter.get("/:id",verifyJWT, checkRole(["admin", "user"]),verifyJWT, async (req: Request, res: Response, next: NextFunction) => {
 	try {
         
-		const user = await UserService.getUserbyId(Number(req.params.id));
+		const user = await UserService.getUserbyId(Number(req.user.id));
 		res.json(user);
 
 	} catch (error) {
@@ -40,18 +40,6 @@ UserRouter.get("/:id",verifyJWT, checkRole(["admin", "user"]),verifyJWT, async (
 	}
 });
 
-UserRouter.get("/", async (req: Request, res: Response, next: NextFunction) => {
-	try {
-        
-		const users = await UserService.getUsers();
-		res.json(users);
-
-	} catch (error) {
-        
-		next(error);
-
-	}
-});
 
 UserRouter.put("/update/:id", async (req: Request, res: Response, next: NextFunction) => {
 	try {

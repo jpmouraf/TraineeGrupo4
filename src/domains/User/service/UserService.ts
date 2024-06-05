@@ -27,6 +27,16 @@ class UserService {
 		return user;
 	}
 
+	async getMyUser(wantedId: number) {
+		const user = await prisma.user.findFirst({
+			where: {
+				id: wantedId,
+			},
+			select: selectItems
+		});
+		return user;
+	}
+
 	async getUserbyId(wantedId: number) {
 		const user = await prisma.user.findFirst({
 			where: {
