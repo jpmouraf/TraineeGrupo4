@@ -1,4 +1,6 @@
-import { Router, Request, Response, NextFunction } from "express";
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { Router, Request, Response, NextFunction, response } from "express";
 import MusicService from "../service/MusicService";
 import { checkRole, verifyJWT } from "../../../middlewares/auth";
 
