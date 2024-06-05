@@ -55,7 +55,7 @@ class UserService {
 				name: body.name,
 				password: body.password,
 				photo: body.photo,
-				role: body.role,
+				role: "user",
 			},
 			where: {
 				id: id,

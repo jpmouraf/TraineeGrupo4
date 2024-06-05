@@ -41,11 +41,11 @@ UserRouter.get("/:id",verifyJWT, checkRole(["admin", "user"]),verifyJWT, async (
 });
 
 
-UserRouter.put("/update/:id", async (req: Request, res: Response, next: NextFunction) => {
+UserRouter.put("/update/:id", verifyJWT, checkRole(["admin", "user"]), async (req: Request, res: Response, next: NextFunction) => {
 	try {
         
 		const body = req.body;
-		const user = await UserService.updateUser(Number(req.params.id), body);
+		const user = await UserService.updateUser(Number(req.user.id), body);
 		res.json(user);
 
 	} catch (error) {
