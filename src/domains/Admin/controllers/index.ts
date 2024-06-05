@@ -65,6 +65,16 @@ AdminRouter.put("/linkAdminMusic/:idUser/:idMusic", checkRole(["admin"]),verifyJ
 	}
 });
 
+AdminRouter.delete("/unlinkAdminMusic/:idUser/:idMusic",checkRole(["admin"]),verifyJWT, async (req: Request, res: Response, next: NextFunction) => {
+	try {
+        
+		const unlink = await UserService.unlinkMusic(Number(req.params.idUser), Number(req.params.idMusic));
+		res.json(unlink);
+
+	} catch (error) {
+	    next(error);
+	}
+});
 
 
 
