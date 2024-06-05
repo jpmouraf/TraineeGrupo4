@@ -7,6 +7,7 @@ import { User } from "@prisma/client";
 import { JwtPayload, sign, verify } from "jsonwebtoken";
 import cookieParser from "cookie-parser";
 import { TokenError } from "../../errors/TokenError";
+import { userRoles} from "../../utils/constants/userRoles";
 
 function generateJWT(user: User, res: Response){
 	const body = {
@@ -15,21 +16,9 @@ function generateJWT(user: User, res: Response){
 		role: user.role,
 		name: user.name,
 	};
-	const body = {
-		id: user.id,
-		email: user.email,
-		role: user.role,
-		name: user.name,
-	};
 
 	const token = sign({user: body}, process.env.SECRET_KEY || "", {expiresIn: process.env.JWT_EXPIRATION});
-	const token = sign({user: body}, process.env.SECRET_KEY || "", {expiresIn: process.env.JWT_EXPIRATION});
 
-	res.cookie("jwt", token, {
-		httpOnly: true,
-		secure: process.env.NODE_ENV !== "development",
-	});
-}
 	res.cookie("jwt", token, {
 		httpOnly: true,
 		secure: process.env.NODE_ENV !== "development",
@@ -38,11 +27,7 @@ function generateJWT(user: User, res: Response){
 
 function cookieExtractor(req: Request){
 	let token = null;
-	let token = null;
 
-	if(req.cookies){
-		token = req.cookies["jwt"];
-	}
 	if(req.cookies){
 		token = req.cookies["jwt"];
 	}
@@ -66,18 +51,10 @@ export function verifyJWT(req:Request, res: Response, next: NextFunction){
 		next(error);
 	}
 }
-	return token;
-}
 
 export async function login(req: Request, res: Response, next: NextFunction) {
 	try {
-	try {
-        
-		const user = await prisma.user.findUnique({
-			where: {
-				email: req.body.email
-			}
-		});
+
 		const user = await prisma.user.findUnique({
 			where: {
 				email: req.body.email
@@ -87,60 +64,38 @@ export async function login(req: Request, res: Response, next: NextFunction) {
 		if(!user) {
 			throw new PermissionError("Email e/ou senha incorretos!");
 		}
-		if(!user) {
-			throw new PermissionError("Email e/ou senha incorretos!");
-		}
 
-		const match = compare(req.body.password, user.password);
 		const match = compare(req.body.password, user.password);
 
 		if(!match){
 			throw new PermissionError("Email e/ou senha incorretos!");
 		}
-		if(!match){
-			throw new PermissionError("Email e/ou senha incorretos!");
-		}
 
-		generateJWT(user, res);
 		generateJWT(user, res);
 
 		res.status(statusCodes.SUCCESS).json("Login realizado com sucesso!");
-		res.status(statusCodes.SUCCESS).json("Login realizado com sucesso!");
 
-	} catch (error) {
 	} catch (error) {
 
 		next(error);
-		next(error);
 
-	}
-}
 	}
 }
 
 export async function notLoggedIn(req: Request, res: Response, next: NextFunction) {
 	try {
-	try {
-        
-		const token = cookieExtractor(req);
+
 		const token = cookieExtractor(req);
 
 		if(token){
 			res.status(400);
 			throw new TokenError("Você já está logado!");
 		}
-		if(token){
-			res.status(400);
-			throw new TokenError("Você já está logado!");
-		}
 
-		next();
 		next();
 
 	} catch (error) {
-	} catch (error) {
-        
-		next(error);
+
 		next(error);
 
 	}
@@ -160,8 +115,7 @@ export async function logout (req: Request, res: Response, next: NextFunction) {
 	} catch (error) {
 		next(error);
 	}
-}
-	}
+
 }
 
 export function checkRole(allowedRoles: string[]) {
@@ -171,7 +125,7 @@ export function checkRole(allowedRoles: string[]) {
 
 			if (!user) {
 				res.status(statusCodes.UNAUTHORIZED);
-				throw new Error("Usuário não autenticado!");
+				throw new Error("Usuário não autenticado");
 			}
 			const hasPermission = allowedRoles.some(role => role === user.role);
 			if (!hasPermission) {
