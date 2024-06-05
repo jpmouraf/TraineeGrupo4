@@ -4,8 +4,8 @@ import { PermissionError } from "../../errors/PermissionError";
 import { compare } from "bcrypt";
 import statusCodes from "../../utils/constants/statusCodes";
 import { User } from "@prisma/client";
-import cookieParser from "cookie-parser";
 import { JwtPayload, sign, verify } from "jsonwebtoken";
+import cookieParser from "cookie-parser";
 import { TokenError } from "../../errors/TokenError";
 import { userRoles} from "../../utils/constants/userRoles";
 
@@ -84,7 +84,7 @@ export async function login(req: Request, res: Response, next: NextFunction) {
 
 export async function notLoggedIn(req: Request, res: Response, next: NextFunction) {
 	try {
-        
+
 		const token = cookieExtractor(req);
 
 		if(token){
