@@ -52,6 +52,19 @@ AdminRouter.get("/account/:id",checkRole(["admin"]),verifyJWT, async (req: Reque
 	}
 });
 
+AdminRouter.put("/linkAdminMusic/:idUser/:idMusic", checkRole(["admin"]),verifyJWT, async (req: Request, res: Response, next: NextFunction) => {
+	try {
+        
+		const link = await UserService.linkMusic(Number(req.params.idUser), Number(req.params.idMusic));
+		res.json(link);
+
+	} catch (error) {
+        
+		next(error);
+
+	}
+});
+
 
 
 
