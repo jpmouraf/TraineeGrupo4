@@ -76,6 +76,14 @@ class UserService {
 			},
 			where: {
 				id: idUser,
+			},
+			select: {
+				id: true,
+				email: true,
+				name: true,
+				photo: true,
+				role: true,
+				password: false
 			}
 		});
 		return link;
@@ -92,6 +100,14 @@ class UserService {
 			},
 			where: {
 				id: idUser,
+			},
+			select: {
+				id: true,
+				email: true,
+				name: true,
+				photo: true,
+				role: true,
+				password: false
 			}
 		});
 		return unlink;
