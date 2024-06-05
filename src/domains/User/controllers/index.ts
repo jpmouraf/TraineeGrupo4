@@ -8,6 +8,9 @@ UserRouter.post("/login", notLoggedIn, login);
 UserRouter.post("/logout", verifyJWT, logout);
 
 
+UserRouter.post("/logout", verifyJWT, logout);
+
+
 UserRouter.post("/create", async (req: Request, res: Response, next: NextFunction) => {
 	try {
 

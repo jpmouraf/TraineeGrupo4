@@ -8,7 +8,7 @@ import bcrypt from "bcrypt";
 
 class UserService {
 	async encryptPassword(password: string) {
-	    const saltRounds = 10;
+		const saltRounds = 10;
 		const encrypted = await bcrypt.hash(password, saltRounds);
 		return encrypted;
 	}
