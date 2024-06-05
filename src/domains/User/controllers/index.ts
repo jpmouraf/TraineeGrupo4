@@ -30,7 +30,7 @@ UserRouter.post("/create", async (req: Request, res: Response, next: NextFunctio
 UserRouter.get("/:id",verifyJWT, checkRole(["admin", "user"]),verifyJWT, async (req: Request, res: Response, next: NextFunction) => {
 	try {
         
-		const user = await UserService.getUserbyId(Number(req.user.id));
+		const user = await UserService.getMyUser(Number(req.user.id));
 		res.json(user);
 
 	} catch (error) {
