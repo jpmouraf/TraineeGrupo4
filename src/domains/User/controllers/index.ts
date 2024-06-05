@@ -62,7 +62,7 @@ UserRouter.put("/update/:id", async (req: Request, res: Response, next: NextFunc
 	}
 });
 
-UserRouter.put("/linkUserMusic/:idUser/:idMusic", async (req: Request, res: Response, next: NextFunction) => {
+UserRouter.put("/linkUserMusic/:idUser/:idMusic",verifyJWT, async (req: Request, res: Response, next: NextFunction) => {
 	try {
         
 		const link = await UserService.linkMusic(Number(req.params.idUser), Number(req.params.idMusic));
