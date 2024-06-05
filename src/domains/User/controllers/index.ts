@@ -89,10 +89,12 @@ UserRouter.get("/listenedMusics/:idUser",verifyJWT,checkRole(["admin", "user"]),
 	}
 });
 
-UserRouter.delete("/delete/:id", async (req: Request, res: Response, next: NextFunction) => {
+UserRouter.delete("/delete/:id", verifyJWT, checkRole(["admin", "user"]), async (req: Request, res: Response, next: NextFunction) => {
 	try {
         
-		const user = await UserService.delete(Number(req.params.id));
+		const user = await UserService.delete(Number(req.user.id));
+		 res.clearCookie("jwt", { httpOnly: true, 
+			secure: process.env.NODE_ENV !== "development"  });
 		res.json(user);
 
 	} catch (error) {
