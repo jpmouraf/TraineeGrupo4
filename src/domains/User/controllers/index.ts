@@ -1,3 +1,4 @@
+/* eslint-disable no-mixed-spaces-and-tabs */
 import { Router, Request, Response, NextFunction } from "express";
 import UserService from "../service/UserService";
 import { notLoggedIn, login, verifyJWT, logout } from "../../../middlewares/auth";
@@ -72,6 +73,17 @@ UserRouter.put("/linkUserMusic/:idUser/:idMusic",verifyJWT, async (req: Request,
         
 		next(error);
 
+	}
+});
+
+UserRouter.delete("/unlinkUserMusic/:idUser/:idMusic",verifyJWT, async (req: Request, res: Response, next: NextFunction) => {
+	try {
+        
+		const unlink = await UserService.unlinkMusic(Number(req.params.idUser), Number(req.params.idMusic));
+		res.json(unlink);
+
+	} catch (error) {
+	    next(error);
 	}
 });
 
