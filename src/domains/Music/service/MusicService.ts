@@ -3,8 +3,7 @@ import { Music } from "@prisma/client";
 
 class MusicService {
 	async create(body: Music) {
-		const music = await prisma.music.create
-		({
+		const music = await prisma.music.create({
 			data: {
 				name: body.name,
 				genre: body.genre,

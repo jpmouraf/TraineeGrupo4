@@ -1,11 +1,14 @@
 import { Router, Request, Response, NextFunction } from "express";
 import UserService from "../service/UserService";
-import { notLoggedIn, login } from "../../../middlewares/auth";
+import { notLoggedIn, login, verifyJWT, logout } from "../../../middlewares/auth";
 import { checkRole } from "../../../middlewares/auth";
 
 const UserRouter = Router();
 
 UserRouter.post("/login", notLoggedIn, login);
+
+UserRouter.post("/logout", verifyJWT, logout);
+
 
 UserRouter.post("/create", async (req: Request, res: Response, next: NextFunction) => {
 	try {
@@ -21,7 +24,7 @@ UserRouter.post("/create", async (req: Request, res: Response, next: NextFunctio
 	}
 });
 
-UserRouter.get("/:id",checkRole(["admin"]), async (req: Request, res: Response, next: NextFunction) => {
+UserRouter.get("/:id",verifyJWT, checkRole(["admin"]), async (req: Request, res: Response, next: NextFunction) => {
 	try {
         
 		const user = await UserService.getUserbyId(Number(req.params.id));

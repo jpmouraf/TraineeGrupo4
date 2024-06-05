@@ -1,10 +1,11 @@
 /* eslint-disable quotes */
 import { Router, Request, Response, NextFunction } from 'express';
 import ArtistService from "../service/ArtistService";
+import { checkRole, verifyJWT } from '../../../middlewares/auth';
 
 const ArtistRouter = Router();
 
-ArtistRouter.post("/create", async (req: Request, res: Response, next: NextFunction) =>{
+ArtistRouter.post("/create", verifyJWT, checkRole(["admin"]), async (req: Request, res: Response, next: NextFunction) =>{
 	try {
         
 		const artists = await ArtistService.create(req.body);
@@ -15,7 +16,7 @@ ArtistRouter.post("/create", async (req: Request, res: Response, next: NextFunct
 	}
 });
 
-ArtistRouter.get("/:id", async (req: Request, res: Response, next: NextFunction) =>{
+ArtistRouter.get("/:id", verifyJWT, checkRole(["admin", "user"]), async (req: Request, res: Response, next: NextFunction) =>{
 	try {
     
 		const artists = await ArtistService.getArtistbyId(Number(req.params.id));
@@ -27,7 +28,7 @@ ArtistRouter.get("/:id", async (req: Request, res: Response, next: NextFunction)
 });
 
 
-ArtistRouter.get("/", async (req: Request, res: Response, next: NextFunction) =>{
+ArtistRouter.get("/", verifyJWT, checkRole(["admin", "user"]), async (req: Request, res: Response, next: NextFunction) =>{
 	try {
 
 		const artists = await ArtistService.getArtists();
@@ -38,7 +39,7 @@ ArtistRouter.get("/", async (req: Request, res: Response, next: NextFunction) =>
 	}
 });
 
-ArtistRouter.put("/update/:id", async (req: Request, res: Response, next: NextFunction) =>{
+ArtistRouter.put("/update/:id", verifyJWT, checkRole(["admin"]), async (req: Request, res: Response, next: NextFunction) =>{
 	try {
             
 		const artists = await ArtistService.updateArtist(Number(req.params.id), req.body);
@@ -50,7 +51,7 @@ ArtistRouter.put("/update/:id", async (req: Request, res: Response, next: NextFu
 });
 
 
-ArtistRouter.delete("/delete/:id", async (req: Request, res: Response, next: NextFunction) =>{
+ArtistRouter.delete("/delete/:id", verifyJWT, checkRole(["admin"]), async (req: Request, res: Response, next: NextFunction) =>{
 	try {
                 
 		const artists = await ArtistService.delete(Number(req.params.id));
@@ -58,6 +59,19 @@ ArtistRouter.delete("/delete/:id", async (req: Request, res: Response, next: Nex
                 
 	} catch (error) {
 		next(error);
+	}
+});
+
+ArtistRouter.get("/musics/:id", verifyJWT, checkRole(["admin","user"]), async (req: Request, res: Response, next: NextFunction) => {
+	try {
+		
+		const musics = await ArtistService.listArtistMusics(Number(req.params.id));
+		res.json(musics);
+
+	} catch (error) {
+		
+		next(error);
+
 	}
 });
 
