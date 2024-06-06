@@ -5,9 +5,7 @@ import { compare } from "bcrypt";
 import statusCodes from "../../utils/constants/statusCodes";
 import { User } from "@prisma/client";
 import { JwtPayload, sign, verify } from "jsonwebtoken";
-import cookieParser from "cookie-parser";
 import { TokenError } from "../../errors/TokenError";
-import { userRoles} from "../../utils/constants/userRoles";
 
 function generateJWT(user: User, res: Response){
 	const body = {
@@ -106,6 +104,7 @@ export async function logout (req: Request, res: Response, next: NextFunction) {
 			secure: process.env.NODE_ENV !== "development"  });
 		const token = cookieExtractor(req);
 		if (!token){
+			res.status(statusCodes.BAD_REQUEST);
 			throw new TokenError("Faça o logout novamente.");
 		}
 

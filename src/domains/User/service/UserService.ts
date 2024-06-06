@@ -94,6 +94,7 @@ class UserService {
 		if(!checkUser) {
 		    throw new InvalidParamError("Usuário não encontrado!");
 		}
+
 		if(body.id) {
 			throw new PermissionError("ID não pode ser alterado!");
 		}
@@ -106,10 +107,6 @@ class UserService {
 		    throw new InvalidParamError("nome não informado!");
 		}
 
-		if(body.password == null) {
-		    throw new InvalidParamError("senha não pode ser nula!");
-		}
-
 		if(typeof body.photo != "string" && body.photo != null) {
 			throw new QueryError("A foto adicionado está no formato errado.");
 		}
@@ -118,14 +115,37 @@ class UserService {
 			throw new PermissionError("Você não tem permissão para alterar o role!");
 		}
 		
-		const encrypted = await this.encryptPassword(body.password);
 		const updatedUser = await prisma.user.update({
 			data: {
 				email: body.email,
 				name: body.name,
-				password: encrypted,
 				photo: body.photo,
 				role: "user",
+			},
+			where: {
+				id: id,
+			}
+		});
+		return updatedUser;
+	}
+	async updateUserPassword(id: number, body: User) {
+		const checkUser = await prisma.user.findUnique({
+		    where: {
+		        id: id,
+		    }
+		});
+		if(!checkUser) {
+		    throw new InvalidParamError("Usuário não encontrado!");
+		}
+
+		if(body.password == null) {
+		    throw new InvalidParamError("senha não pode ser nula!");
+		}
+
+		const encrypted = await this.encryptPassword(body.password);
+		const updatedUser = await prisma.user.update({
+			data: {
+				password: encrypted
 			},
 			where: {
 				id: id,

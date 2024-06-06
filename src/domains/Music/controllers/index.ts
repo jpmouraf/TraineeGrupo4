@@ -3,6 +3,8 @@
 import { Router, Request, Response, NextFunction, response } from "express";
 import MusicService from "../service/MusicService";
 import { checkRole, verifyJWT } from "../../../middlewares/auth";
+import statusCodes from "../../../../utils/constants/statusCodes";
+
 
 const MusicRouter = Router();
 
@@ -10,8 +12,9 @@ MusicRouter.post("/create", verifyJWT, checkRole(["admin"]), async (req: Request
 	try {
 		const body = req.body;
 		const newMusic = await MusicService.create(body);
-		res.json(newMusic); 
+		res.status(statusCodes.CREATED).json(newMusic); 
 	} catch (error) {
+		
 		next(error);
 	}
 });
@@ -19,7 +22,7 @@ MusicRouter.post("/create", verifyJWT, checkRole(["admin"]), async (req: Request
 MusicRouter.get("/:id", verifyJWT, checkRole(["admin", "user"]), async (req: Request, res: Response, next: NextFunction) => {
 	try {
 		const music = await MusicService.getMusicbyId(Number(req.params.id));
-		res.json(music);
+		res.status(statusCodes.SUCCESS).json(music);
 	} catch (error) {
 		next(error);
 	}
@@ -29,7 +32,7 @@ MusicRouter.get("/:id", verifyJWT, checkRole(["admin", "user"]), async (req: Req
 MusicRouter.get("/", verifyJWT, checkRole(["admin", "user"]), async (req: Request, res: Response, next: NextFunction) => {
 	try {
 		const musics = await MusicService.getMusics();
-		res.json(musics);
+		res.status(statusCodes.SUCCESS).json(musics);
 	} catch (error) {
 		next(error);
 	}  
@@ -39,7 +42,7 @@ MusicRouter.put("/update/:id", verifyJWT, checkRole(["admin"]), async (req: Requ
 	try {
 		const body = req.body;
 		const updatedMusic = await MusicService.updateMusic(Number(req.params.id), body);
-		res.json(updatedMusic);
+		res.status(statusCodes.SUCCESS).json(updatedMusic);
 	} catch (error) {
 		next(error);
 	}
@@ -48,7 +51,7 @@ MusicRouter.put("/update/:id", verifyJWT, checkRole(["admin"]), async (req: Requ
 MusicRouter.delete("/delete/:id", verifyJWT, checkRole(["admin"]), async (req: Request, res: Response, next: NextFunction) => {
 	try {
 		const deletedMusic = await MusicService.delete(Number(req.params.id));
-		res.json(deletedMusic);
+		res.status(statusCodes.SUCCESS).json(deletedMusic);
 	} catch (error) {
 		next(error);
 	}
