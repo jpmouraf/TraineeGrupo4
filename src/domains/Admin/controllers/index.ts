@@ -69,6 +69,18 @@ AdminRouter.post("/account/create",checkRole(["admin"]),verifyJWT, async (req: R
 	}
 });
 
+AdminRouter.get("/account/:id",checkRole(["admin"]),verifyJWT, async (req: Request, res: Response, next: NextFunction) => {
+	try {
+        
+		const user = await UserService.getUserbyId(Number(req.params.id));
+		res.json(user);
+
+	} catch (error) {
+        
+		next(error);
+
+	}
+});
 
 
 export default AdminRouter;
