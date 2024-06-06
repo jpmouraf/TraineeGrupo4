@@ -184,6 +184,15 @@ class UserService {
 
 	async delete(wantedId: number) 
 	{
+		const checkUser = await prisma.user.findUnique({
+			where: {
+				id: wantedId,
+			},
+		});
+
+		if(!checkUser) {
+		    throw new InvalidParamError("Usuário que deseja deletar não está cadastrado!");
+		}
 		const user = await prisma.user.delete({ where: {id: wantedId}});
 		return user;
 	}
