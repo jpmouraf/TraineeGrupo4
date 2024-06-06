@@ -4,6 +4,8 @@ import prisma from "../../../../config/prismaClient";
 import { User } from "@prisma/client";
 import {selectItems} from "./excludeAttributes";
 import bcrypt from "bcrypt";
+import { InvalidParamError } from "../../../../errors/InvalidParamError";
+import { QueryError } from "../../../../errors/QueryError";
 
 
 class UserService {
@@ -13,6 +15,19 @@ class UserService {
 		return encrypted;
 	}
 	async create(body: User) {
+		const checkUser = await prisma.user.findUnique({
+			where: {
+				email: body.email,
+			},
+		});
+		if(checkUser) {
+			throw new QueryError("Email já cadastrado!");
+		}
+
+		if(body.email == null) {
+			throw new InvalidParamError("email não informado!");
+		}
+
 		const encrypted = await this.encryptPassword(body.password);
 		const user = await prisma.user.create
 		({
