@@ -28,6 +28,14 @@ class UserService {
 			throw new InvalidParamError("email não informado!");
 		}
 
+		if(body.name == null) {
+		    throw new InvalidParamError("nome não informado!");
+		}
+
+		if(body.password == null) {
+		    throw new InvalidParamError("senha não informada!");
+		}
+
 		const encrypted = await this.encryptPassword(body.password);
 		const user = await prisma.user.create
 		({
