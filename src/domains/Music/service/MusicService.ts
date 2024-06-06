@@ -1,5 +1,6 @@
 import prisma from "../../../../config/prismaClient";
 import { Music } from "@prisma/client";
+import { Artist } from "@prisma/client";
 import { PermissionError } from "../../../../errors/PermissionError";
 import { QueryError } from "../../../../errors/QueryError";
 import { TokenError } from "../../../../errors/TokenError";
@@ -43,7 +44,7 @@ class MusicService {
 		});
 
 		if (!music){
-			throw new QueryError("Música não encontrada.")
+			throw new QueryError("Música não encontrada.");
 		}
 
 		return music;
@@ -58,19 +59,30 @@ class MusicService {
 			}
 		});
 		if (!musics){
-			throw new QueryError("Não existem músicas cadastradas.")
+			throw new QueryError("Não existem músicas cadastradas.");
 		}
 		return musics;
 
 	}
 
 	async updateMusic(id: number, body: Music) {
-
+		if ((typeof body.name !== "string" &&  typeof body.name !== "undefined") || (typeof body.genre !== "string" &&  typeof body.genre !=="undefined") ||(typeof body.album !== "string" && typeof body.album !== "undefined")||(typeof body.artistId !== "number" && typeof body.artistId !== "undefined")){
+			throw new InvalidParamError("Os dados inseridos são inválidos!");
+		}
+		const checkArtist = await prisma.artist.findUnique({
+			where: {
+				id: body.artistId
+			}
+		});
+		if (!checkArtist){
+			throw new QueryError("Esse artista não existe.");
+		}
 		const updatedMusic = await prisma.music.update({
 			data: {
 				name: body.name,
 				genre: body.genre,
-				album: body.album
+				album: body.album,
+				artistId: body.artistId
 			},
 			where: {
 				id: id,
@@ -79,6 +91,7 @@ class MusicService {
 		return updatedMusic;
 
 	}
+
 
 	async delete(wantedId: number) 
 	{

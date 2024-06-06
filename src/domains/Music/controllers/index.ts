@@ -42,7 +42,7 @@ MusicRouter.put("/update/:id", verifyJWT, checkRole(["admin"]), async (req: Requ
 	try {
 		const body = req.body;
 		const updatedMusic = await MusicService.updateMusic(Number(req.params.id), body);
-		res.json(updatedMusic);
+		res.status(statusCodes.SUCCESS).json(updatedMusic);
 	} catch (error) {
 		next(error);
 	}
