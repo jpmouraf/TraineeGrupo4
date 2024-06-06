@@ -35,6 +35,13 @@ class AdminService {
 		if (!checkUser){
 			throw new QueryError("Esse usuario não existe.");
 		}
+		if (body.id !== undefined){
+			throw new QueryError("O id não pode ser modificado!");
+		}
+		const validation = await this.validEmail(body.email);
+		if (!validation) {
+			throw new InvalidParamError("Email inválido!");}
+		
 		const encrypted = await this.encryptPassword(body.password);
 		const updatedAdmin = await prisma.user.update({
 			data: {
