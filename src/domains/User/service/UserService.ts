@@ -78,6 +78,10 @@ class UserService {
 			},
 			select: selectItems
 		});
+
+		if(!users) {
+		    throw new InvalidParamError("Nenhum usuário cadastrado!");
+		}
 		return users;
 	}
 
