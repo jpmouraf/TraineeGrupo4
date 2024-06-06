@@ -15,6 +15,7 @@ class UserService {
 		return encrypted;
 	}
 	async create(body: User) {
+		const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 		const checkUser = await prisma.user.findUnique({
 			where: {
 				email: body.email,
@@ -34,6 +35,10 @@ class UserService {
 
 		if(body.password == null) {
 		    throw new InvalidParamError("senha não informada!");
+		}
+
+		if(!emailRegex.test(body.email)) {
+			throw new InvalidParamError("Formato de email inválido!");
 		}
 
 		const encrypted = await this.encryptPassword(body.password);
