@@ -54,7 +54,6 @@ export function verifyJWT(req:Request, res: Response, next: NextFunction){
 
 export async function login(req: Request, res: Response, next: NextFunction) {
 	try {
-
 		const user = await prisma.user.findUnique({
 			where: {
 				email: req.body.email
