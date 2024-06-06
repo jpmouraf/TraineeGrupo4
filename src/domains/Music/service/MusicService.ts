@@ -71,13 +71,18 @@ class MusicService {
 		if ((typeof body.name !== "string" &&  typeof body.name !== "undefined") || (typeof body.genre !== "string" &&  typeof body.genre !=="undefined") ||(typeof body.album !== "string" && typeof body.album !== "undefined")||(typeof body.artistId !== "number" && typeof body.artistId !== "undefined")){
 			throw new InvalidParamError("Os dados inseridos são inválidos!");
 		}
-		const checkArtist = await prisma.artist.findUnique({
-			where: {
-				id: body.artistId
+		if (body.artistId != undefined){
+			const checkArtist = await prisma.artist.findUnique({
+				where: {
+					id: body.artistId
+				}
+			});
+			if (!checkArtist){
+				throw new QueryError("Esse artista não existe.");
 			}
-		});
-		if (!checkArtist){
-			throw new QueryError("Esse artista não existe.");
+		}
+		if (body.id !== undefined){
+			throw new QueryError("O id não pode ser modificado");
 		}
 		const updatedMusic = await prisma.music.update({
 			data: {

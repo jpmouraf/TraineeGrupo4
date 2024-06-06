@@ -52,12 +52,12 @@ AdminRouter.delete("/delete/:id", verifyJWT, checkRole(["admin"]), verifyJWT, as
 });
 
 
-AdminRouter.post("/create",checkRole(["admin"]),verifyJWT, async (req: Request, res: Response, next: NextFunction) => {
+AdminRouter.post("/create", verifyJWT,checkRole(["admin"]), async (req: Request, res: Response, next: NextFunction) => {
 	try {
 
 		const body = req.body;
 		const newUser = await AdminService.createByAdmin(body);
-		res.json(newUser);
+		res.status(statusCodes.SUCCESS).json(newUser);
 
 	} catch (error) {
 
@@ -66,7 +66,7 @@ AdminRouter.post("/create",checkRole(["admin"]),verifyJWT, async (req: Request, 
 	}
 });
 
-AdminRouter.get("/:id",checkRole(["admin"]),verifyJWT, async (req: Request, res: Response, next: NextFunction) => {
+AdminRouter.get("/:id", verifyJWT, checkRole(["admin"]), async (req: Request, res: Response, next: NextFunction) => {
 	try {
         
 		const user = await UserService.getUserbyId(Number(req.params.id));
@@ -79,7 +79,7 @@ AdminRouter.get("/:id",checkRole(["admin"]),verifyJWT, async (req: Request, res:
 	}
 });
 
-AdminRouter.get("/all",checkRole(["admin"]),verifyJWT, async (req: Request, res: Response, next: NextFunction) => {
+AdminRouter.get("/", verifyJWT, checkRole(["admin"]), async (req: Request, res: Response, next: NextFunction) => {
 	try {
         
 		const users = await UserService.getUsers();

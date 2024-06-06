@@ -11,6 +11,11 @@ import { InvalidRouteError } from "../../../../errors/InvalidRouteError";
 import { InvalidParamError } from "../../../../errors/InvalidParamError";
 
 class AdminService {
+	async validEmail(email: string) {
+		const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+		return regex.test(email);
+	}
+
 	async encryptPassword(password: string) {
 		const saltRounds = 10;
 		const encrypted = await bcrypt.hash(password, saltRounds);
@@ -18,7 +23,7 @@ class AdminService {
 	}
 	async updateAdmin(id: number, body: User) {
 
-		if ((typeof body.name !== "string" &&  typeof body.name !== "undefined") || (typeof body.email !== "string" &&  typeof body.email !=="undefined") ||(typeof body.password !== "string" && typeof body.password !== "undefined")||(typeof body.role !== "string" && typeof body.role !== "undefined")){
+		if ((typeof body.name !== "string" &&  typeof body.name !== "undefined") || (typeof body.photo !== "string" &&  typeof body.photo !== "undefined") || (typeof body.email !== "string" &&  typeof body.email !=="undefined") ||(typeof body.password !== "string" && typeof body.password !== "undefined")||(typeof body.role !== "string" && typeof body.role !== "undefined")){
 			throw new InvalidParamError("Os dados inseridos são inválidos!");
 		}
 		const checkUser = await prisma.user.findUnique({
@@ -26,6 +31,7 @@ class AdminService {
 				id: id
 			}
 		});
+
 		if (!checkUser){
 			throw new QueryError("Esse usuario não existe.");
 		}
@@ -47,6 +53,25 @@ class AdminService {
 	}
 
 	async createByAdmin(body: User) {
+
+		const checkUser = await prisma.user.findUnique({
+			where: {
+				email: body.email
+			}
+		});
+		if (checkUser){
+			throw new QueryError("Email já cadastrado..");
+		}
+		if (typeof body.name !== "string" ||(typeof body.photo !== "string"  &&  body.photo !== null)|| typeof body.email !== "string"  ||typeof body.password !== "string"||typeof body.role !== "string" ){
+			throw new InvalidParamError("Os dados inseridos são inválidos!");
+		}
+		if (body.id !== undefined){
+			throw new QueryError("O id não pode ser modificado!");
+		}
+		const validation = await this.validEmail(body.email);
+		if (!validation) {
+			throw new InvalidParamError("Email inválido!");}
+
 		const encrypted = await this.encryptPassword(body.password);
 		const user = await prisma.user.create({
 			data: {
