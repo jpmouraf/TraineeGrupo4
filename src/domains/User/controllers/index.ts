@@ -6,9 +6,8 @@ import { notLoggedIn, login, verifyJWT, logout } from "../../../middlewares/auth
 import { checkRole } from "../../../middlewares/auth";
 
 const UserRouter = Router();
-UserRouter.post("/login", notLoggedIn, login);
-UserRouter.post("/logout", verifyJWT, logout);
 
+UserRouter.post("/login", notLoggedIn, login);
 
 UserRouter.post("/logout", verifyJWT, logout);
 

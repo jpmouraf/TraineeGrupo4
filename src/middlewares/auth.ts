@@ -5,9 +5,7 @@ import { compare } from "bcrypt";
 import statusCodes from "../../utils/constants/statusCodes";
 import { User } from "@prisma/client";
 import { JwtPayload, sign, verify } from "jsonwebtoken";
-import cookieParser from "cookie-parser";
 import { TokenError } from "../../errors/TokenError";
-import { userRoles} from "../../utils/constants/userRoles";
 
 function generateJWT(user: User, res: Response){
 	const body = {
@@ -87,7 +85,7 @@ export async function notLoggedIn(req: Request, res: Response, next: NextFunctio
 		const token = cookieExtractor(req);
 
 		if(token){
-			res.status(400);
+			res.status(statusCodes.BAD_REQUEST);
 			throw new TokenError("Você já está logado!");
 		}
 
