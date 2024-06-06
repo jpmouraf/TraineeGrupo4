@@ -18,11 +18,20 @@ class AdminService {
 	}
 	async updateAdmin(id: number, body: User) {
 
-		if ((typeof body.name !== "string" &&  typeof body.name !== "undefined") || (typeof body.photo !== "string" &&  typeof body.photo !== "undefined") || (typeof body.email !== "string" &&  typeof body.email !=="undefined") ||(typeof body.role !== "string" && typeof body.role !== "undefined")){
-			throw new InvalidParamError("Os dados inseridos são inválidos!");
+		if ((typeof body.name !== "string" &&  typeof body.name !== "undefined") ){
+			throw new InvalidParamError("Os nome inserido é inválido!");
+		}
+		if ( (typeof body.photo !== "string" &&  typeof body.photo !== "undefined") ){
+			throw new InvalidParamError("A foto inserida está em formato errado.");
+		}
+		if (  (typeof body.email !== "string" &&  typeof body.email !=="undefined") ){
+			throw new InvalidParamError("Email inválido!");
 		}
 		if ((typeof body.password !== "undefined")){
 			throw new InvalidParamError("Não é possível modificar a senha por essa rota!");
+		}
+		if ((body.role !== "user" && typeof body.role !== "undefined" && body.role !== "admin")){
+			throw new InvalidParamError("A role inserida é inválida!");
 		}
 		const checkUser = await prisma.user.findUnique({
 			where: {
@@ -95,9 +104,22 @@ class AdminService {
 		if (checkUser){
 			throw new QueryError("Email já cadastrado..");
 		}
-		if (typeof body.name !== "string" ||(typeof body.photo !== "string"  &&  body.photo !== null)|| typeof body.email !== "string"  ||typeof body.password !== "string"||typeof body.role !== "string" ){
-			throw new InvalidParamError("Os dados inseridos são inválidos!");
+		if (typeof body.name !== "string" ){
+			throw new InvalidParamError("O nome está em um formato inválido!");
 		}
+		if ((typeof body.photo !== "string"  &&  body.photo !== null) ){
+			throw new InvalidParamError("A foto inserida está em um formato inválido!");
+		}
+		if ( typeof body.email !== "string" ){
+			throw new InvalidParamError("Email está em um formato inválido!");
+		}
+		if (typeof body.password !== "string"){
+			throw new InvalidParamError("A senha está em um formato inválido!");
+		}
+		if ( body.role !== "user" && body.role !== "admin"  ){
+			throw new InvalidParamError("O role está em um formato inválido!");
+		}
+
 		if (body.id !== undefined){
 			throw new QueryError("O id não pode ser modificado!");
 		}

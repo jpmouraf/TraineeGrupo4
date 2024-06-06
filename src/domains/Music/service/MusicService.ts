@@ -10,8 +10,17 @@ import { InvalidParamError } from "../../../../errors/InvalidParamError";
 class MusicService {
 	async create(body: Music) {
 
-		if (typeof body.name !== "string" || typeof body.genre !== "string"||typeof body.album !== "string"|| typeof body.artistId !== "number"){
-			throw new InvalidParamError("Os dados inseridos são inválidos!");
+		if (typeof body.name !== "string"){
+			throw new InvalidParamError("O nome inserido está em um formato inválido!");
+		}
+		if ( typeof body.genre !== "string"){
+			throw new InvalidParamError("O gênero inserido está em um formato inválido!");
+		}
+		if ( typeof body.album !== "string"){
+			throw new InvalidParamError("O álbum inserido está em um formato inválido!");
+		}
+		if ( typeof body.artistId !== "number"){
+			throw new InvalidParamError("O id do artista está em um formato inválido!");
 		}
 		const checkArtist = await prisma.artist.findUnique({
 			where: {
@@ -68,8 +77,17 @@ class MusicService {
 	}
 
 	async updateMusic(id: number, body: Music) {
-		if ((typeof body.name !== "string" &&  typeof body.name !== "undefined") || (typeof body.genre !== "string" &&  typeof body.genre !=="undefined") ||(typeof body.album !== "string" && typeof body.album !== "undefined")||(typeof body.artistId !== "number" && typeof body.artistId !== "undefined")){
-			throw new InvalidParamError("Os dados inseridos são inválidos!");
+		if ((typeof body.name !== "string" &&  typeof body.name !== "undefined")){
+			throw new InvalidParamError("O nome inseridos está em um formato inválido!");
+		}
+		if ( (typeof body.genre !== "string" &&  typeof body.genre !=="undefined") ){
+			throw new InvalidParamError("O gênero inserido está em um formato inválido!");
+		}
+		if ((typeof body.album !== "string" && typeof body.album !== "undefined")){
+			throw new InvalidParamError("O álbum inserido está em um formato inválido!");
+		}
+		if ((typeof body.artistId !== "number" && typeof body.artistId !== "undefined")){
+			throw new InvalidParamError("O Id de artista inserido está em um formato inválido!");
 		}
 		if (body.artistId != undefined){
 			const checkArtist = await prisma.artist.findUnique({
