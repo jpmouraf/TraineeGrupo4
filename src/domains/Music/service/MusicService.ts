@@ -19,6 +19,14 @@ class MusicService {
 		if (typeof body.name !== "string" || typeof body.genre !== "string"||typeof body.album !== "string"|| typeof body.artistId !== "number"){
 			throw new InvalidParamError("Os dados inseridos são inválidos!");
 		}
+		const checkArtist = await prisma.artist.findUnique({
+			where: {
+				id: body.artistId
+			}
+		});
+		if (!checkArtist){
+			throw new QueryError("Esse artista não existe.");
+		}
 		
 		const music = await prisma.music.create({
 			data: {
