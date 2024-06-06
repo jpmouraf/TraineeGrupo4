@@ -82,5 +82,17 @@ AdminRouter.get("/account/:id",checkRole(["admin"]),verifyJWT, async (req: Reque
 	}
 });
 
+AdminRouter.get("/account/all",checkRole(["admin"]),verifyJWT, async (req: Request, res: Response, next: NextFunction) => {
+	try {
+        
+		const users = await UserService.getUsers();
+		res.json(users);
+
+	} catch (error) {
+        
+		next(error);
+
+	}
+});
 
 export default AdminRouter;
