@@ -32,7 +32,7 @@ MusicRouter.get("/:id", verifyJWT, checkRole(["admin", "user"]), async (req: Req
 MusicRouter.get("/", verifyJWT, checkRole(["admin", "user"]), async (req: Request, res: Response, next: NextFunction) => {
 	try {
 		const musics = await MusicService.getMusics();
-		res.json(musics);
+		res.status(statusCodes.SUCCESS).json(musics);
 	} catch (error) {
 		next(error);
 	}  

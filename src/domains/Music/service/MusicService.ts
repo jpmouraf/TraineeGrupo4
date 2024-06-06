@@ -57,6 +57,9 @@ class MusicService {
 				name: "asc",
 			}
 		});
+		if (!musics){
+			throw new QueryError("Não existem músicas cadastradas.")
+		}
 		return musics;
 
 	}
