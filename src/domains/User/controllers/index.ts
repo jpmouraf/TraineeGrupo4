@@ -13,7 +13,7 @@ UserRouter.post("/logout", verifyJWT, logout);
 UserRouter.post("/logout", verifyJWT, logout);
 
 
-UserRouter.post("/create", async (req: Request, res: Response, next: NextFunction) => {
+UserRouter.post("/account/create", async (req: Request, res: Response, next: NextFunction) => {
 	try {
 
 		const body = req.body;
