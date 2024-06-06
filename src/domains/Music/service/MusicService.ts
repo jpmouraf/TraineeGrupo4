@@ -1,8 +1,20 @@
 import prisma from "../../../../config/prismaClient";
 import { Music } from "@prisma/client";
+import { PermissionError } from "../../../../errors/PermissionError";
+import { QueryError } from "../../../../errors/QueryError";
+import { TokenError } from "../../../../errors/TokenError";
+import { NotAuthorizedError } from "../../../../errors/NotAuthorizedError";
+import { LoginError } from "../../../../errors/LoginError";
+import { InvalidRouteError } from "../../../../errors/InvalidRouteError";
+import { InvalidParamError } from "../../../../errors/InvalidParamError";
+
+
+
+
 
 class MusicService {
 	async create(body: Music) {
+		
 		const music = await prisma.music.create({
 			data: {
 				name: body.name,
@@ -19,47 +31,41 @@ class MusicService {
 	}
 
 	async getMusicbyId(wantedId: number) {
-		try {
-			const music = await prisma.music.findFirst({
-				where: {
-					id: wantedId
-				}
-			});
-			return music;
-		} catch (error) {
-			console.log("Erro ao procurar a música", error);
-		}
+	
+		const music = await prisma.music.findFirst({
+			where: {
+				id: wantedId
+			}
+		});
+		return music;
+
 	}
 
 	async getMusics() {
-		try {
-			const musics = await prisma.music.findMany({
-				orderBy: {
-					name: "asc",
-				}
-			});
-			return musics;
-		} catch (error) {
-			console.log("Erro ao procurar as músicas", error);
-		}
+
+		const musics = await prisma.music.findMany({
+			orderBy: {
+				name: "asc",
+			}
+		});
+		return musics;
+
 	}
 
 	async updateMusic(id: number, body: Music) {
-		try {
-			const updatedMusic = await prisma.music.update({
-				data: {
-					name: body.name,
-					genre: body.genre,
-					album: body.album
-				},
-				where: {
-					id: id,
-				}
-			});
-			return updatedMusic;
-		} catch (error) {
-			console.log("Erro ao atualizar a música", error);
-		}
+
+		const updatedMusic = await prisma.music.update({
+			data: {
+				name: body.name,
+				genre: body.genre,
+				album: body.album
+			},
+			where: {
+				id: id,
+			}
+		});
+		return updatedMusic;
+
 	}
 
 	async delete(wantedId: number) 
