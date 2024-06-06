@@ -44,7 +44,7 @@ ArtistRouter.put("/update/:id", verifyJWT, checkRole(["admin"]), async (req: Req
 	try {
             
 		const artists = await ArtistService.updateArtist(Number(req.params.id), req.body);
-		res.status(statusCodes.ACCEPTED).json(artists);
+		res.status(statusCodes.SUCCESS).json(artists);
             
 	} catch (error) {
 		next(error);
