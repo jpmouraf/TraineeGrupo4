@@ -54,6 +54,19 @@ UserRouter.put("/account/update/:id", verifyJWT, checkRole(["admin", "user"]), a
 
 	}
 });
+UserRouter.put("/account/password/update/:id", verifyJWT, checkRole(["admin", "user"]), async (req: Request, res: Response, next: NextFunction) => {
+	try {
+        
+		const body = req.body;
+		const user = await UserService.updateUserPassword(Number(req.user.id), body);
+		res.json(user);
+
+	} catch (error) {
+        
+		next(error);
+
+	}
+});
 
 UserRouter.put("/linkUserMusic/:idUser/:idMusic", verifyJWT, checkRole(["admin", "user"]), async (req: Request, res: Response, next: NextFunction) => {
 	try {
