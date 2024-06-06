@@ -13,7 +13,7 @@ UserRouter.post("/logout", verifyJWT, logout);
 UserRouter.post("/logout", verifyJWT, logout);
 
 
-UserRouter.post("/create", async (req: Request, res: Response, next: NextFunction) => {
+UserRouter.post("/account/create", async (req: Request, res: Response, next: NextFunction) => {
 	try {
 
 		const body = req.body;
@@ -41,7 +41,7 @@ UserRouter.get("/account/:id",verifyJWT, checkRole(["admin", "user"]), async (re
 });
 
 
-UserRouter.put("/update/:id", verifyJWT, checkRole(["admin", "user"]), async (req: Request, res: Response, next: NextFunction) => {
+UserRouter.put("/account/update/:id", verifyJWT, checkRole(["admin", "user"]), async (req: Request, res: Response, next: NextFunction) => {
 	try {
         
 		const body = req.body;
@@ -89,7 +89,7 @@ UserRouter.get("/listenedMusics/:idUser",verifyJWT,checkRole(["admin", "user"]),
 	}
 });
 
-UserRouter.delete("/delete/:id", verifyJWT, checkRole(["admin", "user"]), async (req: Request, res: Response, next: NextFunction) => {
+UserRouter.delete("/account/delete/:id", verifyJWT, checkRole(["admin", "user"]), async (req: Request, res: Response, next: NextFunction) => {
 	try {
         
 		const user = await UserService.delete(Number(req.user.id));

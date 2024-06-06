@@ -1,3 +1,4 @@
+/* eslint-disable no-mixed-spaces-and-tabs */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Router, Request, Response, NextFunction } from "express";
 import AdminService from "../service/AdminService";
@@ -28,10 +29,10 @@ AdminRouter.put("/account/update", verifyJWT, checkRole(["admin"]), verifyJWT, a
 	}
 });
 
-AdminRouter.delete("/account/delete", verifyJWT, checkRole(["admin"]), verifyJWT, async (req: Request, res: Response, next: NextFunction) => {
+AdminRouter.delete("/delete/:id", verifyJWT, checkRole(["admin"]), verifyJWT, async (req: Request, res: Response, next: NextFunction) => {
 	try {
         
-		const user = await UserService.delete(Number(req.user.id));
+		const user = await UserService.delete(Number(req.params.id));
 		res.json(user);
 
 	} catch (error) {
@@ -41,34 +42,45 @@ AdminRouter.delete("/account/delete", verifyJWT, checkRole(["admin"]), verifyJWT
 	}
 });
 
-AdminRouter.get("/account", verifyJWT, checkRole(["admin"]), verifyJWT, async (req: Request, res: Response, next: NextFunction) => {
+
+AdminRouter.post("/create",checkRole(["admin"]),verifyJWT, async (req: Request, res: Response, next: NextFunction) => {
 	try {
-		
-		const user = await UserService.getUserbyId(Number(req.user.id));
-		res.json(user);
+
+		const body = req.body;
+		const newUser = await AdminService.createByAdmin(body);
+		res.json(newUser);
 
 	} catch (error) {
-		
+
 		next(error);
 
 	}
 });
 
+AdminRouter.get("/:id",checkRole(["admin"]),verifyJWT, async (req: Request, res: Response, next: NextFunction) => {
+	try {
+        
+		const user = await UserService.getUserbyId(Number(req.params.id));
+		res.json(user);
 
+	} catch (error) {
+        
+		next(error);
 
+	}
+});
 
+AdminRouter.get("/all",checkRole(["admin"]),verifyJWT, async (req: Request, res: Response, next: NextFunction) => {
+	try {
+        
+		const users = await UserService.getUsers();
+		res.json(users);
 
+	} catch (error) {
+        
+		next(error);
 
-
-
-
-
-
-
-
-
-
-
-
+	}
+});
 
 export default AdminRouter;
