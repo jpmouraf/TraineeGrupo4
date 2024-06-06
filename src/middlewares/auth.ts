@@ -6,6 +6,7 @@ import statusCodes from "../../utils/constants/statusCodes";
 import { User } from "@prisma/client";
 import { JwtPayload, sign, verify } from "jsonwebtoken";
 import { TokenError } from "../../errors/TokenError";
+import { LoginError } from "../../errors/LoginError";
 
 function generateJWT(user: User, res: Response){
 	const body = {
@@ -86,7 +87,7 @@ export async function notLoggedIn(req: Request, res: Response, next: NextFunctio
 
 		if(token){
 			res.status(statusCodes.BAD_REQUEST);
-			throw new TokenError("Você já está logado!");
+			throw new LoginError("Você já está logado!");
 		}
 
 		next();
