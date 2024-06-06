@@ -18,8 +18,11 @@ class AdminService {
 	}
 	async updateAdmin(id: number, body: User) {
 
-		if ((typeof body.name !== "string" &&  typeof body.name !== "undefined") || (typeof body.photo !== "string" &&  typeof body.photo !== "undefined") || (typeof body.email !== "string" &&  typeof body.email !=="undefined") ||(typeof body.password !== "string" && typeof body.password !== "undefined")||(typeof body.role !== "string" && typeof body.role !== "undefined")){
+		if ((typeof body.name !== "string" &&  typeof body.name !== "undefined") || (typeof body.photo !== "string" &&  typeof body.photo !== "undefined") || (typeof body.email !== "string" &&  typeof body.email !=="undefined") ||(typeof body.role !== "string" && typeof body.role !== "undefined")){
 			throw new InvalidParamError("Os dados inseridos são inválidos!");
+		}
+		if ((typeof body.password !== "undefined")){
+			throw new InvalidParamError("Não é possível modificar a senha por essa rota!");
 		}
 		const checkUser = await prisma.user.findUnique({
 			where: {
@@ -33,16 +36,15 @@ class AdminService {
 		if (body.id !== undefined){
 			throw new QueryError("O id não pode ser modificado!");
 		}
-		const validation = await this.validEmail(body.email);
-		if (!validation) {
-			throw new InvalidParamError("Email inválido!");}
-		
-		const encrypted = await this.encryptPassword(body.password);
+		if (typeof body.email !== "undefined"){
+			const validation = await this.validEmail(body.email);
+			if (!validation) {
+				throw new InvalidParamError("Email inválido!");}
+		}
 		const updatedAdmin = await prisma.user.update({
 			data: {
 				email: body.email,
 				name: body.name,
-				password: encrypted,
 				photo: body.photo,
 				role: body.role,
 			},
@@ -51,6 +53,35 @@ class AdminService {
 			}
 		});
 		return updatedAdmin;
+	
+	}
+	async updateAdminPassword(id: number, body: User) {
+
+		if (typeof body.password !== "string" ){
+			throw new InvalidParamError("Os dados inseridos são inválidos!");
+		}
+		
+		const checkUser = await prisma.user.findUnique({
+			where: {
+				id: id
+			}
+		});
+
+		if (!checkUser){
+			throw new QueryError("Esse usuario não existe.");
+		}
+
+		
+		const encrypted = await this.encryptPassword(body.password);
+		const updatedPassword = await prisma.user.update({
+			data: {
+				password: encrypted,
+			},
+			where: {
+				id: id,
+			}
+		});
+		return updatedPassword;
 	
 	}
 

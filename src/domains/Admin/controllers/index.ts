@@ -24,11 +24,38 @@ AdminRouter.put("/account/update", verifyJWT, checkRole(["admin"]), verifyJWT, a
 	}
 });
 
+AdminRouter.put("/account/password/update", verifyJWT, checkRole(["admin"]), verifyJWT, async (req: Request, res: Response, next: NextFunction) => {
+	try {
+        
+		const body = req.body;
+		const user = await AdminService.updateAdminPassword(Number(req.user.id), body);
+		res.status(statusCodes.SUCCESS).json(user);
+
+	} catch (error) {
+        
+		next(error);
+
+	}
+});
+
 AdminRouter.put("/update/:id", verifyJWT, checkRole(["admin"]), verifyJWT, async (req: Request, res: Response, next: NextFunction) => {
 	try {
         
 		const body = req.body;
 		const user = await AdminService.updateAdmin(Number(req.params.id), body);
+		res.status(statusCodes.SUCCESS).json(user);
+
+	} catch (error) {
+        
+		next(error);
+
+	}
+});
+AdminRouter.put("/password/update/:id", verifyJWT, checkRole(["admin"]), verifyJWT, async (req: Request, res: Response, next: NextFunction) => {
+	try {
+        
+		const body = req.body;
+		const user = await AdminService.updateAdminPassword(Number(req.params.id), body);
 		res.status(statusCodes.SUCCESS).json(user);
 
 	} catch (error) {
