@@ -5,22 +5,31 @@ import AdminService from "../service/AdminService";
 import UserService from "../../User/service/UserService";
 import { verifyJWT } from "../../../middlewares/auth";
 import { checkRole } from "../../../middlewares/auth";
+import statusCodes from "../../../../utils/constants/statusCodes";
+
 
 const AdminRouter = Router();
 
 AdminRouter.put("/account/update", verifyJWT, checkRole(["admin"]), verifyJWT, async (req: Request, res: Response, next: NextFunction) => {
 	try {
         
-		const body = {
-			id: 0,
-			email: req.body.email,
-			name: req.body.name,
-			password: req.body.password,
-			role: req.body.role,
-			photo: req.body.photo,
-		};
+		const body = req.body;
 		const user = await AdminService.updateAdmin(Number(req.user.id), body);
-		res.json(user);
+		res.status(statusCodes.SUCCESS).json(user);
+
+	} catch (error) {
+        
+		next(error);
+
+	}
+});
+
+AdminRouter.put("/update/:id", verifyJWT, checkRole(["admin"]), verifyJWT, async (req: Request, res: Response, next: NextFunction) => {
+	try {
+        
+		const body = req.body;
+		const user = await AdminService.updateAdmin(Number(req.params.id), body);
+		res.status(statusCodes.SUCCESS).json(user);
 
 	} catch (error) {
         
