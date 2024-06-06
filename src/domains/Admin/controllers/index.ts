@@ -55,4 +55,20 @@ AdminRouter.get("/account", verifyJWT, checkRole(["admin"]), verifyJWT, async (r
 	}
 });
 
+AdminRouter.post("/account/create",checkRole(["admin"]),verifyJWT, async (req: Request, res: Response, next: NextFunction) => {
+	try {
+
+		const body = req.body;
+		const newUser = await AdminService.createByAdmin(body);
+		res.json(newUser);
+
+	} catch (error) {
+
+		next(error);
+
+	}
+});
+
+
+
 export default AdminRouter;

@@ -26,6 +26,21 @@ class AdminService {
 		return updatedAdmin;
 	
 	}
+
+	async createByAdmin(body: User) {
+		const encrypted = await this.encryptPassword(body.password);
+		const user = await prisma.user.create({
+			data: {
+				email: body.email,
+				name: body.name,
+				password: encrypted,
+				photo: body.photo,
+				role: body.role,
+			}
+		});
+		return user;
+	}
 }
+	
 
 export default new AdminService();
