@@ -2,12 +2,7 @@
 import prisma from "../../../../config/prismaClient";
 import { User } from "@prisma/client";
 import bcrypt from "bcrypt";
-import { PermissionError } from "../../../../errors/PermissionError";
 import { QueryError } from "../../../../errors/QueryError";
-import { TokenError } from "../../../../errors/TokenError";
-import { NotAuthorizedError } from "../../../../errors/NotAuthorizedError";
-import { LoginError } from "../../../../errors/LoginError";
-import { InvalidRouteError } from "../../../../errors/InvalidRouteError";
 import { InvalidParamError } from "../../../../errors/InvalidParamError";
 
 class AdminService {

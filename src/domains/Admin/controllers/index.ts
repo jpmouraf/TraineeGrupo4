@@ -42,7 +42,7 @@ AdminRouter.delete("/delete/:id", verifyJWT, checkRole(["admin"]), verifyJWT, as
 	try {
         
 		const user = await UserService.delete(Number(req.params.id));
-		res.json(user);
+		res.status(statusCodes.SUCCESS).json(user);
 
 	} catch (error) {
         
@@ -70,7 +70,7 @@ AdminRouter.get("/:id", verifyJWT, checkRole(["admin"]), async (req: Request, re
 	try {
         
 		const user = await UserService.getUserbyId(Number(req.params.id));
-		res.json(user);
+		res.status(statusCodes.SUCCESS).json(user);
 
 	} catch (error) {
         
@@ -83,7 +83,7 @@ AdminRouter.get("/", verifyJWT, checkRole(["admin"]), async (req: Request, res: 
 	try {
         
 		const users = await UserService.getUsers();
-		res.json(users);
+		res.status(statusCodes.SUCCESS).json(users);
 
 	} catch (error) {
         

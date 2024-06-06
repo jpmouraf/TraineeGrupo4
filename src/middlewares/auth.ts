@@ -5,9 +5,7 @@ import { compare } from "bcrypt";
 import statusCodes from "../../utils/constants/statusCodes";
 import { User } from "@prisma/client";
 import { JwtPayload, sign, verify } from "jsonwebtoken";
-import cookieParser from "cookie-parser";
 import { TokenError } from "../../errors/TokenError";
-import { userRoles} from "../../utils/constants/userRoles";
 
 function generateJWT(user: User, res: Response){
 	const body = {
