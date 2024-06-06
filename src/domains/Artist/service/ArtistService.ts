@@ -1,9 +1,9 @@
 /* eslint-disable no-unexpected-multiline */
 import prisma from "../../../../config/prismaClient";
 import { Artist } from "@prisma/client";
-import { NotAuthorizedError } from "../../../../errors/NotAuthorizedError";
 import { InvalidParamError } from "../../../../errors/InvalidParamError";
 import { QueryError } from "../../../../errors/QueryError";
+import { PermissionError } from "../../../../errors/PermissionError";
 
 class ArtistService {
 	async create(body: Artist) {
@@ -69,7 +69,7 @@ class ArtistService {
 	async updateArtist(id: number, body: Artist) {
 
 		if(body.id){
-			throw new NotAuthorizedError("Você não tem autorização para realizar essas mudanças.");
+			throw new PermissionError("Você não tem autorização para realizar essas mudanças.");
 		}
 		if(typeof body.name != "string" && typeof body.name != "undefined"){
 			throw new InvalidParamError("O nome colocado deve ser uma string.");
