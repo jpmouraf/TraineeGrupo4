@@ -41,7 +41,7 @@ UserRouter.get("/account/:id",verifyJWT, checkRole(["admin", "user"]), async (re
 });
 
 
-UserRouter.put("/update/:id", verifyJWT, checkRole(["admin", "user"]), async (req: Request, res: Response, next: NextFunction) => {
+UserRouter.put("/account/update/:id", verifyJWT, checkRole(["admin", "user"]), async (req: Request, res: Response, next: NextFunction) => {
 	try {
         
 		const body = req.body;
