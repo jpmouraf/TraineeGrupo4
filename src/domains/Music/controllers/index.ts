@@ -12,8 +12,9 @@ MusicRouter.post("/create", verifyJWT, checkRole(["admin"]), async (req: Request
 	try {
 		const body = req.body;
 		const newMusic = await MusicService.create(body);
-		res.json(newMusic); 
+		res.status(statusCodes.CREATED).json(newMusic); 
 	} catch (error) {
+		
 		next(error);
 	}
 });

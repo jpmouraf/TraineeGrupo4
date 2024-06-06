@@ -14,6 +14,10 @@ import { InvalidParamError } from "../../../../errors/InvalidParamError";
 
 class MusicService {
 	async create(body: Music) {
+
+		if (typeof body.name !== "string" || typeof body.genre !== "string"||typeof body.album !== "string"|| typeof body.artistId !== "number"){
+			throw new InvalidParamError("Os dados inseridos são inválidos!");
+		}
 		
 		const music = await prisma.music.create({
 			data: {
