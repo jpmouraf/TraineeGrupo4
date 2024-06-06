@@ -102,8 +102,12 @@ class UserService {
 		    throw new InvalidParamError("senha não pode ser nula!");
 		}
 
-		if(typeof body.photo != "string"){
+		if(typeof body.photo != "string" && body.photo != null) {
 			throw new QueryError("A foto adicionado está no formato errado.");
+		}
+
+		if(body.role != "user") {
+			throw new PermissionError("Você não tem permissão para alterar o role!");
 		}
 		
 		const encrypted = await this.encryptPassword(body.password);
