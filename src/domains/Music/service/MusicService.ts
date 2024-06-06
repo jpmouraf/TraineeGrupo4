@@ -1,6 +1,5 @@
 import prisma from "../../../../config/prismaClient";
 import { Music } from "@prisma/client";
-import { Artist } from "@prisma/client";
 import { PermissionError } from "../../../../errors/PermissionError";
 import { QueryError } from "../../../../errors/QueryError";
 import { TokenError } from "../../../../errors/TokenError";
@@ -103,6 +102,15 @@ class MusicService {
 
 	async delete(wantedId: number) 
 	{
+		const checkMusic = await prisma.music.findUnique({
+			where: {
+				id: wantedId
+			}
+		});
+		if (!checkMusic){
+			throw new QueryError("Essa música não existe.");
+		}
+
 		const music = await prisma.music.delete({ where: {id: wantedId}});
 		return music;
 	}

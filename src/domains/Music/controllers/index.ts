@@ -51,7 +51,7 @@ MusicRouter.put("/update/:id", verifyJWT, checkRole(["admin"]), async (req: Requ
 MusicRouter.delete("/delete/:id", verifyJWT, checkRole(["admin"]), async (req: Request, res: Response, next: NextFunction) => {
 	try {
 		const deletedMusic = await MusicService.delete(Number(req.params.id));
-		res.json(deletedMusic);
+		res.status(statusCodes.SUCCESS).json(deletedMusic);
 	} catch (error) {
 		next(error);
 	}
