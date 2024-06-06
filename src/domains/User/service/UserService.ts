@@ -6,7 +6,9 @@ import {selectItems} from "./excludeAttributes";
 import bcrypt from "bcrypt";
 import { InvalidParamError } from "../../../../errors/InvalidParamError";
 import { QueryError } from "../../../../errors/QueryError";
+import { PermissionError } from "../../../../errors/PermissionError";
 
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 class UserService {
 	async encryptPassword(password: string) {
@@ -15,7 +17,6 @@ class UserService {
 		return encrypted;
 	}
 	async create(body: User) {
-		const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 		const checkUser = await prisma.user.findUnique({
 			where: {
 				email: body.email,
@@ -38,7 +39,7 @@ class UserService {
 		}
 
 		if(!emailRegex.test(body.email)) {
-			throw new InvalidParamError("Formato de email inválido!");
+			throw new QueryError("Formato de email inválido!");
 		}
 
 		const encrypted = await this.encryptPassword(body.password);
@@ -77,6 +78,34 @@ class UserService {
 	}
 
 	async updateUser(id: number, body: User) {
+		const checkUser = await prisma.user.findUnique({
+		    where: {
+		        id: id,
+		    }
+		});
+		if(!checkUser) {
+		    throw new InvalidParamError("Usuário não encontrado!");
+		}
+		if(body.id) {
+			throw new PermissionError("ID não pode ser alterado!");
+		}
+
+		if(!emailRegex.test(body.email) || body.email == null) {
+			throw new QueryError("Formato de email inválido!");
+		}
+
+		if(typeof body.name !== "string" || body.name == null) {
+		    throw new InvalidParamError("nome não informado!");
+		}
+
+		if(body.password == null) {
+		    throw new InvalidParamError("senha não pode ser nula!");
+		}
+
+		if(typeof body.photo != "string"){
+			throw new QueryError("A foto adicionado está no formato errado.");
+		}
+		
 		const encrypted = await this.encryptPassword(body.password);
 		const updatedUser = await prisma.user.update({
 			data: {
