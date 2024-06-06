@@ -41,6 +41,11 @@ class MusicService {
 				id: wantedId
 			}
 		});
+
+		if (!music){
+			throw new QueryError("Música não encontrada.")
+		}
+
 		return music;
 
 	}

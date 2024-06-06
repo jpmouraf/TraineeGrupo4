@@ -22,7 +22,7 @@ MusicRouter.post("/create", verifyJWT, checkRole(["admin"]), async (req: Request
 MusicRouter.get("/:id", verifyJWT, checkRole(["admin", "user"]), async (req: Request, res: Response, next: NextFunction) => {
 	try {
 		const music = await MusicService.getMusicbyId(Number(req.params.id));
-		res.json(music);
+		res.status(statusCodes.SUCCESS).json(music);
 	} catch (error) {
 		next(error);
 	}
