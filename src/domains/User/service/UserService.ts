@@ -8,7 +8,7 @@ import bcrypt from "bcrypt";
 
 class UserService {
 	async encryptPassword(password: string) {
-	    const saltRounds = 10;
+		const saltRounds = 10;
 		const encrypted = await bcrypt.hash(password, saltRounds);
 		return encrypted;
 	}
@@ -26,6 +26,7 @@ class UserService {
 		});
 		return user;
 	}
+
 
 	async getUserbyId(wantedId: number) {
 		const user = await prisma.user.findFirst({
@@ -48,13 +49,14 @@ class UserService {
 	}
 
 	async updateUser(id: number, body: User) {
+		const encrypted = await this.encryptPassword(body.password);
 		const updatedUser = await prisma.user.update({
 			data: {
 				email: body.email,
 				name: body.name,
-				password: body.password,
+				password: encrypted,
 				photo: body.photo,
-				role: body.role,
+				role: "user",
 			},
 			where: {
 				id: id,

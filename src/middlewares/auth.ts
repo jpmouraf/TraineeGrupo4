@@ -54,7 +54,6 @@ export function verifyJWT(req:Request, res: Response, next: NextFunction){
 
 export async function login(req: Request, res: Response, next: NextFunction) {
 	try {
-
 		const user = await prisma.user.findUnique({
 			where: {
 				email: req.body.email
@@ -65,7 +64,7 @@ export async function login(req: Request, res: Response, next: NextFunction) {
 			throw new PermissionError("Email e/ou senha incorretos!");
 		}
 
-		const match = compare(req.body.password, user.password);
+		const match = await compare(req.body.password, user.password);
 
 		if(!match){
 			throw new PermissionError("Email e/ou senha incorretos!");

@@ -10,6 +10,9 @@ UserRouter.post("/login", notLoggedIn, login);
 UserRouter.post("/logout", verifyJWT, logout);
 
 
+UserRouter.post("/logout", verifyJWT, logout);
+
+
 UserRouter.post("/create", async (req: Request, res: Response, next: NextFunction) => {
 	try {
 
@@ -24,10 +27,10 @@ UserRouter.post("/create", async (req: Request, res: Response, next: NextFunctio
 	}
 });
 
-UserRouter.get("/:id",checkRole(["admin", "user"]),verifyJWT, async (req: Request, res: Response, next: NextFunction) => {
+UserRouter.get("/:id",verifyJWT, checkRole(["admin", "user"]), async (req: Request, res: Response, next: NextFunction) => {
 	try {
         
-		const user = await UserService.getUserbyId(Number(req.params.id));
+		const user = await UserService.getUserbyId(Number(req.user.id));
 		res.json(user);
 
 	} catch (error) {
@@ -37,24 +40,12 @@ UserRouter.get("/:id",checkRole(["admin", "user"]),verifyJWT, async (req: Reques
 	}
 });
 
-UserRouter.get("/", async (req: Request, res: Response, next: NextFunction) => {
-	try {
-        
-		const users = await UserService.getUsers();
-		res.json(users);
 
-	} catch (error) {
-        
-		next(error);
-
-	}
-});
-
-UserRouter.put("/update/:id", async (req: Request, res: Response, next: NextFunction) => {
+UserRouter.put("/update/:id", verifyJWT, checkRole(["admin", "user"]), async (req: Request, res: Response, next: NextFunction) => {
 	try {
         
 		const body = req.body;
-		const user = await UserService.updateUser(Number(req.params.id), body);
+		const user = await UserService.updateUser(Number(req.user.id), body);
 		res.json(user);
 
 	} catch (error) {
@@ -64,7 +55,7 @@ UserRouter.put("/update/:id", async (req: Request, res: Response, next: NextFunc
 	}
 });
 
-UserRouter.put("/linkUserMusic/:idUser/:idMusic", checkRole(["admin", "user"]),verifyJWT, async (req: Request, res: Response, next: NextFunction) => {
+UserRouter.put("/linkUserMusic/:idUser/:idMusic", verifyJWT, checkRole(["admin", "user"]), async (req: Request, res: Response, next: NextFunction) => {
 	try {
         
 		const link = await UserService.linkMusic(Number(req.params.idUser), Number(req.params.idMusic));
@@ -77,7 +68,7 @@ UserRouter.put("/linkUserMusic/:idUser/:idMusic", checkRole(["admin", "user"]),v
 	}
 });
 
-UserRouter.delete("/unlinkUserMusic/:idUser/:idMusic",checkRole(["admin", "user"]),verifyJWT, async (req: Request, res: Response, next: NextFunction) => {
+UserRouter.delete("/unlinkUserMusic/:idUser/:idMusic", verifyJWT, checkRole(["admin", "user"]), async (req: Request, res: Response, next: NextFunction) => {
 	try {
         
 		const unlink = await UserService.unlinkMusic(Number(req.params.idUser), Number(req.params.idMusic));
@@ -98,10 +89,12 @@ UserRouter.get("/listenedMusics/:idUser",verifyJWT,checkRole(["admin", "user"]),
 	}
 });
 
-UserRouter.delete("/delete/:id", async (req: Request, res: Response, next: NextFunction) => {
+UserRouter.delete("/delete/:id", verifyJWT, checkRole(["admin", "user"]), async (req: Request, res: Response, next: NextFunction) => {
 	try {
         
-		const user = await UserService.delete(Number(req.params.id));
+		const user = await UserService.delete(Number(req.user.id));
+		 res.clearCookie("jwt", { httpOnly: true, 
+			secure: process.env.NODE_ENV !== "development"  });
 		res.json(user);
 
 	} catch (error) {
