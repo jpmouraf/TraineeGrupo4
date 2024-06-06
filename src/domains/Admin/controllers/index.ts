@@ -55,7 +55,7 @@ AdminRouter.get("/account", verifyJWT, checkRole(["admin"]), verifyJWT, async (r
 	}
 });
 
-AdminRouter.post("/account/create",checkRole(["admin"]),verifyJWT, async (req: Request, res: Response, next: NextFunction) => {
+AdminRouter.post("/create",checkRole(["admin"]),verifyJWT, async (req: Request, res: Response, next: NextFunction) => {
 	try {
 
 		const body = req.body;
@@ -69,7 +69,7 @@ AdminRouter.post("/account/create",checkRole(["admin"]),verifyJWT, async (req: R
 	}
 });
 
-AdminRouter.get("/account/:id",checkRole(["admin"]),verifyJWT, async (req: Request, res: Response, next: NextFunction) => {
+AdminRouter.get("/:id",checkRole(["admin"]),verifyJWT, async (req: Request, res: Response, next: NextFunction) => {
 	try {
         
 		const user = await UserService.getUserbyId(Number(req.params.id));
@@ -82,7 +82,7 @@ AdminRouter.get("/account/:id",checkRole(["admin"]),verifyJWT, async (req: Reque
 	}
 });
 
-AdminRouter.get("/account/all",checkRole(["admin"]),verifyJWT, async (req: Request, res: Response, next: NextFunction) => {
+AdminRouter.get("/all",checkRole(["admin"]),verifyJWT, async (req: Request, res: Response, next: NextFunction) => {
 	try {
         
 		const users = await UserService.getUsers();
