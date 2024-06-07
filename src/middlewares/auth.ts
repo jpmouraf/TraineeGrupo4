@@ -118,6 +118,7 @@ export async function logout (req: Request, res: Response, next: NextFunction) {
 	} catch (error) {
 		next(error);
 	}
+}
 
 
 export function checkRole(allowedRoles: string[]) {
