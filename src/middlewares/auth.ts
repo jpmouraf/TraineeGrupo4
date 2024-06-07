@@ -9,7 +9,8 @@ import cookieParser from "cookie-parser";
 import { TokenError } from "../../errors/TokenError";
 import { userRoles} from "../../utils/constants/userRoles";
 
-function generateJWT(user: User, res: Response){
+
+function generateJWT(user: User, res: Response) {
 	const body = {
 		id: user.id,
 		email: user.email,
@@ -17,7 +18,7 @@ function generateJWT(user: User, res: Response){
 		name: user.name,
 	};
 
-	const token = sign({user: body}, process.env.SECRET_KEY || "", {expiresIn: process.env.JWT_EXPIRATION});
+	const token = sign({ user: body }, process.env.SECRET_KEY || "", { expiresIn: process.env.JWT_EXPIRATION });
 
 	res.cookie("jwt", token, {
 		httpOnly: true,
@@ -25,15 +26,16 @@ function generateJWT(user: User, res: Response){
 	});
 }
 
-function cookieExtractor(req: Request){
+function cookieExtractor(req: Request) {
 	let token = null;
 
-	if(req.cookies){
+	if (req.cookies) {
 		token = req.cookies["jwt"];
 	}
 
 	return token;
 }
+
 
 export function verifyJWT(req:Request, res: Response, next: NextFunction){
 	try{
@@ -99,6 +101,7 @@ export async function notLoggedIn(req: Request, res: Response, next: NextFunctio
 		next(error);
 
 	}
+
 }
 
 export async function logout (req: Request, res: Response, next: NextFunction) {
@@ -115,8 +118,8 @@ export async function logout (req: Request, res: Response, next: NextFunction) {
 	} catch (error) {
 		next(error);
 	}
-
 }
+
 
 export function checkRole(allowedRoles: string[]) {
 	return (req: Request, res: Response, next: NextFunction) => {
