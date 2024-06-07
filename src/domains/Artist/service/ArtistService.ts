@@ -54,6 +54,23 @@ class ArtistService {
 		const artist = await prisma.artist.delete({ where: {id: wantedId}});
 		return artist;
 	}
+
+	async listArtistMusics(wantedId: number) {
+		const musics = await prisma.artist.findFirst({
+			where: {
+				id: wantedId,
+			},
+			select: {
+				music: true,
+			},
+			orderBy: {
+				name: "asc",
+			}
+
+		});
+
+		return musics;
+	}
 }
 
 export default new ArtistService;

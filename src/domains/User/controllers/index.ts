@@ -11,6 +11,9 @@ UserRouter.post("/login", notLoggedIn, login);
 UserRouter.post("/logout", verifyJWT, logout);
 
 
+UserRouter.post("/logout", verifyJWT, logout);
+
+
 UserRouter.post("/create", async (req: Request, res: Response, next: NextFunction) => {
 	try {
 
@@ -25,10 +28,7 @@ UserRouter.post("/create", async (req: Request, res: Response, next: NextFunctio
 	}
 });
 
-
-
 UserRouter.get("/:id",verifyJWT, checkRole(["admin"]), async (req: Request, res: Response, next: NextFunction) => {
-
 	try {
         
 		const user = await UserService.getUserbyId(Number(req.params.id));

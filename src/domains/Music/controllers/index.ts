@@ -1,7 +1,6 @@
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { Router, Request, Response, NextFunction, response } from "express";
+import { Router, Request, Response, NextFunction } from "express";
 import MusicService from "../service/MusicService";
-import { verifyJWT } from "../../../middlewares/auth";
+import { checkRole, verifyJWT } from "../../../middlewares/auth";
 
 const MusicRouter = Router();
 
@@ -25,7 +24,7 @@ MusicRouter.get("/:id", verifyJWT ,async (req: Request, res: Response, next: Nex
 });
 
 
-MusicRouter.get("/", async (req: Request, res: Response, next: NextFunction) => {
+MusicRouter.get("/", verifyJWT, checkRole(["admin", "user"]), async (req: Request, res: Response, next: NextFunction) => {
 	try {
 		const musics = await MusicService.getMusics();
 		res.json(musics);
