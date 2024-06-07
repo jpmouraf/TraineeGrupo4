@@ -19,7 +19,7 @@ class UserService {
 		if(body.email == null) {
 			throw new InvalidParamError("email não informado!");
 		}
-		
+
 		const checkUser = await prisma.user.findUnique({
 			where: {
 				email: body.email,
@@ -86,15 +86,6 @@ class UserService {
 	}
 
 	async updateUser(id: number, body: User) {
-		const checkUser = await prisma.user.findUnique({
-		    where: {
-		        id: id,
-		    }
-		});
-		if(!checkUser) {
-		    throw new QueryError("Usuário não encontrado!");
-		}
-
 		if(body.id) {
 			throw new PermissionError("ID não pode ser alterado!");
 		}
@@ -139,15 +130,6 @@ class UserService {
 
 
 	async updateUserPassword(id: number, body: User) {
-		const checkUser = await prisma.user.findUnique({
-		    where: {
-		        id: id,
-		    }
-		});
-		if(!checkUser) {
-		    throw new QueryError("Usuário não encontrado!");
-		}
-
 		if(body.password == null || typeof body.password !== "string") {
 		    throw new InvalidParamError("Formato de senha inválido!");
 		}

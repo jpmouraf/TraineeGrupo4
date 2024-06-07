@@ -59,6 +59,7 @@ export async function login(req: Request, res: Response, next: NextFunction) {
 			}
 		});
 
+
 		if(!user) {
 			throw new PermissionError("Email e/ou senha incorretos!");
 		}
@@ -93,7 +94,7 @@ export async function notLoggedIn(req: Request, res: Response, next: NextFunctio
 		next();
 
 	} catch (error) {
-
+        
 		next(error);
 
 	}
