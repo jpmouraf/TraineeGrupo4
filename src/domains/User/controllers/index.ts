@@ -1,6 +1,7 @@
 import { Router, Request, Response, NextFunction } from "express";
 import UserService from "../service/UserService";
 import { notLoggedIn, login } from "../../../middlewares/auth";
+import { checkRole } from "../../../middlewares/auth";
 
 const UserRouter = Router();
 
@@ -20,7 +21,7 @@ UserRouter.post("/create", async (req: Request, res: Response, next: NextFunctio
 	}
 });
 
-UserRouter.get("/:id", async (req: Request, res: Response, next: NextFunction) => {
+UserRouter.get("/:id",checkRole(["admin"]), async (req: Request, res: Response, next: NextFunction) => {
 	try {
         
 		const user = await UserService.getUserbyId(Number(req.params.id));
