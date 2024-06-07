@@ -24,8 +24,10 @@ class AdminService {
 		if ( (typeof body.email !== "string" &&  typeof body.email !=="undefined") ){
 			throw new InvalidParamError("Email inválido!");
 		}
-		if(!adminRegex.test(body.email)) {
-			throw new QueryError("Formato de email inválido!");
+		if (body.email !== undefined){
+			if(!adminRegex.test(body.email)) {
+				throw new QueryError("Formato de email inválido!");
+			}
 		}
 		if ((typeof body.password !== "undefined")){
 			throw new InvalidParamError("Não é possível modificar a senha por essa rota!");
