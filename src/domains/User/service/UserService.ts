@@ -86,7 +86,7 @@ class UserService {
 	}
 
 	async updateUser(id: number, body: User) {
-		if(body.id) {
+		if(body.id !== undefined || body.id == 0) {
 			throw new PermissionError("ID não pode ser alterado!");
 		}
 
