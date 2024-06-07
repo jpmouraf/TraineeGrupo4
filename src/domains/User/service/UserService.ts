@@ -7,8 +7,7 @@ import bcrypt from "bcrypt";
 import { InvalidParamError } from "../../../../errors/InvalidParamError";
 import { QueryError } from "../../../../errors/QueryError";
 import { PermissionError } from "../../../../errors/PermissionError";
-
-const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+import  emailRegex  from "../../../../utils/constants/verifyEmail";
 
 class UserService {
 	async encryptPassword(password: string) {
