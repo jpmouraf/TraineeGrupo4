@@ -145,6 +145,10 @@ class ArtistService {
 
 		});
 
+		if(musics?.music.length == 0){
+			throw new QueryError("Esse artista ainda não possui nenhuma música cadastrada.");
+		}
+
 		return musics;
 	}
 }
