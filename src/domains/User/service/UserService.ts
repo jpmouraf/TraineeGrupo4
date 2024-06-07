@@ -17,17 +17,18 @@ class UserService {
 		return encrypted;
 	}
 	async create(body: User) {
+		if(body.email == null) {
+			throw new InvalidParamError("email não informado!");
+		}
+		
 		const checkUser = await prisma.user.findUnique({
 			where: {
 				email: body.email,
 			},
 		});
+
 		if(checkUser) {
 			throw new QueryError("Email já cadastrado!");
-		}
-
-		if(body.email == null) {
-			throw new InvalidParamError("email não informado!");
 		}
 
 		if(body.name == null) {
