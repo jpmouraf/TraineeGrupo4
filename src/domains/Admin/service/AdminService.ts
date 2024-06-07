@@ -4,6 +4,7 @@ import { User } from "@prisma/client";
 import bcrypt from "bcrypt";
 import { QueryError } from "../../../../errors/QueryError";
 import { InvalidParamError } from "../../../../errors/InvalidParamError";
+import adminRegex from "../../../../utils/constants/verifyEmail";
 
 class AdminService {
 	async validEmail(email: string) {
@@ -21,11 +22,14 @@ class AdminService {
 		if ((typeof body.name !== "string" &&  typeof body.name !== "undefined") ){
 			throw new InvalidParamError("Os nome inserido é inválido!");
 		}
-		if ( (typeof body.photo !== "string" &&  typeof body.photo !== "undefined") ){
+		if ((typeof body.photo !== "string" &&  typeof body.photo !== "undefined") ){
 			throw new InvalidParamError("A foto inserida está em formato errado.");
 		}
-		if (  (typeof body.email !== "string" &&  typeof body.email !=="undefined") ){
+		if ( (typeof body.email !== "string" &&  typeof body.email !=="undefined") ){
 			throw new InvalidParamError("Email inválido!");
+		}
+		if(!adminRegex.test(body.email)) {
+			throw new QueryError("Formato de email inválido!");
 		}
 		if ((typeof body.password !== "undefined")){
 			throw new InvalidParamError("Não é possível modificar a senha por essa rota!");
