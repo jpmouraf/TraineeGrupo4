@@ -5,7 +5,9 @@ import { compare } from "bcrypt";
 import statusCodes from "../../utils/constants/statusCodes";
 import { User } from "@prisma/client";
 import { JwtPayload, sign, verify } from "jsonwebtoken";
+import cookieParser from "cookie-parser";
 import { TokenError } from "../../errors/TokenError";
+
 
 function generateJWT(user: User, res: Response){
 	const body = {
@@ -58,6 +60,7 @@ export async function login(req: Request, res: Response, next: NextFunction) {
 				email: req.body.email
 			}
 		});
+
 
 		if(!user) {
 			throw new PermissionError("Email e/ou senha incorretos!");

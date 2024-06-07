@@ -14,7 +14,7 @@ MusicRouter.post("/create", async (req: Request, res: Response, next: NextFuncti
 	}
 });
 
-MusicRouter.get("/:id", async (req: Request, res: Response, next: NextFunction) => {
+MusicRouter.get("/:id", verifyJWT ,async (req: Request, res: Response, next: NextFunction) => {
 	try {
 		const music = await MusicService.getMusicbyId(Number(req.params.id));
 		res.json(music);
