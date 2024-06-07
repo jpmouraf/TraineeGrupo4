@@ -32,7 +32,7 @@ UserRouter.get("/:id",verifyJWT, checkRole(["admin"]), async (req: Request, res:
 
 	try {
         
-		const user = await UserService.getUserbyId(Number(req.params.id));
+		const user = await UserService.getUserbyId(Number(req.user.id));
 		res.json(user);
 
 	} catch (error) {
@@ -42,24 +42,12 @@ UserRouter.get("/:id",verifyJWT, checkRole(["admin"]), async (req: Request, res:
 	}
 });
 
-UserRouter.get("/", async (req: Request, res: Response, next: NextFunction) => {
-	try {
-        
-		const users = await UserService.getUsers();
-		res.json(users);
 
-	} catch (error) {
-        
-		next(error);
-
-	}
-});
-
-UserRouter.put("/update/:id", async (req: Request, res: Response, next: NextFunction) => {
+UserRouter.put("/update/:id", verifyJWT, checkRole(["admin", "user"]), async (req: Request, res: Response, next: NextFunction) => {
 	try {
         
 		const body = req.body;
-		const user = await UserService.updateUser(Number(req.params.id), body);
+		const user = await UserService.updateUser(Number(req.user.id), body);
 		res.json(user);
 
 	} catch (error) {
@@ -103,10 +91,12 @@ UserRouter.get("/listenedMusics/:idUser",verifyJWT,checkRole(["admin", "user"]),
 	}
 });
 
-UserRouter.delete("/delete/:id", async (req: Request, res: Response, next: NextFunction) => {
+UserRouter.delete("/delete/:id", verifyJWT, checkRole(["admin", "user"]), async (req: Request, res: Response, next: NextFunction) => {
 	try {
         
-		const user = await UserService.delete(Number(req.params.id));
+		const user = await UserService.delete(Number(req.user.id));
+		 res.clearCookie("jwt", { httpOnly: true, 
+			secure: process.env.NODE_ENV !== "development"  });
 		res.json(user);
 
 	} catch (error) {

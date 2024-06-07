@@ -27,6 +27,7 @@ class UserService {
 		return user;
 	}
 
+
 	async getUserbyId(wantedId: number) {
 		const user = await prisma.user.findFirst({
 			where: {
@@ -54,7 +55,7 @@ class UserService {
 				name: body.name,
 				password: body.password,
 				photo: body.photo,
-				role: body.role,
+				role: "user",
 			},
 			where: {
 				id: id,
