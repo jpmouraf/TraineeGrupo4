@@ -102,6 +102,24 @@ export async function notLoggedIn(req: Request, res: Response, next: NextFunctio
 
 	}
 
+}
+
+export async function logout (req: Request, res: Response, next: NextFunction) {
+	try {
+		res.clearCookie("jwt", { httpOnly: true, 
+			secure: process.env.NODE_ENV !== "development"  });
+		const token = cookieExtractor(req);
+		if (!token){
+			throw new TokenError("Faça o logout novamente.");
+		}
+
+		res.status(statusCodes.SUCCESS).json("Logout realizado com sucesso!");
+
+	} catch (error) {
+		next(error);
+	}
+
+
 export function checkRole(allowedRoles: string[]) {
 	return (req: Request, res: Response, next: NextFunction) => {
 		try {
