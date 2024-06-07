@@ -7,7 +7,7 @@ import { User } from "@prisma/client";
 import cookieParser from "cookie-parser";
 import { JwtPayload, sign, verify } from "jsonwebtoken";
 import { TokenError } from "../../errors/TokenError";
-import { userRoles} from "../../utils/constants/userRoles";
+
 
 function generateJWT(user: User, res: Response){
 	const body = {
@@ -54,12 +54,13 @@ export function verifyJWT(req:Request, res: Response, next: NextFunction){
 
 export async function login(req: Request, res: Response, next: NextFunction) {
 	try {
-
+        
 		const user = await prisma.user.findUnique({
 			where: {
 				email: req.body.email
 			}
 		});
+
 
 		if(!user) {
 			throw new PermissionError("Email e/ou senha incorretos!");
@@ -95,7 +96,7 @@ export async function notLoggedIn(req: Request, res: Response, next: NextFunctio
 		next();
 
 	} catch (error) {
-
+        
 		next(error);
 
 	}
