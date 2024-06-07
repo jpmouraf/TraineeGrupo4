@@ -84,10 +84,10 @@ UserRouter.put("/account/password/update/:id", verifyJWT, checkRole(["admin", "u
 	}
 });
 
-UserRouter.put("/linkUserMusic/:idUser/:idMusic", verifyJWT, checkRole(["admin", "user"]), async (req: Request, res: Response, next: NextFunction) => {
+UserRouter.put("/linkUserMusic/account/:idMusic", verifyJWT, checkRole(["admin", "user"]), async (req: Request, res: Response, next: NextFunction) => {
 	try {
         
-		const link = await UserService.linkMusic(Number(req.params.idUser), Number(req.params.idMusic));
+		const link = await UserService.linkMusic(Number(req.user.id), Number(req.params.idMusic));
 		res.status(statusCodes.SUCCESS).json(link);
 
 	} catch (error) {
@@ -97,10 +97,10 @@ UserRouter.put("/linkUserMusic/:idUser/:idMusic", verifyJWT, checkRole(["admin",
 	}
 });
 
-UserRouter.delete("/unlinkUserMusic/:idUser/:idMusic", verifyJWT, checkRole(["admin", "user"]), async (req: Request, res: Response, next: NextFunction) => {
+UserRouter.delete("/unlinkUserMusic/account/:idMusic", verifyJWT, checkRole(["admin", "user"]), async (req: Request, res: Response, next: NextFunction) => {
 	try {
         
-		const unlink = await UserService.unlinkMusic(Number(req.params.idUser), Number(req.params.idMusic));
+		const unlink = await UserService.unlinkMusic(Number(req.user.id), Number(req.params.idMusic));
 		res.status(statusCodes.SUCCESS).json(unlink);
 
 	} catch (error) {
