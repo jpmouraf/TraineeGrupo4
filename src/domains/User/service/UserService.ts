@@ -147,8 +147,8 @@ class UserService {
 		    throw new QueryError("Usuário não encontrado!");
 		}
 
-		if(body.password == null) {
-		    throw new InvalidParamError("senha não pode ser nula!");
+		if(body.password == null || typeof body.password !== "string") {
+		    throw new InvalidParamError("Formato de senha inválido!");
 		}
 
 		const encrypted = await this.encryptPassword(body.password);
@@ -163,9 +163,27 @@ class UserService {
 		return updatedUser;
 	}
 
-	//alteração para comitar
-	async linkMusic(idUser: number, idMusic: number) 
-	{
+	async linkMusic(idUser: number, idMusic: number) {
+		const checkUser = await prisma.user.findUnique({
+		    where: {
+		        id: idUser,
+		    }
+		});
+
+		if(!checkUser) {
+		    throw new QueryError("Usuário não encontrado!");
+		}
+
+		const checkMusic = await prisma.music.findUnique({
+		    where: {
+		        id: idMusic,
+		    }
+		});
+
+		if(!checkMusic) {
+		    throw new QueryError("Música não encontrada!");
+		}
+
 		const link = await prisma.user.update({
 			data: {
 				music: {
@@ -183,6 +201,26 @@ class UserService {
 	}
 
 	async unlinkMusic(idUser: number, idMusic: number) {
+		const checkUser = await prisma.user.findUnique({
+		    where: {
+		        id: idUser,
+		    }
+		});
+
+		if(!checkUser) {
+		    throw new QueryError("Usuário não encontrado!");
+		}
+
+		const checkMusic = await prisma.music.findUnique({
+		    where: {
+		        id: idMusic,
+		    }
+		});
+
+		if(!checkMusic) {
+		    throw new QueryError("Música não encontrada!");
+		}
+		
 		const unlink = await prisma.user.update({
 			data: {
 				music: {
