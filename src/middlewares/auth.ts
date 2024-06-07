@@ -7,7 +7,7 @@ import { User } from "@prisma/client";
 import { JwtPayload, sign, verify } from "jsonwebtoken";
 import cookieParser from "cookie-parser";
 import { TokenError } from "../../errors/TokenError";
-import { userRoles} from "../../utils/constants/userRoles";
+
 
 function generateJWT(user: User, res: Response){
 	const body = {
@@ -60,6 +60,7 @@ export async function login(req: Request, res: Response, next: NextFunction) {
 			}
 		});
 
+
 		if(!user) {
 			throw new PermissionError("Email e/ou senha incorretos!");
 		}
@@ -94,7 +95,7 @@ export async function notLoggedIn(req: Request, res: Response, next: NextFunctio
 		next();
 
 	} catch (error) {
-
+        
 		next(error);
 
 	}
@@ -106,6 +107,7 @@ export async function logout (req: Request, res: Response, next: NextFunction) {
 			secure: process.env.NODE_ENV !== "development"  });
 		const token = cookieExtractor(req);
 		if (!token){
+			res.status(statusCodes.BAD_REQUEST);
 			throw new TokenError("Faça o logout novamente.");
 		}
 
