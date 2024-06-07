@@ -6,9 +6,9 @@ declare global{
             user: User;
         }
     }
-}
 
-namespace NodeJD{
+
+namespace NodeJS{
     interface ProcessEnv{
     APP_URL: string;
     PORT: string;
@@ -17,4 +17,5 @@ namespace NodeJD{
     JWT_EXPIRATION: string;
     NODE_ENV: string;
     }
+}
 }
