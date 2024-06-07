@@ -7,10 +7,6 @@ import { InvalidParamError } from "../../../../errors/InvalidParamError";
 import adminRegex from "../../../../utils/constants/verifyEmail";
 
 class AdminService {
-	async validEmail(email: string) {
-		const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-		return regex.test(email);
-	}
 
 	async encryptPassword(password: string) {
 		const saltRounds = 10;
@@ -28,8 +24,10 @@ class AdminService {
 		if ( (typeof body.email !== "string" &&  typeof body.email !=="undefined") ){
 			throw new InvalidParamError("Email inválido!");
 		}
-		if(!adminRegex.test(body.email)) {
-			throw new QueryError("Formato de email inválido!");
+		if (body.email !== undefined){
+			if(!adminRegex.test(body.email)) {
+				throw new QueryError("Formato de email inválido!");
+			}
 		}
 		if ((typeof body.password !== "undefined")){
 			throw new InvalidParamError("Não é possível modificar a senha por essa rota!");
@@ -50,9 +48,9 @@ class AdminService {
 			throw new QueryError("O id não pode ser modificado!");
 		}
 		if (typeof body.email !== "undefined"){
-			const validation = await this.validEmail(body.email);
-			if (!validation) {
-				throw new InvalidParamError("Email inválido!");}
+			if(!adminRegex.test(body.email)) {
+				throw new QueryError("Formato de email inválido!");
+			}
 		}
 		const updatedAdmin = await prisma.user.update({
 			data: {
@@ -127,10 +125,9 @@ class AdminService {
 		if (body.id !== undefined){
 			throw new QueryError("O id não pode ser modificado!");
 		}
-		const validation = await this.validEmail(body.email);
-		if (!validation) {
-			throw new InvalidParamError("Email inválido!");}
-
+		if(!adminRegex.test(body.email)) {
+			throw new QueryError("Formato de email inválido!");
+		}
 		const encrypted = await this.encryptPassword(body.password);
 		const user = await prisma.user.create({
 			data: {

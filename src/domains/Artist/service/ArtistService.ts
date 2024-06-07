@@ -20,7 +20,7 @@ class ArtistService {
 		if(typeof body.streams != "number"){
 			throw new InvalidParamError("O número de streams do artista deve ser um número.");
 		}
-		if(typeof body.photo != "string"){
+		if(typeof body.photo != "string" && body.photo !== null){
 			throw new InvalidParamError("O foto inserida está no formato errado.");
 		}
 

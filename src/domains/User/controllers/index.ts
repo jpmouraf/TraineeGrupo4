@@ -29,7 +29,7 @@ UserRouter.post("/account/create", async (req: Request, res: Response, next: Nex
 });
 
 
-UserRouter.get("/account/:id",verifyJWT, checkRole(["admin", "user"]), async (req: Request, res: Response, next: NextFunction) => {
+UserRouter.get("/account",verifyJWT, checkRole(["admin", "user"]), async (req: Request, res: Response, next: NextFunction) => {
 
 	try {
         
@@ -108,10 +108,10 @@ UserRouter.delete("/unlinkUserMusic/:idUser/:idMusic", verifyJWT, checkRole(["ad
 	}
 });
 
-UserRouter.get("/listenedMusics/:idUser",verifyJWT,checkRole(["admin", "user"]), async (req: Request, res: Response, next: NextFunction) => {
+UserRouter.get("/account/listenedMusics",verifyJWT,checkRole(["admin", "user"]), async (req: Request, res: Response, next: NextFunction) => {
     try {
 		
-		const listenedMusics = await UserService.listenedMusics(Number(req.params.idUser));
+		const listenedMusics = await UserService.listenedMusics(Number(req.user.id));
 		res.status(statusCodes.SUCCESS).json(listenedMusics);
 	} catch (error) {
 	    next(error);
