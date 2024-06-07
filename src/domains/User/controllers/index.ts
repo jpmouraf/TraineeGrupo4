@@ -44,7 +44,7 @@ UserRouter.get("/account/:id",verifyJWT, checkRole(["admin", "user"]), async (re
 });
 
 
-UserRouter.put("/account/update/:id", verifyJWT, checkRole(["admin", "user"]), async (req: Request, res: Response, next: NextFunction) => {
+UserRouter.put("/account/update", verifyJWT, checkRole(["admin", "user"]), async (req: Request, res: Response, next: NextFunction) => {
 	try {
         
 		const body = req.body;
@@ -57,7 +57,7 @@ UserRouter.put("/account/update/:id", verifyJWT, checkRole(["admin", "user"]), a
 
 	}
 });
-UserRouter.put("/account/password/update/:id", verifyJWT, checkRole(["admin", "user"]), async (req: Request, res: Response, next: NextFunction) => {
+UserRouter.put("/account/password/update", verifyJWT, checkRole(["admin", "user"]), async (req: Request, res: Response, next: NextFunction) => {
 	try {
         
 		const body = req.body;
@@ -118,7 +118,7 @@ UserRouter.get("/listenedMusics/:idUser",verifyJWT,checkRole(["admin", "user"]),
 	}
 });
 
-UserRouter.delete("/account/delete/:id", verifyJWT, checkRole(["admin", "user"]), async (req: Request, res: Response, next: NextFunction) => {
+UserRouter.delete("/account/delete", verifyJWT, checkRole(["admin", "user"]), async (req: Request, res: Response, next: NextFunction) => {
 	try {
         
 		const user = await UserService.delete(Number(req.user.id));
