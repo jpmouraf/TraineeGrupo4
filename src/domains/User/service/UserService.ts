@@ -21,7 +21,7 @@ class UserService {
 				name: body.name,
 				password: encrypted,
 				photo: body.photo,
-				role: body.role,
+				role: "user",
 			}
 		});
 		return user;
@@ -76,9 +76,39 @@ class UserService {
 			},
 			where: {
 				id: idUser,
-			}
+			},
+			select: selectItems
 		});
 		return link;
+	}
+
+	async unlinkMusic(idUser: number, idMusic: number) {
+		const unlink = await prisma.user.update({
+			data: {
+				music: {
+					disconnect: {
+						id: idMusic,
+					},
+				},
+			},
+			where: {
+				id: idUser,
+			},
+			select: selectItems
+		});
+		return unlink;
+	}
+
+	async listenedMusics(wantedId: number) {
+		const listened = await prisma.user.findFirst({
+		    where: {
+				id: wantedId,
+			},
+			select: {
+			    music: true
+			}
+		});
+		return listened;
 	}
 
 	async delete(wantedId: number) 

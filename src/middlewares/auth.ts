@@ -56,7 +56,7 @@ export function verifyJWT(req:Request, res: Response, next: NextFunction){
 
 export async function login(req: Request, res: Response, next: NextFunction) {
 	try {
-        
+
 		const user = await prisma.user.findUnique({
 			where: {
 				email: req.body.email
@@ -86,7 +86,7 @@ export async function login(req: Request, res: Response, next: NextFunction) {
 
 export async function notLoggedIn(req: Request, res: Response, next: NextFunction) {
 	try {
-        
+
 		const token = cookieExtractor(req);
 
 		if(token){
@@ -97,7 +97,7 @@ export async function notLoggedIn(req: Request, res: Response, next: NextFunctio
 		next();
 
 	} catch (error) {
-        
+
 		next(error);
 
 	}
