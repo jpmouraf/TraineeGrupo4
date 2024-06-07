@@ -106,6 +106,7 @@ export async function logout (req: Request, res: Response, next: NextFunction) {
 		const token = cookieExtractor(req);
 		if (!token){
 			res.status(statusCodes.BAD_REQUEST);
+			res.status(statusCodes.BAD_REQUEST);
 			throw new TokenError("Faça o logout novamente.");
 		}
 
