@@ -44,7 +44,7 @@ class AdminService {
 		if (!checkUser){
 			throw new QueryError("Esse usuario não existe.");
 		}
-		if (body.id !== undefined){
+		if (body.id !== undefined || body.id == 0){
 			throw new QueryError("O id não pode ser modificado!");
 		}
 		if (typeof body.email !== "undefined"){
