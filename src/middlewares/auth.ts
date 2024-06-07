@@ -54,7 +54,6 @@ export function verifyJWT(req:Request, res: Response, next: NextFunction){
 
 export async function login(req: Request, res: Response, next: NextFunction) {
 	try {
-        
 		const user = await prisma.user.findUnique({
 			where: {
 				email: req.body.email
@@ -108,6 +107,7 @@ export async function logout (req: Request, res: Response, next: NextFunction) {
 			secure: process.env.NODE_ENV !== "development"  });
 		const token = cookieExtractor(req);
 		if (!token){
+			res.status(statusCodes.BAD_REQUEST);
 			throw new TokenError("Faça o logout novamente.");
 		}
 
