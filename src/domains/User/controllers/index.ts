@@ -6,10 +6,10 @@ import { notLoggedIn, login, verifyJWT, logout } from "../../../middlewares/auth
 import { checkRole } from "../../../middlewares/auth";
 import statusCodes from "../../../../utils/constants/statusCodes";
 
-const UserRouter = Router();
-UserRouter.post("/login", notLoggedIn, login);
-UserRouter.post("/logout", verifyJWT, logout);
 
+const UserRouter = Router();
+
+UserRouter.post("/login", notLoggedIn, login);
 
 UserRouter.post("/logout", verifyJWT, logout);
 
@@ -28,7 +28,9 @@ UserRouter.post("/account/create", async (req: Request, res: Response, next: Nex
 	}
 });
 
-UserRouter.get("/account",verifyJWT, checkRole(["admin", "user"]), async (req: Request, res: Response, next: NextFunction) => {
+
+UserRouter.get("/account/:id",verifyJWT, checkRole(["admin", "user"]), async (req: Request, res: Response, next: NextFunction) => {
+
 	try {
         
 		const user = await UserService.getUserbyId(Number(req.user.id));
@@ -61,6 +63,19 @@ UserRouter.put("/account/password/update", verifyJWT, checkRole(["admin", "user"
 		const body = req.body;
 		const user = await UserService.updateUserPassword(Number(req.user.id), body);
 		res.status(statusCodes.SUCCESS).json(user);
+
+	} catch (error) {
+        
+		next(error);
+
+	}
+});
+UserRouter.put("/account/password/update/:id", verifyJWT, checkRole(["admin", "user"]), async (req: Request, res: Response, next: NextFunction) => {
+	try {
+        
+		const body = req.body;
+		const user = await UserService.updateUserPassword(Number(req.user.id), body);
+		res.json(user);
 
 	} catch (error) {
         
