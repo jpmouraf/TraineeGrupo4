@@ -12,7 +12,7 @@ UserRouter.post("/login", notLoggedIn, login);
 UserRouter.post("/logout", verifyJWT, logout);
 
 
-UserRouter.post("/create", async (req: Request, res: Response, next: NextFunction) => {
+UserRouter.post("/account/create", async (req: Request, res: Response, next: NextFunction) => {
 	try {
 
 		const body = req.body;
@@ -26,7 +26,7 @@ UserRouter.post("/create", async (req: Request, res: Response, next: NextFunctio
 	}
 });
 
-UserRouter.get("/:id",verifyJWT, checkRole(["admin", "user"]), async (req: Request, res: Response, next: NextFunction) => {
+UserRouter.get("/account/:id",verifyJWT, checkRole(["admin", "user"]), async (req: Request, res: Response, next: NextFunction) => {
 	try {
         
 		const user = await UserService.getUserbyId(Number(req.user.id));
@@ -40,11 +40,24 @@ UserRouter.get("/:id",verifyJWT, checkRole(["admin", "user"]), async (req: Reque
 });
 
 
-UserRouter.put("/update/:id", verifyJWT, checkRole(["admin", "user"]), async (req: Request, res: Response, next: NextFunction) => {
+UserRouter.put("/account/update/:id", verifyJWT, checkRole(["admin", "user"]), async (req: Request, res: Response, next: NextFunction) => {
 	try {
         
 		const body = req.body;
 		const user = await UserService.updateUser(Number(req.user.id), body);
+		res.json(user);
+
+	} catch (error) {
+        
+		next(error);
+
+	}
+});
+UserRouter.put("/account/password/update/:id", verifyJWT, checkRole(["admin", "user"]), async (req: Request, res: Response, next: NextFunction) => {
+	try {
+        
+		const body = req.body;
+		const user = await UserService.updateUserPassword(Number(req.user.id), body);
 		res.json(user);
 
 	} catch (error) {
@@ -88,7 +101,7 @@ UserRouter.get("/listenedMusics/:idUser",verifyJWT,checkRole(["admin", "user"]),
 	}
 });
 
-UserRouter.delete("/delete/:id", verifyJWT, checkRole(["admin", "user"]), async (req: Request, res: Response, next: NextFunction) => {
+UserRouter.delete("/account/delete/:id", verifyJWT, checkRole(["admin", "user"]), async (req: Request, res: Response, next: NextFunction) => {
 	try {
         
 		const user = await UserService.delete(Number(req.user.id));
