@@ -5,6 +5,7 @@ import UserService from "../service/UserService";
 import { notLoggedIn, login, verifyJWT, logout } from "../../../middlewares/auth";
 import { checkRole } from "../../../middlewares/auth";
 
+
 const UserRouter = Router();
 UserRouter.post("/login", notLoggedIn, login);
 UserRouter.post("/logout", verifyJWT, logout);
@@ -27,7 +28,9 @@ UserRouter.post("/account/create", async (req: Request, res: Response, next: Nex
 	}
 });
 
+
 UserRouter.get("/account/:id",verifyJWT, checkRole(["admin", "user"]), async (req: Request, res: Response, next: NextFunction) => {
+
 	try {
         
 		const user = await UserService.getUserbyId(Number(req.user.id));
