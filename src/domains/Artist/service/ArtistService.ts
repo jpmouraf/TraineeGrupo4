@@ -78,7 +78,7 @@ class ArtistService {
 			throw new InvalidParamError("A foto adicionado está no formato errado.");
 		}
 		if(typeof body.streams != "number" && typeof body.streams != "undefined"){
-			throw new InvalidParamError("O nome colocado deve ser uma string.");
+			throw new InvalidParamError("A quantidade de streams deve ser um número.");
 		}
 
 		const checkArtist = await prisma.artist.findUnique({
