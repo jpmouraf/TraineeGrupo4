@@ -66,7 +66,7 @@ class UserService {
 		});
 
 		if(!user) {
-		    throw new InvalidParamError("Usuário não cadastrado!");
+		    throw new QueryError("Usuário não cadastrado!");
 		}
 		return user;
 	}
@@ -80,7 +80,7 @@ class UserService {
 		});
 
 		if(!users) {
-		    throw new InvalidParamError("Nenhum usuário cadastrado!");
+		    throw new QueryError("Nenhum usuário cadastrado!");
 		}
 		return users;
 	}
@@ -92,27 +92,35 @@ class UserService {
 		    }
 		});
 		if(!checkUser) {
-		    throw new InvalidParamError("Usuário não encontrado!");
+		    throw new QueryError("Usuário não encontrado!");
 		}
 
 		if(body.id) {
 			throw new PermissionError("ID não pode ser alterado!");
 		}
 
-		if(!emailRegex.test(body.email) || body.email == null) {
-			throw new QueryError("Formato de email inválido!");
+		if (body.email !== undefined) {
+			if (!emailRegex.test(body.email) || body.email == null) {
+				throw new QueryError("Formato de email inválido!");
+			}
 		}
-
-		if(typeof body.name !== "string" || body.name == null) {
-		    throw new InvalidParamError("nome não informado!");
+	
+		if (body.name !== undefined) {
+			if (typeof body.name !== "string" || body.name == null) {
+				throw new InvalidParamError("Formato de nome inválido ou não informado!");
+			}
 		}
-
-		if(typeof body.photo != "string" && body.photo != null) {
-			throw new QueryError("A foto adicionado está no formato errado.");
+	
+		if (body.photo !== undefined) {
+			if (typeof body.photo != "string" && body.photo != null) {
+				throw new QueryError("A foto adicionada está no formato errado.");
+			}
 		}
-
-		if(body.role != "user") {
-			throw new PermissionError("Você não tem permissão para alterar o role!");
+	
+		if (body.role !== undefined) {
+			if (body.role != "user") {
+				throw new PermissionError("Você não tem permissão para alterar o role!");
+			}
 		}
 		
 		const updatedUser = await prisma.user.update({
@@ -128,6 +136,7 @@ class UserService {
 		});
 		return updatedUser;
 	}
+
 	async updateUserPassword(id: number, body: User) {
 		const checkUser = await prisma.user.findUnique({
 		    where: {
@@ -135,7 +144,7 @@ class UserService {
 		    }
 		});
 		if(!checkUser) {
-		    throw new InvalidParamError("Usuário não encontrado!");
+		    throw new QueryError("Usuário não encontrado!");
 		}
 
 		if(body.password == null) {
@@ -211,7 +220,7 @@ class UserService {
 		});
 
 		if(!checkUser) {
-		    throw new InvalidParamError("Usuário que deseja deletar não está cadastrado!");
+		    throw new QueryError("Usuário que deseja deletar não está cadastrado!");
 		}
 		const user = await prisma.user.delete({ where: {id: wantedId}});
 		return user;

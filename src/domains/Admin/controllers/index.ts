@@ -65,9 +65,6 @@ AdminRouter.put("/password/update/:id", verifyJWT, checkRole(["admin"]), verifyJ
 	}
 });
 
-<<<<<<< HEAD
-AdminRouter.post("/create", verifyJWT, checkRole(["admin"]), async (req: Request, res: Response, next: NextFunction) => {
-=======
 AdminRouter.delete("/delete/:id", verifyJWT, checkRole(["admin"]), verifyJWT, async (req: Request, res: Response, next: NextFunction) => {
 	try {
         
@@ -83,7 +80,6 @@ AdminRouter.delete("/delete/:id", verifyJWT, checkRole(["admin"]), verifyJWT, as
 
 
 AdminRouter.post("/create", verifyJWT,checkRole(["admin"]), async (req: Request, res: Response, next: NextFunction) => {
->>>>>>> 91ae9f1125900edc95a4bc0d53a38512aa70ae94
 	try {
 
 		const body = req.body;
@@ -110,11 +106,7 @@ AdminRouter.get("/:id", verifyJWT, checkRole(["admin"]), async (req: Request, re
 	}
 });
 
-<<<<<<< HEAD
-AdminRouter.get("/all", verifyJWT, checkRole(["admin"]), async (req: Request, res: Response, next: NextFunction) => {
-=======
 AdminRouter.get("/", verifyJWT, checkRole(["admin"]), async (req: Request, res: Response, next: NextFunction) => {
->>>>>>> 91ae9f1125900edc95a4bc0d53a38512aa70ae94
 	try {
         
 		const users = await UserService.getUsers();
