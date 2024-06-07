@@ -220,7 +220,7 @@ class UserService {
 		if(!checkMusic) {
 		    throw new QueryError("Música não encontrada!");
 		}
-		
+
 		const unlink = await prisma.user.update({
 			data: {
 				music: {
@@ -238,6 +238,16 @@ class UserService {
 	}
 
 	async listenedMusics(wantedId: number) {
+		const checkUser = await prisma.user.findUnique({
+		    where: {
+		        id: wantedId,
+		    }
+		});
+
+		if(!checkUser) {
+		    throw new QueryError("Usuário não encontrado!");
+		}
+
 		const listened = await prisma.user.findFirst({
 		    where: {
 				id: wantedId,
@@ -249,8 +259,7 @@ class UserService {
 		return listened;
 	}
 
-	async delete(wantedId: number) 
-	{
+	async delete(wantedId: number) {
 		const checkUser = await prisma.user.findUnique({
 			where: {
 				id: wantedId,
