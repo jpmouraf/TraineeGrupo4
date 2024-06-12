@@ -3,10 +3,11 @@
 
 generator client {
   provider = "prisma-client-js"
+  binaryTargets = ["native", "debian-openssl-1.1.x"]
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "mysql"
   url      = env("DATABASE_URL")
 }
 
@@ -14,7 +15,7 @@ model User {
   id       Int     @id @default(autoincrement())
   email    String  @unique
   name     String
-  password String
+  password String @db.VarChar(20)
   photo    String?
   role     String
 

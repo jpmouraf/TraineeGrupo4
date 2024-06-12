@@ -1,0 +1,56 @@
+services:
+  api:
+    build:
+      dockerfile: api.dockerfile
+      context: .
+
+    container_name: ${NOME_CONTAINER_API}
+
+    networks:
+      - base_network
+
+    ports:
+      - "${PORTA_API_HOST}:${PORTA_API_CONTAINER}"
+    
+    expose:
+      - ${PORTA_API_CONTAINER}
+
+    volumes:
+      - "${DIRETORIO_HOST}:${DIRETORIO_CONTAINER}"
+
+    command:
+      - npm start
+      - npx prisma migrate deploy
+
+    depends_on:
+      - mysql
+
+    environment:
+      - DB = ${NOME_CONTAINER_BD}
+
+  mysql:
+    networks:
+      - base_network
+
+    image: ${IMAGEM_BD}
+
+    container_name: ${NOME_CONTAINER_BD}
+
+    ports:
+      - "${PORTA_BD_HOST}:${PORTA_BD_CONTAINER}"
+
+    volumes:
+      - ${NOME_VOLUME_BD} 
+
+    environment:
+      - MYSQL_ROOT_PASSWORD = ${MYSQL_ROOT_PASSWORD}
+      - MYSQL_DATABASE = ${MYSQL_DATABASE}
+
+     
+
+networks:
+  base_network:
+    driver: bridge
+
+volumes:
+  my_db: 
