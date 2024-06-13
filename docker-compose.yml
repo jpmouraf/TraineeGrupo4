@@ -1,3 +1,4 @@
+version: '3'
 services:
   api:
     build:
@@ -11,12 +12,13 @@ services:
 
     ports:
       - "${PORTA_API_HOST}:${PORTA_API_CONTAINER}"
-    
+
     expose:
       - ${PORTA_API_CONTAINER}
 
     volumes:
       - "${DIRETORIO_HOST}:${DIRETORIO_CONTAINER}"
+      - /api/node_modules
 
     command: sh -c "npx prisma migrate deploy && npm start"
 
@@ -44,12 +46,13 @@ services:
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
       - MYSQL_DATABASE=${MYSQL_DATABASE}
       - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
 
-     
+
 
 networks:
   base_network:
     driver: bridge
 
 volumes:
-  my_db: 
+  my_db:

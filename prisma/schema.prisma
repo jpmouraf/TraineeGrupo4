@@ -15,7 +15,7 @@ model User {
   id       Int     @id @default(autoincrement())
   email    String  @unique
   name     String
-  password String @db.VarChar(20)
+  password String @db.VarChar(191)
   photo    String?
   role     String
 
