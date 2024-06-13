@@ -18,15 +18,13 @@ services:
     volumes:
       - "${DIRETORIO_HOST}:${DIRETORIO_CONTAINER}"
 
-    command:
-      - npm start
-      - npx prisma migrate deploy
+    command: sh -c "npx prisma migrate deploy && npm start"
 
     depends_on:
       - mysql
 
     environment:
-      - DB = ${NOME_CONTAINER_BD}
+      - DB=${NOME_CONTAINER_BD}
 
   mysql:
     networks:
@@ -43,8 +41,8 @@ services:
       - ${NOME_VOLUME_BD} 
 
     environment:
-      - MYSQL_ROOT_PASSWORD = ${MYSQL_ROOT_PASSWORD}
-      - MYSQL_DATABASE = ${MYSQL_DATABASE}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
       - MYSQL_USER=${MYSQL_USER}
 
      
