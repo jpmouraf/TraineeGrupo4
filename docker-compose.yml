@@ -29,6 +29,7 @@ services:
 
     environment:
       - DB=${NOME_CONTAINER_BD}
+      - DATABASE_URL=${DATABASE_URL}
 
   mysql:
     networks:
