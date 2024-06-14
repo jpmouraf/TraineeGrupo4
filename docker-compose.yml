@@ -12,12 +12,15 @@ services:
 
     ports:
       - "${PORTA_API_HOST}:${PORTA_API_CONTAINER}"
+      - "${PORTA_PRISMA}:${PORTA_PRISMA}"
 
     expose:
       - ${PORTA_API_CONTAINER}
+     
 
     volumes:
       - "${DIRETORIO_HOST}:${DIRETORIO_CONTAINER}"
+      - /api/node_modules
 
     command: sh -c "npx prisma migrate deploy && npm start"
 
@@ -26,6 +29,7 @@ services:
 
     environment:
       - DB=${NOME_CONTAINER_BD}
+      - DATABASE_URL=${DATABASE_URL}
 
   mysql:
     networks:
