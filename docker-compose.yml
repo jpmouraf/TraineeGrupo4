@@ -1,0 +1,61 @@
+version: '3'
+services:
+  api:
+    build:
+      dockerfile: api.dockerfile
+      context: .
+
+    container_name: ${NOME_CONTAINER_API}
+
+    networks:
+      - base_network
+
+    ports:
+      - "${PORTA_API_HOST}:${PORTA_API_CONTAINER}"
+      - "${PORTA_PRISMA}:${PORTA_PRISMA}"
+
+    expose:
+      - ${PORTA_API_CONTAINER}
+     
+
+    volumes:
+      - "${DIRETORIO_HOST}:${DIRETORIO_CONTAINER}"
+      - /api/node_modules
+
+    command: sh -c "npx prisma migrate deploy && npm start"
+
+    depends_on:
+      - mysql
+
+    environment:
+      - DB=${NOME_CONTAINER_BD}
+      - DATABASE_URL=${DATABASE_URL}
+
+  mysql:
+    networks:
+      - base_network
+
+    image: ${IMAGEM_BD}
+
+    container_name: ${NOME_CONTAINER_BD}
+
+    ports:
+      - "${PORTA_BD_HOST}:${PORTA_BD_CONTAINER}"
+
+    volumes:
+      - ${NOME_VOLUME_BD} 
+
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+
+
+
+networks:
+  base_network:
+    driver: bridge
+
+volumes:
+  my_db:

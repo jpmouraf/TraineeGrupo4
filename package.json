@@ -1,5 +1,5 @@
 {
-  "name": "traineesemana5",
+  "name": "traineegrupo4",
   "version": "1.0.0",
   "description": "Este é o projeto para a atividade \"Mãos à obra\" da semana 5 do Trainee",
   "main": "index.js",
@@ -18,12 +18,12 @@
     "@typescript-eslint/eslint-plugin": "^7.11.0",
     "@typescript-eslint/parser": "^7.11.0",
     "eslint": "^8.56.0",
-    "prisma": "^5.14.0",
+    "prisma": "^5.15.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.4.5"
   },
   "dependencies": {
-    "@prisma/client": "^5.14.0",
+    "@prisma/client": "^5.15.0",
     "@types/bcrypt": "^5.0.2",
     "@types/dotenv": "^8.2.0",
     "@types/jsonwebtoken": "^9.0.6",
