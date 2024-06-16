@@ -8,7 +8,7 @@ COPY package*.json ./
 
 RUN npm install
 
-COPY . /api .
+COPY . /api 
 
 RUN npx prisma generate
 
