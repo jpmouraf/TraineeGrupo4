@@ -22,10 +22,10 @@ services:
       - "${DIRETORIO_HOST}:${DIRETORIO_CONTAINER}"
       - /api/node_modules
 
-    command: sh -c "npx prisma migrate deploy && npm start"
-
     depends_on:
       - mysql
+
+    command: sh -c "npx prisma migrate deploy && npm start"
 
     environment:
       - DB=${NOME_CONTAINER_BD}
