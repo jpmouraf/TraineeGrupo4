@@ -170,6 +170,18 @@ describe('updateArtist' , () => {
         await expect(ArtistService.updateArtist(1, mockArtist)).resolves.toEqual(mockArtist)
     });
 
+    test('o artista que você quer atualizar não está cadastrado ==> gera erro', async() => {
+        const artist :any = {
+            name: 'cantor',
+            photo: null,
+            streams: 1000
+        };
+
+        await expect(ArtistService.updateArtist(2, artist)).rejects.toThrow(
+            new InvalidParamError("O artista procurado não está cadastrado.")
+        );
+    });
+
 });
 
 describe('delete' , () => {
