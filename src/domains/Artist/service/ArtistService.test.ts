@@ -1,10 +1,9 @@
 import { prismaMock } from '../../../../config/singleton';
 import { InvalidParamError } from '../../../../errors/InvalidParamError';
 import { QueryError } from "../../../../errors/QueryError";
+import { PermissionError } from '../../../../errors/PermissionError';
 import ArtistService from './ArtistService';
-import UserService from '../../User/service/UserService';
-import MusicService from '../../Music/service/MusicService';
-import prisma from '../../../../config/prismaClient';
+
 
 describe('ArtistService - create', () => {
     test('deve criar um novo artista', async () => {
@@ -183,6 +182,28 @@ describe('updateArtist' , () => {
         );
     });
 
+    test('tenta atualizar o id do artista ==> gera erro', async() => {
+        const artist = {
+            id: 1,
+            name: 'cantor',
+            photo: null,
+            streams: 1000
+        };
+
+        const updatedArtist = {
+            id: 2,
+            name: 'cantor',
+            photo: null,
+            streams: 1000
+        }
+
+        prismaMock.artist.findUnique.mockResolvedValue(artist);
+        prismaMock.artist.update.mockResolvedValue(updatedArtist);
+
+        await expect(ArtistService.updateArtist(1, updatedArtist)).rejects.toThrow(
+            new PermissionError("Você não tem autorização para realizar essas mudanças.")
+        )
+    });
 });
 
 describe('delete' , () => {
