@@ -2,6 +2,8 @@ import { prismaMock } from '../../../../config/singleton';
 import { InvalidParamError } from '../../../../errors/InvalidParamError';
 import { QueryError } from "../../../../errors/QueryError";
 import ArtistService from './ArtistService';
+import UserService from '../../User/service/UserService';
+import MusicService from '../../Music/service/MusicService';
 
 describe('ArtistService - create', () => {
     test('deve criar um novo artista', async () => {
@@ -89,7 +91,7 @@ describe('ArtistService - create', () => {
     });
 
 describe('getArtistbyId' , () => {
-    test('um usuário cadastrado com seu id ==> retorna o usuário', async () => {
+    test('um artista cadastrado com seu id ==> retorna o artista', async () => {
         const artist = {
             id: 1,
             name: 'cantor',
@@ -102,7 +104,7 @@ describe('getArtistbyId' , () => {
         await expect(ArtistService.getArtistbyId(1)).resolves.toEqual(artist);
     });
 
-    test('tenta buscar um usuário inexistente ==> gera erro', async () => {
+    test('tenta buscar um artista inexistente ==> gera erro', async () => {
         const artistId = 1;
         prismaMock.artist.findFirst.mockResolvedValue(null)
 
@@ -116,7 +118,7 @@ describe('getArtistbyId' , () => {
 });
 
 describe('getArtists' , () => {
-    test('dois usuários estão cadastrados ==> retorna dois usuários', async () => {
+    test('dois artistas estão cadastrados ==> retorna dois artistas', async () => {
         const firstUser = {
             id: 1,
             name: 'cantor',
@@ -137,7 +139,7 @@ describe('getArtists' , () => {
         expect(artists).toEqual([firstUser, secondUser]);
     });
 
-    test('nao há nenhum usuário cadastrado ==> gera erro', async () => {
+    test('nao há nenhum artista cadastrado ==> gera erro', async () => {
         prismaMock.artist.findFirst.mockResolvedValue(null);
 
         await expect(ArtistService.getArtists()).rejects.toThrow(
@@ -148,6 +150,25 @@ describe('getArtists' , () => {
 });
 
 describe('updateArtist' , () => {
+    test('tem um artista cadastrado ==> atualiza o artista', async () => {
+        const newArtist = {
+            id: 1,
+            name: 'cantor',
+            photo: null,
+            streams: 1000
+        };
+
+        const mockArtist : any = {
+            name: 'cantor',
+            photo: null,
+            streams: 1000
+        };
+        
+        prismaMock.artist.findUnique.mockResolvedValue(newArtist);
+        prismaMock.artist.update.mockResolvedValue(mockArtist);
+
+        await expect(ArtistService.updateArtist(1, mockArtist)).resolves.toEqual(mockArtist)
+    });
 
 });
 
@@ -156,5 +177,22 @@ describe('delete' , () => {
 });
 
 describe('listArtistMusics' , () => {
+    test('tem um artista com música cadastrada ==> retorna as músicas produzidas pelo artista', async() => {
+        const artist = {
+            id: 1,
+            name: 'cantor',
+            photo: null,
+            streams: 1000
+        };
+        const music = {
+            "name": "Nome da Música",
+            "genre": "Gênero da Música",
+            "album": "Álbum da Música",
+            "artistId": 1
+        }
 
+        prismaMock.artist.findFirst.mockResolvedValue(artist)    
+        
+        expect(ArtistService.listArtistMusics(1)).toEqual(music)
+    });
 });
