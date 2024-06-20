@@ -4,6 +4,7 @@ import { QueryError } from "../../../../errors/QueryError";
 import ArtistService from './ArtistService';
 import UserService from '../../User/service/UserService';
 import MusicService from '../../Music/service/MusicService';
+import prisma from '../../../../config/prismaClient';
 
 describe('ArtistService - create', () => {
     test('deve criar um novo artista', async () => {
@@ -185,26 +186,31 @@ describe('updateArtist' , () => {
 });
 
 describe('delete' , () => {
-
-});
-
-describe('listArtistMusics' , () => {
-    test('tem um artista com música cadastrada ==> retorna as músicas produzidas pelo artista', async() => {
+    test('tem um artista cadastrado ==> deleta esse artista', async() => {
         const artist = {
             id: 1,
             name: 'cantor',
             photo: null,
             streams: 1000
         };
-        const music = {
-            "name": "Nome da Música",
-            "genre": "Gênero da Música",
-            "album": "Álbum da Música",
-            "artistId": 1
-        }
 
-        prismaMock.artist.findFirst.mockResolvedValue(artist)    
-        
-        expect(ArtistService.listArtistMusics(1)).toEqual(music)
+        prismaMock.artist.findUnique.mockResolvedValue(artist);
+        prismaMock.artist.delete.mockResolvedValue(artist)
+
+        await expect(ArtistService.delete(1)).resolves.toEqual(artist);
+    });
+
+    test('tenta deletar um artista inexistente ==> gera erro', async () => {
+        await expect(ArtistService.delete(2)).rejects.toThrow(
+            new InvalidParamError("Você não pode deletar um artista que não está cadastrado.")
+        );
+    });
+});
+
+describe('listArtistMusics' , () => {
+    test('quer buscar músicas de um artista não cadastrado ==> gera erro', async () => {
+        await expect(ArtistService.listArtistMusics(1)).rejects.toThrow(
+            new InvalidParamError("O artista das músicas buscadas não está cadastrado.")
+        )
     });
 });
