@@ -4,12 +4,12 @@
 
 // async function main() {
 //     // const body = {
-       //     id: 0,
-       //     name: "Pedro",
-       //     email: "pedro@gmail.com",
-       //     photo: null,
-       //     password: "123456",
-       //     role: "admin"
+//     id: 0,
+//     name: "Pedro",
+//     email: "pedro@gmail.com",
+//     photo: null,
+//     password: "123456",
+//     role: "admin"
 //     // }
 
 //     // const user = await UserService.create(body)
@@ -81,8 +81,8 @@
 import { app } from "./config/expressConfig";
 import dotenv from "dotenv";
 
-dotenv.config()
+dotenv.config();
 
 app.listen(process.env.PORT, () => {
-    console.log("Servidor hosteado na porta " + process.env.PORT);
+	console.log("Servidor hosteado na porta " + process.env.PORT);
 });
