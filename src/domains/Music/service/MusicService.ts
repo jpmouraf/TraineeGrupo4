@@ -2,6 +2,7 @@ import prisma from "../../../../config/prismaClient";
 import { Music } from "@prisma/client";
 import { QueryError } from "../../../../errors/QueryError";
 import { InvalidParamError } from "../../../../errors/InvalidParamError";
+import { PermissionError } from "../../../../errors/PermissionError";
 
 
 
@@ -69,14 +70,14 @@ class MusicService {
 				name: "asc",
 			}
 		});
-		if (!musics){
+		if (musics.length == 0){
 			throw new QueryError("Não existem músicas cadastradas.");
 		}
 		return musics;
 
 	}
 
-	async updateMusic(id: number, body: Music) {
+	async updateMusic(id: number, body: Partial<Music>) {
 		if ((typeof body.name !== "string" &&  typeof body.name !== "undefined")){
 			throw new InvalidParamError("O nome inseridos está em um formato inválido!");
 		}
@@ -100,7 +101,7 @@ class MusicService {
 			}
 		}
 		if (body.id !== undefined){
-			throw new QueryError("O id não pode ser modificado");
+			throw new PermissionError("O id não pode ser modificado");
 		}
 		const updatedMusic = await prisma.music.update({
 			data: {
@@ -133,5 +134,7 @@ class MusicService {
 		return music;
 	}
 }
+
+//commit
 
 export default new MusicService();

@@ -221,7 +221,6 @@ describe('updateUser', () => {
 });
 describe('UpdateUserPassword', () => {
 	test('Atualiza senha com sucesso ==> retorna senha', async () => {
-
 		const body={
 			password: "123"
 		};
@@ -235,6 +234,7 @@ describe('UpdateUserPassword', () => {
 			photo:user.photo,
 			role: user.role 
 		};
+		prismaMock.user.findUnique.mockResolvedValueOnce(user2);
 		prismaMock.user.update.mockResolvedValue(user2);
 		await expect(UserService.updateUserPassword(user.id, body)).resolves.toEqual(user2);
 		expect(prismaMock.user.update).toHaveBeenCalledWith({
@@ -245,6 +245,7 @@ describe('UpdateUserPassword', () => {
 				id: user.id,
 			}
 		});
+        
 	});
 });
 describe('LinkUserMusic', () => {
