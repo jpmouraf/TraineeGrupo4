@@ -119,24 +119,24 @@ describe('getArtistbyId' , () => {
 
 describe('getArtists' , () => {
     test('dois artistas estão cadastrados ==> retorna dois artistas', async () => {
-        const firstUser = {
+        const firstArtist = {
             id: 1,
             name: 'cantor',
             photo: null,
             streams: 1000
         };
-        const secondUser = {
+        const secondArtist = {
             id: 2,
             name: 'vocalista',
             photo: null,
             streams: 2000
         };
 
-        prismaMock.artist.findMany.mockResolvedValue([firstUser, secondUser]);
+        prismaMock.artist.findMany.mockResolvedValue([firstArtist, secondArtist]);
 
         const artists = await ArtistService.getArtists();
 
-        expect(artists).toEqual([firstUser, secondUser]);
+        expect(artists).toEqual([firstArtist, secondArtist]);
     });
 
     test('nao há nenhum artista cadastrado ==> gera erro', async () => {
