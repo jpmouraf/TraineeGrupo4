@@ -31,15 +31,32 @@ describe('User-create', () =>{
 			photo:null,
 			role: 'user' 
 		};
-		prismaMock.user.create.mockResolvedValue(user);
-		await expect(UserService.create(user)).resolves.toEqual({
+
+		const encrypted2 = await UserService.encryptPassword(user.password);
+		const user2={
+			id: user.id,
+			email: user.email,
+			name:user.name,
+			password:encrypted2,
+			photo:user.photo,
+			role: user.role 
+		};
+		prismaMock.user.create.mockResolvedValue(user2);
+		await expect(UserService.create(user2)).resolves.toEqual({
 			id:0,
 			email:'Alice@gmail.com',
 			name:'Alice',
-			password:'12345',
+			password:encrypted2,
 			photo: null,
 			role:"user"
 		});
+		expect(prismaMock.user.create).toHaveBeenCalledWith({data: {
+			email: user.email,
+			name: user.name,
+			password: encrypted2,
+			photo: user.photo,
+			role: "user",
+		}});
 
 	});
 
