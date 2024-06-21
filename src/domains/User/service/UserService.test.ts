@@ -39,6 +39,14 @@ const user={
 	role: 'user',
 	music: [music2]
 };
+const user3={
+	id: 3,
+	email:'Delete@gmail.com',
+	name:'delete',
+	password:'12345',
+	photo:null,
+	role: 'user'
+};
 jest.mock('bcrypt');
 describe('Encrypt password', () => {
 	test('Tenta encriptar a senha ==> retorna encrypted', async () => {
@@ -256,7 +264,7 @@ describe('LinkUserMusic', () => {
 		expect(prismaMock.user.update).not.toHaveBeenCalled();
 	});
 
-	test('Tenta linkar música com usuário que não exste ==> Lança erro', async () => {
+	test('Tenta linkar música com usuário que não existe ==> Lança erro', async () => {
 		const userId=9;
 		prismaMock.user.findUnique.mockResolvedValueOnce(null);
 		prismaMock.music.findUnique.mockResolvedValueOnce(music);
@@ -336,3 +344,23 @@ describe('listenedMusics', () => {
 			}
 		});
 	});});
+
+describe('deleteUser', () => {
+	test('A conta do usuário é deletada com sucesso ==> Retorna user', async () => {
+		prismaMock.user.findUnique.mockResolvedValue(user3);
+		prismaMock.user.delete.mockResolvedValue(user3);
+		const retorno = await UserService.delete(user3.id);
+		expect(retorno).toEqual(user3);
+		expect(prismaMock.user.findUnique).toHaveBeenCalledWith({where:{id: user3.id}});
+
+	});
+	test('Tenta deletar usuário que não existe ==> Lança erro', async () => {
+		prismaMock.user.findUnique.mockResolvedValue(null);
+		const userID=9;    
+		await expect(UserService.delete(userID)).rejects.toThrow(
+			new QueryError("Usuário que deseja deletar não está cadastrado!"));
+    
+		expect(prismaMock.user.findUnique).toHaveBeenCalledWith({where: {id: userID}});
+		expect(prismaMock.user.delete).not.toHaveBeenCalled();
+	});
+});
