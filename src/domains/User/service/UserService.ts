@@ -79,7 +79,7 @@ class UserService {
 			select: selectItems
 		});
 
-		if(!users) {
+		if(users.length==0) {
 		    throw new QueryError("Nenhum usuário cadastrado!");
 		}
 		return users;
