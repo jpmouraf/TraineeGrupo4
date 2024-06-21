@@ -52,7 +52,7 @@ describe('User-create', () =>{
 			new QueryError("Email já cadastrado!")
 		);
 		expect(prismaMock.user.findUnique).toHaveBeenCalledWith({where:{email: user.email}});
-        
+		expect(prismaMock.user.create).not.toHaveBeenCalled();
 	});
 
 });
