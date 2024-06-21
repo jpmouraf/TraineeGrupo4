@@ -17,6 +17,19 @@ const user={
 	role: 'user' 
 };
 
+const newArtist = {
+	id: 0,
+	name: "João",
+	photo: null,
+	streams: 100
+};
+const music={
+	id: 0,
+	name: "music",
+	genre: "pop",
+	album: "hits",
+	artistId: newArtist.id
+};
 jest.mock('bcrypt');
 describe('Encrypt password', () => {
 	test('Tenta encriptar a senha ==> retorna encrypted', async () => {
@@ -214,6 +227,50 @@ describe('UpdateUserPassword', () => {
 		});
 	});
 });
-describe('Name of the group', () => {
-    
+describe('LinkUserMusic', () => {
+	test('Linka um user com uma musica ==> retorna link', async () => {
+
+		prismaMock.user.findUnique.mockResolvedValueOnce(user); 
+		prismaMock.music.findUnique.mockResolvedValueOnce(music);
+		prismaMock.user.update.mockResolvedValue(user);
+		await expect(UserService.linkMusic(user.id,music.id)).resolves.toEqual(user);
+	
+		expect(prismaMock.user.update).toHaveBeenCalledWith({
+			data: {
+				music: {
+					connect: {
+						id: music.id
+					}
+				}
+			},
+			where: {
+				id: user.id
+			},
+			select: selectItems
+		});
+	});
+	test('Tenta linkar usuário com música que não exste ==> Lança erro', async () => {
+		prismaMock.user.findUnique.mockResolvedValueOnce(user);
+		prismaMock.music.findUnique.mockResolvedValueOnce(null);
+		const musicId=9;
+		await expect(UserService.linkMusic(user.id,musicId)).rejects.toThrow(
+			new QueryError("Música não encontrada!")
+		);
+		expect(prismaMock.music.findUnique).toHaveBeenCalledWith({where:{id: musicId}});
+		expect(prismaMock.user.findUnique).toHaveBeenCalledWith({where:{id: user.id}});
+
+		expect(prismaMock.user.update).not.toHaveBeenCalled();
+	});
+
+	test('Tenta linkar música com usuário que não exste ==> Lança erro', async () => {
+		const musicID = music.id;
+		const userId=9;
+		prismaMock.user.findUnique.mockResolvedValueOnce(null);
+		prismaMock.music.findUnique.mockResolvedValueOnce(music);
+		await expect(UserService.linkMusic(userId,musicID)).rejects.toThrow(
+			new QueryError("Usuário não encontrado!")
+		);
+		expect(prismaMock.user.findUnique).toHaveBeenCalledWith({where:{id: userId}});
+		expect(prismaMock.user.update).not.toHaveBeenCalled();
+	});
 });
