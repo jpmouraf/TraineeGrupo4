@@ -129,7 +129,7 @@ class UserService {
 	}
 
 
-	async updateUserPassword(id: number, body: User) {
+	async updateUserPassword(id: number, body: Partial<User>) {
 		if(body.password == null || typeof body.password !== "string") {
 		    throw new InvalidParamError("Formato de senha inválido!");
 		}

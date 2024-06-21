@@ -4,9 +4,23 @@ import { prismaMock } from '../../../../config/singleton';
 import { QueryError } from "../../../../errors/QueryError";
 import { PermissionError } from "../../../../errors/PermissionError";
 import { selectItems } from "./excludeAttributes";
+import bcrypt from "bcrypt";
 
 // import { User } from "@prisma/client";
 // import { PrismaClient} from "@prisma/client";
+jest.mock('bcrypt', () => ({
+	hash: jest.fn(),
+}));
+describe('Encrypt password', () => {
+	test('Tenta encriptar a senha ==> retorna encrypted', async () => {
+		const password= "12345";
+		const encrypted='encrypted';
+		const saltRounds=10;
+		(bcrypt.hash as jest.Mock).mockResolvedValue(encrypted);
+		await expect(UserService.encryptPassword(password)).resolves.toEqual(encrypted);
+		expect(bcrypt.hash).toHaveBeenCalledWith(password, saltRounds);
+	});
+});
 describe('User-create', () =>{
 	test('O usuário é criado corretamente ==> retorna o usuário', async()=>{
 		const user={
@@ -185,8 +199,8 @@ describe('updateUser', () => {
 		}});
 	});
 
-    test('Tenta alterar o ID de um usuário ==> Lança erro', async () => {
-        const user={
+	test('Tenta alterar o ID de um usuário ==> Lança erro', async () => {
+		const user={
 			id: 1,
 			email:'Alice@gmail.com',
 			name:'Alice',
@@ -196,14 +210,56 @@ describe('updateUser', () => {
 		};
 
 		const body={
-            id: 3,
+			id: 3,
 			email:'Alice2@gmail.com',
 			name:'Alice Silva', 
 			photo: user.photo
 		};
-                prismaMock.user.update.mockRejectedValue(new PermissionError("ID não pode ser alterado!"));
-		await expect(UserService.updateUser(user.id, body)).rejects.toEqual(new Per"ID não pode ser alterado!");
+		prismaMock.user.update.mockRejectedValue(new PermissionError("ID não pode ser alterado!"));
+		await expect(UserService.updateUser(user.id, body)).rejects.toEqual(new PermissionError("ID não pode ser alterado!"));
     
-            expect(prismaMock.user.update).not.toHaveBeenCalled();
-    });
+		expect(prismaMock.user.update).not.toHaveBeenCalled();
+	});
+});
+describe('UpdateUserPassword', () => {
+	test('Atualiza senha com sucesso ==> retorna senha', async () => {
+		const user={
+			id: 1,
+			email:'Alice@gmail.com',
+			name:'Alice',
+			password:'12345',
+			photo:null,
+			role: 'user' 
+		};
+		const body={
+			password: "123"
+		};
+
+		const encrypted2 = await UserService.encryptPassword(body.password);
+		const user2={
+			id: user.id,
+			email: user.email,
+			name:user.name,
+			password:encrypted2,
+			photo:user.photo,
+			role: user.role 
+		};
+		prismaMock.user.update.mockResolvedValue(user2);
+		await expect(UserService.updateUserPassword(user.id, body)).resolves.toEqual({
+			id: 1,
+			email:'Alice@gmail.com',
+			name:'Alice',
+			password:encrypted2,
+			photo:null,
+			role: 'user' 
+		});
+		expect(prismaMock.user.update).toHaveBeenCalledWith({
+			data: {
+				password: encrypted2
+			},
+			where: {
+				id: user.id,
+			}
+		});
+	});
 });
