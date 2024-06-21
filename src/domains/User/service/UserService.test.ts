@@ -8,9 +8,16 @@ import bcrypt from "bcrypt";
 
 // import { User } from "@prisma/client";
 // import { PrismaClient} from "@prisma/client";
-jest.mock('bcrypt', () => ({
-	hash: jest.fn(),
-}));
+const user={
+	id: 0,
+	email:'Alice@gmail.com',
+	name:'Alice',
+	password:'12345',
+	photo:null,
+	role: 'user' 
+};
+
+jest.mock('bcrypt');
 describe('Encrypt password', () => {
 	test('Tenta encriptar a senha ==> retorna encrypted', async () => {
 		const password= "12345";
@@ -23,15 +30,6 @@ describe('Encrypt password', () => {
 });
 describe('User-create', () =>{
 	test('O usuário é criado corretamente ==> retorna o usuário', async()=>{
-		const user={
-			id: 0,
-			email:'Alice@gmail.com',
-			name:'Alice',
-			password:'12345',
-			photo:null,
-			role: 'user' 
-		};
-
 		const encrypted2 = await UserService.encryptPassword(user.password);
 		const user2={
 			id: user.id,
@@ -42,14 +40,7 @@ describe('User-create', () =>{
 			role: user.role 
 		};
 		prismaMock.user.create.mockResolvedValue(user2);
-		await expect(UserService.create(user2)).resolves.toEqual({
-			id:0,
-			email:'Alice@gmail.com',
-			name:'Alice',
-			password:encrypted2,
-			photo: null,
-			role:"user"
-		});
+		await expect(UserService.create(user2)).resolves.toEqual(user2);
 		expect(prismaMock.user.create).toHaveBeenCalledWith({data: {
 			email: user.email,
 			name: user.name,
@@ -61,14 +52,6 @@ describe('User-create', () =>{
 	});
 
 	test('Usuário tenta cadastrar com email já existente ==> lança erro', async()=>{
-		const user={
-			id: 1,
-			email:'Alice@gmail.com',
-			name:'Alice',
-			password:'12345',
-			photo:null,
-			role: 'user' 
-		};
 		const user2={
 			id: 1,
 			email:'Alice@gmail.com',
@@ -95,23 +78,9 @@ describe('GetUsersbyId', () => {
 		expect(prismaMock.user.findFirst).toHaveBeenCalledWith({where:{id: 9},select:selectItems});
 	});
 	test('Tenta achar um usuário que existe ==> retorna usuário', async () => {
-		const user={
-			id: 1,
-			email:'Alice@gmail.com',
-			name:'Alice',
-			password:'12345',
-			photo:null,
-			role: 'user' 
-		};
+
 		prismaMock.user.findFirst.mockResolvedValue(user);
-		await expect(UserService.getUserbyId(user.id)).resolves.toEqual({
-			id:1,
-			email:'Alice@gmail.com',
-			name:'Alice',
-			password:'12345',
-			photo: null,
-			role:"user"   
-		});
+		await expect(UserService.getUserbyId(user.id)).resolves.toEqual(user);
 		expect(prismaMock.user.findFirst).toHaveBeenCalledWith({
 			where:{id: user.id}, select: selectItems
 		});
@@ -120,25 +89,18 @@ describe('GetUsersbyId', () => {
 
 describe('GetUsers', () => {
 	test('Tenta listar todos os usuários ==> retorna os usuários', async () => {
-		const users=[{
-			id: 1,
-			email:'Alice@gmail.com',
-			name:'Alice',
-			password:'12345',
-			photo:null,
-			role: 'user' 
-		},
-		{
-			id: 1,
-			email:'Julia@gmail.com',
-			name:'Julia Silva',
-			password:'12345',
-			photo:null,
-			role: 'user' 
-		}];
+		const users=[user,
+			{
+				id: 1,
+				email:'Julia@gmail.com',
+				name:'Julia Silva',
+				password:'12345',
+				photo:null,
+				role: 'user' 
+			}];
 		prismaMock.user.findMany.mockResolvedValue(users);
 		await expect(UserService.getUsers()).resolves.toEqual([{
-			id: 1, 
+			id: 0, 
 			email:'Alice@gmail.com', 
 			name:'Alice', 
 			password:'12345',
@@ -175,16 +137,9 @@ describe('GetUsers', () => {
 });
 describe('updateUser', () => {
 	test('Tenta atualizar usuário ==> retorna usuário atualizado', async () => {
-		const user={
-			id: 1,
-			email:'Alice@gmail.com',
-			name:'Alice',
-			password:'12345',
-			photo:null,
-			role: 'user' 
-		};
+
 		const user2={
-			id: 1,
+			id: 0,
 			email:'Alice2@gmail.com',
 			name:'Alice Silva',
 			password:'12345',
@@ -198,7 +153,7 @@ describe('updateUser', () => {
 		};
 		prismaMock.user.update.mockResolvedValue(user2);
 		await expect(UserService.updateUser(user.id, body)).resolves.toEqual({
-			id: 1,
+			id: 0,
 			email:'Alice2@gmail.com',
 			name:'Alice Silva',
 			password:'12345',
@@ -217,14 +172,7 @@ describe('updateUser', () => {
 	});
 
 	test('Tenta alterar o ID de um usuário ==> Lança erro', async () => {
-		const user={
-			id: 1,
-			email:'Alice@gmail.com',
-			name:'Alice',
-			password:'12345',
-			photo:null,
-			role: 'user' 
-		};
+
 
 		const body={
 			id: 3,
@@ -240,14 +188,7 @@ describe('updateUser', () => {
 });
 describe('UpdateUserPassword', () => {
 	test('Atualiza senha com sucesso ==> retorna senha', async () => {
-		const user={
-			id: 1,
-			email:'Alice@gmail.com',
-			name:'Alice',
-			password:'12345',
-			photo:null,
-			role: 'user' 
-		};
+
 		const body={
 			password: "123"
 		};
@@ -262,14 +203,7 @@ describe('UpdateUserPassword', () => {
 			role: user.role 
 		};
 		prismaMock.user.update.mockResolvedValue(user2);
-		await expect(UserService.updateUserPassword(user.id, body)).resolves.toEqual({
-			id: 1,
-			email:'Alice@gmail.com',
-			name:'Alice',
-			password:encrypted2,
-			photo:null,
-			role: 'user' 
-		});
+		await expect(UserService.updateUserPassword(user.id, body)).resolves.toEqual(user2);
 		expect(prismaMock.user.update).toHaveBeenCalledWith({
 			data: {
 				password: encrypted2
@@ -279,4 +213,7 @@ describe('UpdateUserPassword', () => {
 			}
 		});
 	});
+});
+describe('Name of the group', () => {
+    
 });
