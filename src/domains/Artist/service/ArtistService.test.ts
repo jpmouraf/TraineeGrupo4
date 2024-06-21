@@ -6,7 +6,7 @@ import ArtistService from './ArtistService';
 
 
 describe('ArtistService - create', () => {
-    test('deve criar um novo artista', async () => {
+    test('deseja criar um novo artista ==> cria o artista', async () => {
         const artist = {
             id: 1,
             name: "cantor",
