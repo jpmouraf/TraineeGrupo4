@@ -1,7 +1,6 @@
 /* eslint-disable quotes */
 import UserService from "./UserService";
 import { prismaMock } from '../../../../config/singleton';
-import { InvalidParamError } from "../../../../errors/InvalidParamError";
 import { QueryError } from "../../../../errors/QueryError";
 import { PermissionError } from "../../../../errors/PermissionError";
 import { selectItems } from "./excludeAttributes";
@@ -142,4 +141,69 @@ describe('GetUsers', () => {
 
 	});
     
+});
+describe('updateUser', () => {
+	test('Tenta atualizar usuário ==> retorna usuário atualizado', async () => {
+		const user={
+			id: 1,
+			email:'Alice@gmail.com',
+			name:'Alice',
+			password:'12345',
+			photo:null,
+			role: 'user' 
+		};
+		const user2={
+			id: 1,
+			email:'Alice2@gmail.com',
+			name:'Alice Silva',
+			password:'12345',
+			photo:null,
+			role: 'user' 
+		};
+		const body={
+			email:'Alice2@gmail.com',
+			name:'Alice Silva', 
+			photo: user.photo
+		};
+		prismaMock.user.update.mockResolvedValue(user2);
+		await expect(UserService.updateUser(user.id, body)).resolves.toEqual({
+			id: 1,
+			email:'Alice2@gmail.com',
+			name:'Alice Silva',
+			password:'12345',
+			photo:null,
+			role: 'user' 
+		});
+		expect(prismaMock.user.update).toHaveBeenCalledWith({ data: {
+			email: body.email,
+			name: body.name,
+			photo: body.photo,
+			role: "user",
+		},
+		where: {
+			id: user.id,
+		}});
+	});
+
+	test('Tenta alterar o ID de um usuário ==> Lança erro', async () => {
+		const user={
+			id: 1,
+			email:'Alice@gmail.com',
+			name:'Alice',
+			password:'12345',
+			photo:null,
+			role: 'user' 
+		};
+
+		const body={
+			id: 3,
+			email:'Alice2@gmail.com',
+			name:'Alice Silva', 
+			photo: user.photo
+		};
+		prismaMock.user.update.mockRejectedValue(new PermissionError("ID não pode ser alterado!"));
+		await expect(UserService.updateUser(user.id, body)).rejects.toEqual(new PermissionError("ID não pode ser alterado!"));
+    
+		expect(prismaMock.user.update).not.toHaveBeenCalled();
+	});
 });
