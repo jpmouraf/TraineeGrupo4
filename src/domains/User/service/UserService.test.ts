@@ -263,11 +263,54 @@ describe('LinkUserMusic', () => {
 	});
 
 	test('Tenta linkar música com usuário que não exste ==> Lança erro', async () => {
-		const musicID = music.id;
 		const userId=9;
 		prismaMock.user.findUnique.mockResolvedValueOnce(null);
 		prismaMock.music.findUnique.mockResolvedValueOnce(music);
-		await expect(UserService.linkMusic(userId,musicID)).rejects.toThrow(
+		await expect(UserService.linkMusic(userId,music.id)).rejects.toThrow(
+			new QueryError("Usuário não encontrado!")
+		);
+		expect(prismaMock.user.findUnique).toHaveBeenCalledWith({where:{id: userId}});
+		expect(prismaMock.user.update).not.toHaveBeenCalled();
+	});
+});
+describe('UnlinkUserMusic', () => {
+	test('Remove relacionamento user e music ==> retorna user.', async () => {
+		prismaMock.user.findUnique.mockResolvedValueOnce(user); 
+		prismaMock.music.findUnique.mockResolvedValueOnce(music);
+		prismaMock.user.update.mockResolvedValue(user);
+		await expect(UserService.unlinkMusic(user.id,music.id)).resolves.toEqual(user);
+	
+		expect(prismaMock.user.update).toHaveBeenCalledWith({
+			data: {
+				music: {
+					disconnect: {
+						id: music.id,
+					},
+				},
+			},
+			where: {
+				id: user.id,
+			},
+			select: selectItems
+		});
+	});
+	test('Tenta remover relacionamento de usuário com música que não exste ==> Lança erro', async () => {
+		prismaMock.user.findUnique.mockResolvedValueOnce(user);
+		prismaMock.music.findUnique.mockResolvedValueOnce(null);
+		const musicId=9;
+		await expect(UserService.unlinkMusic(user.id,musicId)).rejects.toThrow(
+			new QueryError("Música não encontrada!")
+		);
+		expect(prismaMock.music.findUnique).toHaveBeenCalledWith({where:{id: musicId}});
+		expect(prismaMock.user.findUnique).toHaveBeenCalledWith({where:{id: user.id}});
+		expect(prismaMock.user.update).not.toHaveBeenCalled();
+	});
+
+	test('Tenta remover relacionamento de música com usuário que não exste ==> Lança erro', async () => {
+		const userId=9;
+		prismaMock.user.findUnique.mockResolvedValueOnce(null);
+		prismaMock.music.findUnique.mockResolvedValueOnce(music);
+		await expect(UserService.unlinkMusic(userId,music.id)).rejects.toThrow(
 			new QueryError("Usuário não encontrado!")
 		);
 		expect(prismaMock.user.findUnique).toHaveBeenCalledWith({where:{id: userId}});
