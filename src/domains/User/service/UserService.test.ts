@@ -185,8 +185,8 @@ describe('updateUser', () => {
 		}});
 	});
 
-	test('Tenta alterar o ID de um usuário ==> Lança erro', async () => {
-		const user={
+    test('Tenta alterar o ID de um usuário ==> Lança erro', async () => {
+        const user={
 			id: 1,
 			email:'Alice@gmail.com',
 			name:'Alice',
@@ -196,14 +196,14 @@ describe('updateUser', () => {
 		};
 
 		const body={
-			id: 3,
+            id: 3,
 			email:'Alice2@gmail.com',
 			name:'Alice Silva', 
 			photo: user.photo
 		};
-		prismaMock.user.update.mockRejectedValue(new PermissionError("ID não pode ser alterado!"));
-		await expect(UserService.updateUser(user.id, body)).rejects.toEqual(new PermissionError("ID não pode ser alterado!"));
+                prismaMock.user.update.mockRejectedValue(new PermissionError("ID não pode ser alterado!"));
+		await expect(UserService.updateUser(user.id, body)).rejects.toEqual(new Per"ID não pode ser alterado!");
     
-		expect(prismaMock.user.update).not.toHaveBeenCalled();
-	});
+            expect(prismaMock.user.update).not.toHaveBeenCalled();
+    });
 });
