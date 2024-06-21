@@ -8,14 +8,7 @@ import bcrypt from "bcrypt";
 
 // import { User } from "@prisma/client";
 // import { PrismaClient} from "@prisma/client";
-const user={
-	id: 0,
-	email:'Alice@gmail.com',
-	name:'Alice',
-	password:'12345',
-	photo:null,
-	role: 'user' 
-};
+
 
 const newArtist = {
 	id: 0,
@@ -29,6 +22,22 @@ const music={
 	genre: "pop",
 	album: "hits",
 	artistId: newArtist.id
+};
+const music2={
+	id: 2,
+	name: "music2",
+	genre: "pop",
+	album: "hits",
+	artistId: newArtist.id,
+};
+const user={
+	id: 0,
+	email:'Alice@gmail.com',
+	name:'Alice',
+	password:'12345',
+	photo:null,
+	role: 'user',
+	music: [music2]
 };
 jest.mock('bcrypt');
 describe('Encrypt password', () => {
@@ -112,22 +121,7 @@ describe('GetUsers', () => {
 				role: 'user' 
 			}];
 		prismaMock.user.findMany.mockResolvedValue(users);
-		await expect(UserService.getUsers()).resolves.toEqual([{
-			id: 0, 
-			email:'Alice@gmail.com', 
-			name:'Alice', 
-			password:'12345',
-			photo:null,
-			role: 'user'
-		},
-		{
-			id: 1,
-			email:'Julia@gmail.com',
-			name:'Julia Silva',
-			password:'12345',
-			photo:null,
-			role: 'user'
-		}]);
+		await expect(UserService.getUsers()).resolves.toEqual(users);
 		expect(prismaMock.user.findMany).toHaveBeenCalledWith({
 			orderBy: {
 				name: "asc",
@@ -294,7 +288,7 @@ describe('UnlinkUserMusic', () => {
 			select: selectItems
 		});
 	});
-	test('Tenta remover relacionamento de usuário com música que não exste ==> Lança erro', async () => {
+	test('Tenta remover relacionamento de usuário com música que não existe ==> Lança erro', async () => {
 		prismaMock.user.findUnique.mockResolvedValueOnce(user);
 		prismaMock.music.findUnique.mockResolvedValueOnce(null);
 		const musicId=9;
@@ -317,3 +311,28 @@ describe('UnlinkUserMusic', () => {
 		expect(prismaMock.user.update).not.toHaveBeenCalled();
 	});
 });
+describe('listenedMusics', () => {
+	test('Tenta listar músicas de um usuário que não existe ==> Lança erro', async () => {
+		const userId=9;
+		prismaMock.user.findUnique.mockResolvedValueOnce(null);
+		await expect(UserService.listenedMusics(userId)).rejects.toThrow(
+			new QueryError("Usuário não encontrado!")
+		);
+		expect(prismaMock.user.findUnique).toHaveBeenCalledWith({where:{id: userId}});
+		expect(prismaMock.user.findFirst).not.toHaveBeenCalled();
+	});
+	test('Lista músicas ouvidas por um usuário ==> Retorna músicas', async () => {
+		prismaMock.user.findUnique.mockResolvedValueOnce(user);
+		prismaMock.user.findFirst.mockResolvedValue(user);
+		const listenedMusics= await UserService.listenedMusics(user.id);
+		expect(listenedMusics).toEqual(user);
+		expect(prismaMock.user.findUnique).toHaveBeenCalledWith({where:{id: user.id}});
+		expect(prismaMock.user.findFirst).toHaveBeenCalledWith({
+			where: {
+				id: user.id,
+			},
+			select: {
+				music: true
+			}
+		});
+	});});
