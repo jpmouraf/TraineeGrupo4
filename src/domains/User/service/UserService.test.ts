@@ -200,10 +200,27 @@ describe('updateUser', () => {
     
 		expect(prismaMock.user.update).not.toHaveBeenCalled();
 	});
+	test('Tenta alterar o role de um usuário ==> Lança erro', async () => {
+
+
+		const body={
+			email:'Alice2@gmail.com',
+			name:'Alice Silva',
+			role:'admin',
+			photo: user.photo
+		};
+		prismaMock.user.update.mockRejectedValue(
+			new PermissionError("Você não tem permissão para alterar o role!")
+		);
+		await expect(UserService.updateUser(user.id, body)).rejects.toEqual(
+			new PermissionError("Você não tem permissão para alterar o role!")
+		);
+    
+		expect(prismaMock.user.update).not.toHaveBeenCalled();
+	});
 });
 describe('UpdateUserPassword', () => {
 	test('Atualiza senha com sucesso ==> retorna senha', async () => {
-
 		const body={
 			password: "123"
 		};
@@ -217,6 +234,7 @@ describe('UpdateUserPassword', () => {
 			photo:user.photo,
 			role: user.role 
 		};
+		prismaMock.user.findUnique.mockResolvedValueOnce(user2);
 		prismaMock.user.update.mockResolvedValue(user2);
 		await expect(UserService.updateUserPassword(user.id, body)).resolves.toEqual(user2);
 		expect(prismaMock.user.update).toHaveBeenCalledWith({
@@ -227,6 +245,7 @@ describe('UpdateUserPassword', () => {
 				id: user.id,
 			}
 		});
+        
 	});
 });
 describe('LinkUserMusic', () => {

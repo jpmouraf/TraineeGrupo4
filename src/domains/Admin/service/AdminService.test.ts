@@ -1,6 +1,8 @@
 
+
 /* eslint-disable quotes */
 import prisma from "../../../../config/prismaClient";
+
 import { prismaMock } from "../../../../config/singleton";
 import { InvalidParamError } from "../../../../errors/InvalidParamError";
 import { QueryError } from "../../../../errors/QueryError";
@@ -15,6 +17,7 @@ const admin = {
 	photo: null,
 	role: "admin"
 };
+
 
 const user = {
     id: 0,
@@ -66,7 +69,6 @@ describe("updateAdmin", () => {
 
 	test("entrada com atributos a serem alterados ==> atributos são alterados no banco de dados", async () => {
 
-        
 		prismaMock.user.findUnique.mockResolvedValue(admin);
 		
 		prismaMock.user.update.mockResolvedValue(updatedAdmin);
@@ -97,7 +99,6 @@ describe("updateAdmin", () => {
 		
 		prismaMock.user.findUnique.mockResolvedValue(admin);
 		
-
 		prismaMock.user.findUnique.mockRejectedValue(new QueryError("O id não pode ser modificado!"));
 
 		await expect(AdminService.updateAdmin(admin.id, bodyId)).rejects.toThrow(
@@ -149,6 +150,7 @@ describe('UpdateAdminPassword', () => {
 		expect(prismaMock.user.findUnique).toHaveBeenCalledWith({where:{id: userID}});
 
 	});  
+
 });
 
 describe('createByAdmin' , () => {
@@ -228,4 +230,5 @@ describe('createByAdmin' , () => {
     });
 
 });
+
 
