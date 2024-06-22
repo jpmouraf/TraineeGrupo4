@@ -13,7 +13,9 @@ class AdminService {
 		const encrypted = await bcrypt.hash(password, saltRounds);
 		return encrypted;
 	}
-	async updateAdmin(id: number, body:Partial<User>) {
+
+	async updateAdmin(id: number, body: Partial<User>) {
+
 
 		if ((typeof body.name !== "string" &&  typeof body.name !== "undefined") ){
 			throw new InvalidParamError("Os nome inserido é inválido!");

@@ -1,3 +1,4 @@
+
 /* eslint-disable quotes */
 import prisma from "../../../../config/prismaClient";
 import { prismaMock } from "../../../../config/singleton";
@@ -65,8 +66,9 @@ describe("updateAdmin", () => {
 
 	test("entrada com atributos a serem alterados ==> atributos são alterados no banco de dados", async () => {
 
+        
 		prismaMock.user.findUnique.mockResolvedValue(admin);
-
+		
 		prismaMock.user.update.mockResolvedValue(updatedAdmin);
 
 		await expect(AdminService.updateAdmin(admin.id, body)).resolves.toEqual(updatedAdmin);
@@ -92,7 +94,9 @@ describe("updateAdmin", () => {
 
 	test("tenta mudar o id do usuário ==> lança exceção", async () => {
 
+		
 		prismaMock.user.findUnique.mockResolvedValue(admin);
+		
 
 		prismaMock.user.findUnique.mockRejectedValue(new QueryError("O id não pode ser modificado!"));
 
@@ -101,6 +105,7 @@ describe("updateAdmin", () => {
 		);
 	});
 });
+
 
 describe('UpdateAdminPassword', () => {
 	test('Atualiza senha com sucesso ==> retorna senha', async () => {
@@ -223,3 +228,4 @@ describe('createByAdmin' , () => {
     });
 
 });
+
