@@ -15,7 +15,8 @@ const admin = {
 	role: "admin"
 };
 
-const user : any= {
+const user = {
+    id: 0,
     name: 'usuário',
     email: 'user@gmail.com',
     password: '12345', 
@@ -155,7 +156,8 @@ describe('createByAdmin' , () => {
     test('Tenta cria um usuário com um email já cadastrado ==> gera erro', async () => {
         prismaMock.user.findUnique.mockResolvedValue(user);
 
-        const newUser :any = {
+        const newUser = {
+            id: 0,
             name: 'usuário2',
             email: 'user@gmail.com',
             password: '12345', 
@@ -187,7 +189,8 @@ describe('createByAdmin' , () => {
     });
 
     test('usuário informa o email em um formato errado ==> gera erro', async () => {
-        const user2 : any = {
+        const user2 = {
+            id: 0,
             name: 'usuário',
             email: 'user.email',
             password: '12345', 

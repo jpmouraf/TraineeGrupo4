@@ -122,9 +122,6 @@ class AdminService {
 			throw new InvalidParamError("O role está em um formato inválido!");
 		}
 
-		if (body.id !== undefined){
-			throw new QueryError("O id não pode ser modificado!");
-		}
 		if(!adminRegex.test(body.email)) {
 			throw new QueryError("Formato de email inválido!");
 		}
