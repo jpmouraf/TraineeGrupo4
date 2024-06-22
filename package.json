@@ -4,7 +4,7 @@
   "description": "Este é o projeto para a atividade \"Mãos à obra\" da semana 5 do Trainee",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest --verbose",
     "start": "tsnd --rs --respawn --transpile-only --exit-child index.ts"
   },
   "keywords": [],
@@ -14,11 +14,15 @@
     "@types/cookie-parser": "^1.4.7",
     "@types/cors": "^2.8.17",
     "@types/express": "^4.17.21",
+    "@types/jest": "^29.5.12",
     "@types/node": "^20.12.12",
     "@typescript-eslint/eslint-plugin": "^7.11.0",
     "@typescript-eslint/parser": "^7.11.0",
     "eslint": "^8.56.0",
+    "jest": "^29.7.0",
+    "jest-mock-extended": "^3.0.7",
     "prisma": "^5.15.0",
+    "ts-jest": "^29.1.5",
     "ts-node": "^10.9.2",
     "typescript": "^5.4.5"
   },
