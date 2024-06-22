@@ -79,13 +79,13 @@ class UserService {
 			select: selectItems
 		});
 
-		if(!users) {
+		if(users.length==0) {
 		    throw new QueryError("Nenhum usuário cadastrado!");
 		}
 		return users;
 	}
 
-	async updateUser(id: number, body: User) {
+	async updateUser(id: number, body: Partial<User>) {
 		if(body.id !== undefined || body.id == 0) {
 			throw new PermissionError("ID não pode ser alterado!");
 		}
@@ -129,7 +129,7 @@ class UserService {
 	}
 
 
-	async updateUserPassword(id: number, body: User) {
+	async updateUserPassword(id: number, body: Partial<User>) {
 		if(body.password == null || typeof body.password !== "string") {
 		    throw new InvalidParamError("Formato de senha inválido!");
 		}
