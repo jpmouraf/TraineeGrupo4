@@ -1,4 +1,8 @@
+
+
 /* eslint-disable quotes */
+import prisma from "../../../../config/prismaClient";
+
 import { prismaMock } from "../../../../config/singleton";
 import { InvalidParamError } from "../../../../errors/InvalidParamError";
 import { QueryError } from "../../../../errors/QueryError";
@@ -13,6 +17,17 @@ const admin = {
 	photo: null,
 	role: "admin"
 };
+
+
+const user = {
+    id: 0,
+    name: 'usuário',
+    email: 'user@gmail.com',
+    password: '12345', 
+    photo: null,
+    role: 'user'
+};
+
 
 jest.mock("bcrypt", () => ({ 
 	hash: jest.fn(), 
@@ -53,7 +68,7 @@ describe("updateAdmin", () => {
 	};
 
 	test("entrada com atributos a serem alterados ==> atributos são alterados no banco de dados", async () => {
-        
+
 		prismaMock.user.findUnique.mockResolvedValue(admin);
 		
 		prismaMock.user.update.mockResolvedValue(updatedAdmin);
@@ -71,7 +86,7 @@ describe("updateAdmin", () => {
 	});
 
 	test("tentar mudar um usuário que não existe ==> lança exceção", async () => {
-		
+
 		prismaMock.user.findUnique.mockResolvedValue(null);
 
 		await expect(AdminService.updateAdmin(admin.id, body)).rejects.toThrow(
@@ -80,6 +95,7 @@ describe("updateAdmin", () => {
 	});
 
 	test("tenta mudar o id do usuário ==> lança exceção", async () => {
+
 		
 		prismaMock.user.findUnique.mockResolvedValue(admin);
 		
@@ -90,6 +106,7 @@ describe("updateAdmin", () => {
 		);
 	});
 });
+
 
 describe('UpdateAdminPassword', () => {
 	test('Atualiza senha com sucesso ==> retorna senha', async () => {
@@ -133,4 +150,85 @@ describe('UpdateAdminPassword', () => {
 		expect(prismaMock.user.findUnique).toHaveBeenCalledWith({where:{id: userID}});
 
 	});  
+
 });
+
+describe('createByAdmin' , () => {
+    test('Admin cria um usuário com sucesso ==> retorna o usuário cadastrado', async () => {
+        prismaMock.user.create.mockResolvedValue(user);
+
+        await expect(AdminService.createByAdmin(user)).resolves.toEqual(user);
+    });
+
+    test('Tenta cria um usuário com um email já cadastrado ==> gera erro', async () => {
+        prismaMock.user.findUnique.mockResolvedValue(user);
+
+        const newUser = {
+            id: 0,
+            name: 'usuário2',
+            email: 'user@gmail.com',
+            password: '12345', 
+            photo: null,
+            role: 'user'
+        };
+
+        prismaMock.user.create.mockRejectedValue(new QueryError("Email já cadastrado.."));
+
+        await expect(AdminService.createByAdmin(newUser)).rejects.toThrow(
+            new QueryError("Email já cadastrado..")
+        );
+    });
+
+    test('admin informa a senha em um formato errado ==> gera erro', async () => {
+        const user2 : any = {
+            name: 'usuário',
+            email: 'user@gmail.com',
+            password: 12345, 
+            photo: null,
+            role: 'user'
+        }
+
+        prismaMock.user.create.mockResolvedValue(user2);
+
+        await expect(AdminService.createByAdmin(user2)).rejects.toThrow(
+            new InvalidParamError("A senha está em um formato inválido!")
+        );
+    });
+
+    test('admin informa o email em um formato errado ==> gera erro', async () => {
+        const user2 = {
+            id: 0,
+            name: 'usuário',
+            email: 'user.email',
+            password: '12345', 
+            photo: null,
+            role: 'user'
+        }
+
+        prismaMock.user.create.mockResolvedValue(user2);
+
+        await expect(AdminService.createByAdmin(user2)).rejects.toThrow(
+            new QueryError("Formato de email inválido!")
+        );
+    });
+
+    test('admin informa uma role em um formato errado ==> gera erro' , async () => {
+        const user2 = {
+            id: 0,
+            name: 'usuário',
+            email: 'user@gmail.com',
+            password: '12345', 
+            photo: null,
+            role: 'usuario'
+        }
+
+        prismaMock.user.create.mockResolvedValue(user2);
+
+        await expect(AdminService.createByAdmin(user2)).rejects.toThrow(
+            new InvalidParamError("O role está em um formato inválido!")
+        );
+    });
+
+});
+
+
