@@ -74,8 +74,10 @@ class ArtistService {
 		if(typeof body.name != "string" && typeof body.name != "undefined"){
 			throw new InvalidParamError("O nome colocado deve ser uma string.");
 		}
-		if(typeof body.photo != "string" && typeof body.photo != "undefined"){
-			throw new InvalidParamError("A foto adicionado está no formato errado.");
+		if (body.photo !== undefined) {
+			if (typeof body.photo != "string" && body.photo != null) {
+				throw new QueryError("A foto adicionada está no formato errado.");
+			}
 		}
 		if(typeof body.streams != "number" && typeof body.streams != "undefined"){
 			throw new InvalidParamError("A quantidade de streams deve ser um número.");
