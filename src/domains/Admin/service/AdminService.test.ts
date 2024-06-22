@@ -1,8 +1,4 @@
-
-
 /* eslint-disable quotes */
-import prisma from "../../../../config/prismaClient";
-
 import { prismaMock } from "../../../../config/singleton";
 import { InvalidParamError } from "../../../../errors/InvalidParamError";
 import { QueryError } from "../../../../errors/QueryError";
@@ -20,12 +16,12 @@ const admin = {
 
 
 const user = {
-    id: 0,
-    name: 'usuário',
-    email: 'user@gmail.com',
-    password: '12345', 
-    photo: null,
-    role: 'user'
+	id: 0,
+	name: 'usuário',
+	email: 'user@gmail.com',
+	password: '12345', 
+	photo: null,
+	role: 'user'
 };
 
 
@@ -154,80 +150,80 @@ describe('UpdateAdminPassword', () => {
 });
 
 describe('createByAdmin' , () => {
-    test('Admin cria um usuário com sucesso ==> retorna o usuário cadastrado', async () => {
-        prismaMock.user.create.mockResolvedValue(user);
+	test('Admin cria um usuário com sucesso ==> retorna o usuário cadastrado', async () => {
+		prismaMock.user.create.mockResolvedValue(user);
 
-        await expect(AdminService.createByAdmin(user)).resolves.toEqual(user);
-    });
+		await expect(AdminService.createByAdmin(user)).resolves.toEqual(user);
+	});
 
-    test('Tenta cria um usuário com um email já cadastrado ==> gera erro', async () => {
-        prismaMock.user.findUnique.mockResolvedValue(user);
+	test('Tenta cria um usuário com um email já cadastrado ==> gera erro', async () => {
+		prismaMock.user.findUnique.mockResolvedValue(user);
 
-        const newUser = {
-            id: 0,
-            name: 'usuário2',
-            email: 'user@gmail.com',
-            password: '12345', 
-            photo: null,
-            role: 'user'
-        };
+		const newUser = {
+			id: 0,
+			name: 'usuário2',
+			email: 'user@gmail.com',
+			password: '12345', 
+			photo: null,
+			role: 'user'
+		};
 
-        prismaMock.user.create.mockRejectedValue(new QueryError("Email já cadastrado.."));
+		prismaMock.user.create.mockRejectedValue(new QueryError("Email já cadastrado.."));
 
-        await expect(AdminService.createByAdmin(newUser)).rejects.toThrow(
-            new QueryError("Email já cadastrado..")
-        );
-    });
+		await expect(AdminService.createByAdmin(newUser)).rejects.toThrow(
+			new QueryError("Email já cadastrado..")
+		);
+	});
 
-    test('admin informa a senha em um formato errado ==> gera erro', async () => {
-        const user2 : any = {
-            name: 'usuário',
-            email: 'user@gmail.com',
-            password: 12345, 
-            photo: null,
-            role: 'user'
-        }
+	test('admin informa a senha em um formato errado ==> gera erro', async () => {
+		const user2 : Any = {
+			name: 'usuário',
+			email: 'user@gmail.com',
+			password: 12345, 
+			photo: null,
+			role: 'user'
+		};
 
-        prismaMock.user.create.mockResolvedValue(user2);
+		prismaMock.user.create.mockResolvedValue(user2);
 
-        await expect(AdminService.createByAdmin(user2)).rejects.toThrow(
-            new InvalidParamError("A senha está em um formato inválido!")
-        );
-    });
+		await expect(AdminService.createByAdmin(user2)).rejects.toThrow(
+			new InvalidParamError("A senha está em um formato inválido!")
+		);
+	});
 
-    test('admin informa o email em um formato errado ==> gera erro', async () => {
-        const user2 = {
-            id: 0,
-            name: 'usuário',
-            email: 'user.email',
-            password: '12345', 
-            photo: null,
-            role: 'user'
-        }
+	test('admin informa o email em um formato errado ==> gera erro', async () => {
+		const user2 = {
+			id: 0,
+			name: 'usuário',
+			email: 'user.email',
+			password: '12345', 
+			photo: null,
+			role: 'user'
+		};
 
-        prismaMock.user.create.mockResolvedValue(user2);
+		prismaMock.user.create.mockResolvedValue(user2);
 
-        await expect(AdminService.createByAdmin(user2)).rejects.toThrow(
-            new QueryError("Formato de email inválido!")
-        );
-    });
+		await expect(AdminService.createByAdmin(user2)).rejects.toThrow(
+			new QueryError("Formato de email inválido!")
+		);
+	});
 
-    test('admin informa uma role em um formato errado ==> gera erro' , async () => {
-        const user2 = {
-            id: 0,
-            name: 'usuário',
-            email: 'user@gmail.com',
-            password: '12345', 
-            photo: null,
-            role: 'usuario'
-        }
+	test('admin informa uma role em um formato errado ==> gera erro' , async () => {
+		const user2 = {
+			id: 0,
+			name: 'usuário',
+			email: 'user@gmail.com',
+			password: '12345', 
+			photo: null,
+			role: 'usuario'
+		};
 
-        prismaMock.user.create.mockResolvedValue(user2);
+		prismaMock.user.create.mockResolvedValue(user2);
 
-        await expect(AdminService.createByAdmin(user2)).rejects.toThrow(
-            new InvalidParamError("O role está em um formato inválido!")
-        );
-    });
+		await expect(AdminService.createByAdmin(user2)).rejects.toThrow(
+			new InvalidParamError("O role está em um formato inválido!")
+		);
+	});
 
 });
 
