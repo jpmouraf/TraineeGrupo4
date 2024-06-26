@@ -293,6 +293,16 @@ describe('LinkUserMusic', () => {
 		expect(prismaMock.user.findUnique).toHaveBeenCalledWith({where:{id: userId}});
 		expect(prismaMock.user.update).not.toHaveBeenCalled();
 	});
+
+	test('Tenta ouvir uma música que já está constada como ouvida ==> gera erro' , async() => {
+		prismaMock.user.findUnique.mockResolvedValueOnce(user);
+        prismaMock.music.findUnique.mockResolvedValueOnce(music);
+        prismaMock.user.findFirst.mockResolvedValueOnce(user);
+
+        await expect(UserService.linkMusic(user.id, music.id)).rejects.toThrow(
+            new QueryError("Música já foi ouvida pelo usuário")
+        );
+	});
 });
 describe('UnlinkUserMusic', () => {
 	test('Remove relacionamento user e music ==> retorna user.', async () => {

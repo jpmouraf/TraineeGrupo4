@@ -167,6 +167,21 @@ class UserService {
 		    throw new QueryError("Música não encontrada!");
 		}
 
+		const checkAlreadyListened = await prisma.user.findFirst({
+			where: {
+				id: idUser,
+				music: {
+					some: {
+						id: idMusic,
+					}
+				}
+			} 
+		})
+
+		if(checkAlreadyListened) {
+			throw new QueryError("Música já foi ouvida pelo usuário");
+		}
+
 		const link = await prisma.user.update({
 			data: {
 				music: {

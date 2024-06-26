@@ -176,7 +176,7 @@ describe('createByAdmin' , () => {
 	});
 
 	test('admin informa a senha em um formato errado ==> gera erro', async () => {
-		const user2 : Any = {
+		const user2 : any = {
 			name: 'usuário',
 			email: 'user@gmail.com',
 			password: 12345, 
