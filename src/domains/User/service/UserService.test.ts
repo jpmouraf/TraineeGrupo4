@@ -294,7 +294,7 @@ describe('LinkUserMusic', () => {
 		expect(prismaMock.user.update).not.toHaveBeenCalled();
 	});
 
-	test('Tenta ouvir uma música que já está constada como ouvida ==> gera erro' , async() => {
+	test('Tenta ouvir uma música que já está constada como ouvida ==> Lança erro' , async() => {
 		prismaMock.user.findUnique.mockResolvedValueOnce(user);
         prismaMock.music.findUnique.mockResolvedValueOnce(music);
         prismaMock.user.findFirst.mockResolvedValueOnce(user);
@@ -308,6 +308,7 @@ describe('UnlinkUserMusic', () => {
 	test('Remove relacionamento user e music ==> retorna user.', async () => {
 		prismaMock.user.findUnique.mockResolvedValueOnce(user); 
 		prismaMock.music.findUnique.mockResolvedValueOnce(music);
+		prismaMock.user.findFirst.mockResolvedValue(user);
 		prismaMock.user.update.mockResolvedValue(user);
 		await expect(UserService.unlinkMusic(user.id,music.id)).resolves.toEqual(user);
 	
@@ -347,7 +348,18 @@ describe('UnlinkUserMusic', () => {
 		expect(prismaMock.user.findUnique).toHaveBeenCalledWith({where:{id: userId}});
 		expect(prismaMock.user.update).not.toHaveBeenCalled();
 	});
+
+	test('Tenta desouvir uma música que não foi escutada ==> Lança erro' , async() => {
+		prismaMock.user.findUnique.mockResolvedValueOnce(user);
+        prismaMock.music.findUnique.mockResolvedValueOnce(music);
+        prismaMock.user.findFirst.mockResolvedValueOnce(null);
+
+        await expect(UserService.unlinkMusic(user.id, music.id)).rejects.toThrow(
+            new QueryError("Música não foi ouvida pelo usuário")
+        );
+	});
 });
+
 describe('listenedMusics', () => {
 	test('Tenta listar músicas de um usuário que não existe ==> Lança erro', async () => {
 		const userId=9;

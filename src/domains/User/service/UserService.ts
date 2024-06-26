@@ -176,7 +176,7 @@ class UserService {
 					}
 				}
 			} 
-		})
+		});
 
 		if(checkAlreadyListened) {
 			throw new QueryError("Música já foi ouvida pelo usuário");
@@ -217,6 +217,21 @@ class UserService {
 
 		if(!checkMusic) {
 		    throw new QueryError("Música não encontrada!");
+		}
+
+		const checkAlreadyListened = await prisma.user.findFirst({
+			where: {
+				id: idUser,
+				music: {
+					some: {
+						id: idMusic,
+					}
+				}
+			} 
+		});
+
+		if(!checkAlreadyListened) {
+			throw new QueryError("Música não foi ouvida pelo usuário");
 		}
 
 		const unlink = await prisma.user.update({
