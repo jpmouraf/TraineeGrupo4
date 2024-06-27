@@ -157,6 +157,10 @@ class UserService {
 		    throw new QueryError("Usuário não encontrado!");
 		}
 
+		if(typeof idMusic != "number") {
+			throw new InvalidParamError("Id da música inválido");
+		}
+
 		const checkMusic = await prisma.music.findUnique({
 		    where: {
 		        id: idMusic,
@@ -207,6 +211,10 @@ class UserService {
 
 		if(!checkUser) {
 		    throw new QueryError("Usuário não encontrado!");
+		}
+
+		if(typeof idMusic != "number") {
+			throw new InvalidParamError("Id da música inválido");
 		}
 
 		const checkMusic = await prisma.music.findUnique({
