@@ -6,7 +6,7 @@ import AdminService from "./AdminService";
 import bcrypt from "bcrypt"; 
 
 const admin = {
-	id: 0,
+	id: 3,
 	name: "Administrador",
 	email: "admin@gmail.com",
 	password: "12345",

@@ -69,6 +69,10 @@ class AdminService {
 	
 	}
 	async updateAdminPassword(id: number, body: Partial<User>) {
+		
+		if(typeof id != "number" || !id){
+			throw new InvalidParamError("Você deve indicar o ID do usuário!");
+		}
 
 		if (typeof body.password !== "string" ){
 			throw new InvalidParamError("Os dados inseridos são inválidos!");
