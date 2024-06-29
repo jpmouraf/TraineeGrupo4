@@ -1,7 +1,3 @@
-
-/* eslint-disable no-mixed-spaces-and-tabs */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-
 import { Router, Request, Response, NextFunction } from "express";
 import AdminService from "../service/AdminService";
 import UserService from "../../User/service/UserService";

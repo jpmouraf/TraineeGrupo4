@@ -1,8 +1,7 @@
-/* eslint-disable quotes */
-import { Router, Request, Response, NextFunction } from 'express';
+import { Router, Request, Response, NextFunction } from "express";
 import ArtistService from "../service/ArtistService";
-import { checkRole, verifyJWT } from '../../../middlewares/auth';
-import statusCodes from '../../../../utils/constants/statusCodes';
+import { checkRole, verifyJWT } from "../../../middlewares/auth";
+import statusCodes from "../../../../utils/constants/statusCodes";
 
 const ArtistRouter = Router();
 

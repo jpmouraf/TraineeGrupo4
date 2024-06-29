@@ -1,5 +1,3 @@
-/* eslint-disable indent */
-/* eslint-disable no-mixed-spaces-and-tabs */
 import { Router, Request, Response, NextFunction } from "express";
 import UserService from "../service/UserService";
 import { notLoggedIn, login, verifyJWT, logout } from "../../../middlewares/auth";
@@ -104,17 +102,17 @@ UserRouter.delete("/unlinkUserMusic/account/:idMusic", verifyJWT, checkRole(["ad
 		res.status(statusCodes.SUCCESS).json(unlink);
 
 	} catch (error) {
-	    next(error);
+		next(error);
 	}
 });
 
 UserRouter.get("/account/listenedMusics",verifyJWT,checkRole(["admin", "user"]), async (req: Request, res: Response, next: NextFunction) => {
-    try {
+	try {
 		
 		const listenedMusics = await UserService.listenedMusics(Number(req.user.id));
 		res.status(statusCodes.SUCCESS).json(listenedMusics);
 	} catch (error) {
-	    next(error);
+		next(error);
 	}
 });
 
@@ -122,7 +120,7 @@ UserRouter.delete("/account/delete", verifyJWT, checkRole(["admin", "user"]), as
 	try {
         
 		const user = await UserService.delete(Number(req.user.id));
-		 res.clearCookie("jwt", { httpOnly: true, 
+		res.clearCookie("jwt", { httpOnly: true, 
 			secure: process.env.NODE_ENV !== "development"  });
 		res.status(statusCodes.SUCCESS).json(user);
 
