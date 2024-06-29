@@ -127,6 +127,26 @@ class ArtistService {
 		if(!checkArtist){
 			throw new InvalidParamError("Você não pode deletar um artista que não está cadastrado.");
 		}
+
+		const Artistmusics = await prisma.artist.findFirst({
+			where: {
+				id: wantedId,
+			},
+			select: {
+				music: true,
+			},
+			orderBy: {
+				name: "asc",
+			}
+
+		});
+		if (Artistmusics){
+			await prisma.music.deleteMany({
+				where: {
+					artistId: wantedId,
+				},
+			});
+		}
 		
 		const artist = await prisma.artist.delete({ where: {id: wantedId}});
 		return artist;

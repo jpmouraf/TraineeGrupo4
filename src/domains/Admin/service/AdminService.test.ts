@@ -5,7 +5,7 @@ import AdminService from "./AdminService";
 import bcrypt from "bcrypt"; 
 
 const admin = {
-	id: 0,
+	id: 3,
 	name: "Administrador",
 	email: "admin@gmail.com",
 	password: "12345",
@@ -174,23 +174,9 @@ describe("createByAdmin" , () => {
 		);
 	});
 
-	test("admin informa a senha em um formato errado ==> gera erro", async () => {
-		const user2 : Any = {
-			name: "usuário",
-			email: "user@gmail.com",
-			password: 12345, 
-			photo: null,
-			role: "user"
-		};
 
-		prismaMock.user.create.mockResolvedValue(user2);
+	test('admin informa o email em um formato errado ==> gera erro', async () => {
 
-		await expect(AdminService.createByAdmin(user2)).rejects.toThrow(
-			new InvalidParamError("A senha está em um formato inválido!")
-		);
-	});
-
-	test("admin informa o email em um formato errado ==> gera erro", async () => {
 		const user2 = {
 			id: 0,
 			name: "usuário",

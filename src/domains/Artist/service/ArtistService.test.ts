@@ -69,6 +69,7 @@ test("o número de streams deve ser um número inteiro ==> lança exceção", as
 		id: 1,
 		name: "cantor",
 		photo: null,
+
 		streams: 1000
 	};
 
