@@ -1,6 +1,5 @@
-/* eslint-disable quotes */
 import UserService from "./UserService";
-import { prismaMock } from '../../../../config/singleton';
+import { prismaMock } from "../../../../config/singleton";
 import { QueryError } from "../../../../errors/QueryError";
 import { PermissionError } from "../../../../errors/PermissionError";
 import { selectItems } from "./excludeAttributes";
@@ -32,34 +31,34 @@ const music2={
 };
 const user={
 	id: 0,
-	email:'Alice@gmail.com',
-	name:'Alice',
-	password:'12345',
+	email:"Alice@gmail.com",
+	name:"Alice",
+	password:"12345",
 	photo:null,
-	role: 'user',
+	role: "user",
 	music: [music2]
 };
 const user3={
 	id: 3,
-	email:'Delete@gmail.com',
-	name:'delete',
-	password:'12345',
+	email:"Delete@gmail.com",
+	name:"delete",
+	password:"12345",
 	photo:null,
-	role: 'user'
+	role: "user"
 };
-jest.mock('bcrypt');
-describe('Encrypt password', () => {
-	test('Tenta encriptar a senha ==> retorna encrypted', async () => {
+jest.mock("bcrypt");
+describe("Encrypt password", () => {
+	test("Tenta encriptar a senha ==> retorna encrypted", async () => {
 		const password= "12345";
-		const encrypted='encrypted';
+		const encrypted="encrypted";
 		const saltRounds=10;
 		(bcrypt.hash as jest.Mock).mockResolvedValue(encrypted);
 		await expect(UserService.encryptPassword(password)).resolves.toEqual(encrypted);
 		expect(bcrypt.hash).toHaveBeenCalledWith(password, saltRounds);
 	});
 });
-describe('User-create', () =>{
-	test('O usuário é criado corretamente ==> retorna o usuário', async()=>{
+describe("User-create", () =>{
+	test("O usuário é criado corretamente ==> retorna o usuário", async()=>{
 		const encrypted2 = await UserService.encryptPassword(user.password);
 		const user2={
 			id: user.id,
@@ -81,14 +80,14 @@ describe('User-create', () =>{
 
 	});
 
-	test('Usuário tenta cadastrar com email já existente ==> lança erro', async()=>{
+	test("Usuário tenta cadastrar com email já existente ==> lança erro", async()=>{
 		const user2={
 			id: 1,
-			email:'Alice@gmail.com',
-			name:'Alice Silva',
-			password:'12345',
+			email:"Alice@gmail.com",
+			name:"Alice Silva",
+			password:"12345",
 			photo:null,
-			role: 'user' 
+			role: "user" 
 		};
 		prismaMock.user.findUnique.mockResolvedValue(user); 
 		await expect(UserService.create(user2)).rejects.toThrow(
@@ -99,15 +98,15 @@ describe('User-create', () =>{
 	});
 
 });
-describe('GetUsersbyId', () => {
-	test('Tenta achar um usuário inexistente ==> Lança erro', async () => {
+describe("GetUsersbyId", () => {
+	test("Tenta achar um usuário inexistente ==> Lança erro", async () => {
 		prismaMock.user.findFirst.mockResolvedValue(null);
 		await expect(UserService.getUserbyId(9)).rejects.toThrow(
 			new QueryError("Usuário não cadastrado!")
 		);
 		expect(prismaMock.user.findFirst).toHaveBeenCalledWith({where:{id: 9},select:selectItems});
 	});
-	test('Tenta achar um usuário que existe ==> retorna usuário', async () => {
+	test("Tenta achar um usuário que existe ==> retorna usuário", async () => {
 
 		prismaMock.user.findFirst.mockResolvedValue(user);
 		await expect(UserService.getUserbyId(user.id)).resolves.toEqual(user);
@@ -117,16 +116,16 @@ describe('GetUsersbyId', () => {
 	});
 });
 
-describe('GetUsers', () => {
-	test('Tenta listar todos os usuários ==> retorna os usuários', async () => {
+describe("GetUsers", () => {
+	test("Tenta listar todos os usuários ==> retorna os usuários", async () => {
 		const users=[user,
 			{
 				id: 1,
-				email:'Julia@gmail.com',
-				name:'Julia Silva',
-				password:'12345',
+				email:"Julia@gmail.com",
+				name:"Julia Silva",
+				password:"12345",
 				photo:null,
-				role: 'user' 
+				role: "user" 
 			}];
 		prismaMock.user.findMany.mockResolvedValue(users);
 		await expect(UserService.getUsers()).resolves.toEqual(users);
@@ -140,7 +139,7 @@ describe('GetUsers', () => {
 
 
 	});
-	test('Tenta listar usuários mas nenhum está cadastrado ==> Lança erro', async () => {
+	test("Tenta listar usuários mas nenhum está cadastrado ==> Lança erro", async () => {
 		prismaMock.user.findMany.mockResolvedValue([]);
 		await expect(UserService.getUsers()).rejects.toThrow(
 			new QueryError("Nenhum usuário cadastrado!")
@@ -150,30 +149,30 @@ describe('GetUsers', () => {
 	});
     
 });
-describe('updateUser', () => {
-	test('Tenta atualizar usuário ==> retorna usuário atualizado', async () => {
+describe("updateUser", () => {
+	test("Tenta atualizar usuário ==> retorna usuário atualizado", async () => {
 
 		const user2={
 			id: 0,
-			email:'Alice2@gmail.com',
-			name:'Alice Silva',
-			password:'12345',
+			email:"Alice2@gmail.com",
+			name:"Alice Silva",
+			password:"12345",
 			photo:null,
-			role: 'user' 
+			role: "user" 
 		};
 		const body={
-			email:'Alice2@gmail.com',
-			name:'Alice Silva', 
+			email:"Alice2@gmail.com",
+			name:"Alice Silva", 
 			photo: user.photo
 		};
 		prismaMock.user.update.mockResolvedValue(user2);
 		await expect(UserService.updateUser(user.id, body)).resolves.toEqual({
 			id: 0,
-			email:'Alice2@gmail.com',
-			name:'Alice Silva',
-			password:'12345',
+			email:"Alice2@gmail.com",
+			name:"Alice Silva",
+			password:"12345",
 			photo:null,
-			role: 'user' 
+			role: "user" 
 		});
 		expect(prismaMock.user.update).toHaveBeenCalledWith({ data: {
 			email: body.email,
@@ -186,13 +185,13 @@ describe('updateUser', () => {
 		}});
 	});
 
-	test('Tenta alterar o ID de um usuário ==> Lança erro', async () => {
+	test("Tenta alterar o ID de um usuário ==> Lança erro", async () => {
 
 
 		const body={
 			id: 3,
-			email:'Alice2@gmail.com',
-			name:'Alice Silva', 
+			email:"Alice2@gmail.com",
+			name:"Alice Silva", 
 			photo: user.photo
 		};
 		prismaMock.user.update.mockRejectedValue(new PermissionError("ID não pode ser alterado!"));
@@ -200,13 +199,13 @@ describe('updateUser', () => {
     
 		expect(prismaMock.user.update).not.toHaveBeenCalled();
 	});
-	test('Tenta alterar o role de um usuário ==> Lança erro', async () => {
+	test("Tenta alterar o role de um usuário ==> Lança erro", async () => {
 
 
 		const body={
-			email:'Alice2@gmail.com',
-			name:'Alice Silva',
-			role:'admin',
+			email:"Alice2@gmail.com",
+			name:"Alice Silva",
+			role:"admin",
 			photo: user.photo
 		};
 		prismaMock.user.update.mockRejectedValue(
@@ -219,8 +218,8 @@ describe('updateUser', () => {
 		expect(prismaMock.user.update).not.toHaveBeenCalled();
 	});
 });
-describe('UpdateUserPassword', () => {
-	test('Atualiza senha com sucesso ==> retorna senha', async () => {
+describe("UpdateUserPassword", () => {
+	test("Atualiza senha com sucesso ==> retorna senha", async () => {
 		const body={
 			password: "123"
 		};
@@ -248,8 +247,8 @@ describe('UpdateUserPassword', () => {
         
 	});
 });
-describe('LinkUserMusic', () => {
-	test('Linka um user com uma musica ==> retorna link', async () => {
+describe("LinkUserMusic", () => {
+	test("Linka um user com uma musica ==> retorna link", async () => {
 
 		prismaMock.user.findUnique.mockResolvedValueOnce(user); 
 		prismaMock.music.findUnique.mockResolvedValueOnce(music);
@@ -270,7 +269,7 @@ describe('LinkUserMusic', () => {
 			select: selectItems
 		});
 	});
-	test('Tenta linkar usuário com música que não exste ==> Lança erro', async () => {
+	test("Tenta linkar usuário com música que não exste ==> Lança erro", async () => {
 		prismaMock.user.findUnique.mockResolvedValueOnce(user);
 		prismaMock.music.findUnique.mockResolvedValueOnce(null);
 		const musicId=9;
@@ -283,7 +282,7 @@ describe('LinkUserMusic', () => {
 		expect(prismaMock.user.update).not.toHaveBeenCalled();
 	});
 
-	test('Tenta linkar música com usuário que não existe ==> Lança erro', async () => {
+	test("Tenta linkar música com usuário que não existe ==> Lança erro", async () => {
 		const userId=9;
 		prismaMock.user.findUnique.mockResolvedValueOnce(null);
 		prismaMock.music.findUnique.mockResolvedValueOnce(music);
@@ -294,8 +293,8 @@ describe('LinkUserMusic', () => {
 		expect(prismaMock.user.update).not.toHaveBeenCalled();
 	});
 });
-describe('UnlinkUserMusic', () => {
-	test('Remove relacionamento user e music ==> retorna user.', async () => {
+describe("UnlinkUserMusic", () => {
+	test("Remove relacionamento user e music ==> retorna user.", async () => {
 		prismaMock.user.findUnique.mockResolvedValueOnce(user); 
 		prismaMock.music.findUnique.mockResolvedValueOnce(music);
 		prismaMock.user.update.mockResolvedValue(user);
@@ -315,7 +314,7 @@ describe('UnlinkUserMusic', () => {
 			select: selectItems
 		});
 	});
-	test('Tenta remover relacionamento de usuário com música que não existe ==> Lança erro', async () => {
+	test("Tenta remover relacionamento de usuário com música que não existe ==> Lança erro", async () => {
 		prismaMock.user.findUnique.mockResolvedValueOnce(user);
 		prismaMock.music.findUnique.mockResolvedValueOnce(null);
 		const musicId=9;
@@ -327,7 +326,7 @@ describe('UnlinkUserMusic', () => {
 		expect(prismaMock.user.update).not.toHaveBeenCalled();
 	});
 
-	test('Tenta remover relacionamento de música com usuário que não exste ==> Lança erro', async () => {
+	test("Tenta remover relacionamento de música com usuário que não exste ==> Lança erro", async () => {
 		const userId=9;
 		prismaMock.user.findUnique.mockResolvedValueOnce(null);
 		prismaMock.music.findUnique.mockResolvedValueOnce(music);
@@ -338,8 +337,8 @@ describe('UnlinkUserMusic', () => {
 		expect(prismaMock.user.update).not.toHaveBeenCalled();
 	});
 });
-describe('listenedMusics', () => {
-	test('Tenta listar músicas de um usuário que não existe ==> Lança erro', async () => {
+describe("listenedMusics", () => {
+	test("Tenta listar músicas de um usuário que não existe ==> Lança erro", async () => {
 		const userId=9;
 		prismaMock.user.findUnique.mockResolvedValueOnce(null);
 		await expect(UserService.listenedMusics(userId)).rejects.toThrow(
@@ -348,7 +347,7 @@ describe('listenedMusics', () => {
 		expect(prismaMock.user.findUnique).toHaveBeenCalledWith({where:{id: userId}});
 		expect(prismaMock.user.findFirst).not.toHaveBeenCalled();
 	});
-	test('Lista músicas ouvidas por um usuário ==> Retorna músicas', async () => {
+	test("Lista músicas ouvidas por um usuário ==> Retorna músicas", async () => {
 		prismaMock.user.findUnique.mockResolvedValueOnce(user);
 		prismaMock.user.findFirst.mockResolvedValue(user);
 		const listenedMusics= await UserService.listenedMusics(user.id);
@@ -364,8 +363,8 @@ describe('listenedMusics', () => {
 		});
 	});});
 
-describe('deleteUser', () => {
-	test('A conta do usuário é deletada com sucesso ==> Retorna user', async () => {
+describe("deleteUser", () => {
+	test("A conta do usuário é deletada com sucesso ==> Retorna user", async () => {
 		prismaMock.user.findUnique.mockResolvedValue(user3);
 		prismaMock.user.delete.mockResolvedValue(user3);
 		const retorno = await UserService.delete(user3.id);
@@ -373,7 +372,7 @@ describe('deleteUser', () => {
 		expect(prismaMock.user.findUnique).toHaveBeenCalledWith({where:{id: user3.id}});
 
 	});
-	test('Tenta deletar usuário que não existe ==> Lança erro', async () => {
+	test("Tenta deletar usuário que não existe ==> Lança erro", async () => {
 		prismaMock.user.findUnique.mockResolvedValue(null);
 		const userID=9;    
 		await expect(UserService.delete(userID)).rejects.toThrow(

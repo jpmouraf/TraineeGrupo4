@@ -69,7 +69,8 @@ test("o número de streams deve ser um número inteiro ==> lança exceção", as
 		id: 1,
 		name: "cantor",
 		photo: null,
-		streams: "mil"
+
+		streams: 1000
 	};
 
 	await expect(ArtistService.create(artist)).rejects.toThrow(

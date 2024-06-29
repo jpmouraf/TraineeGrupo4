@@ -5,9 +5,6 @@ import { InvalidParamError } from "../../../../errors/InvalidParamError";
 import { PermissionError } from "../../../../errors/PermissionError";
 
 
-
-
-
 class MusicService {
 	async create(body: Music) {
 
@@ -48,6 +45,10 @@ class MusicService {
 	}
 
 	async getMusicbyId(wantedId: number) {
+
+		if(typeof wantedId != "number" || !wantedId){
+			throw new InvalidParamError("Você deve indicar o ID da música!");
+		}
 	
 		const music = await prisma.music.findFirst({
 			where: {
@@ -78,6 +79,10 @@ class MusicService {
 	}
 
 	async updateMusic(id: number, body: Partial<Music>) {
+
+		if(typeof id != "number" || !id){
+			throw new InvalidParamError("Você deve indicar o ID da música!");
+		}
 		if ((typeof body.name !== "string" &&  typeof body.name !== "undefined")){
 			throw new InvalidParamError("O nome inseridos está em um formato inválido!");
 		}
@@ -121,6 +126,10 @@ class MusicService {
 
 	async delete(wantedId: number) 
 	{
+		if(typeof wantedId != "number" || !wantedId){
+			throw new InvalidParamError("Você deve indicar o ID da música!");
+		}
+		
 		const checkMusic = await prisma.music.findUnique({
 			where: {
 				id: wantedId
@@ -134,7 +143,5 @@ class MusicService {
 		return music;
 	}
 }
-
-//commit
 
 export default new MusicService();
