@@ -1,12 +1,11 @@
-/* eslint-disable quotes */
-import dotenv from 'dotenv';
-import express, { Express } from 'express';
-import cors, { CorsOptions } from 'cors';
+import dotenv from "dotenv";
+import express, { Express } from "express";
+import cors, { CorsOptions } from "cors";
 import UserRouter from "../src/domains/User/controllers";
 import AdminRouter from "../src/domains/Admin/controllers";
 import ArtistRouter from "../src/domains/Artist/controllers";
 import MusicRouter from "../src/domains/Music/controllers";
-import cookieParser = require('cookie-parser');
+import cookieParser = require("cookie-parser");
 
 dotenv.config();
 

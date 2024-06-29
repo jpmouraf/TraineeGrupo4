@@ -1,5 +1,3 @@
-/* eslint-disable no-mixed-spaces-and-tabs */
-/* eslint-disable no-unexpected-multiline */
 import prisma from "../../../../config/prismaClient";
 import { User } from "@prisma/client";
 import {selectItems} from "./excludeAttributes";
@@ -31,11 +29,11 @@ class UserService {
 		}
 
 		if(body.name == null) {
-		    throw new InvalidParamError("nome não informado!");
+			throw new InvalidParamError("nome não informado!");
 		}
 
 		if(body.password == null) {
-		    throw new InvalidParamError("senha não informada!");
+			throw new InvalidParamError("senha não informada!");
 		}
 
 		if(!emailRegex.test(body.email)) {
@@ -43,8 +41,7 @@ class UserService {
 		}
 
 		const encrypted = await this.encryptPassword(body.password);
-		const user = await prisma.user.create
-		({
+		const user = await prisma.user.create({
 			data: {
 				email: body.email,
 				name: body.name,
@@ -58,6 +55,11 @@ class UserService {
 
 
 	async getUserbyId(wantedId: number) {
+
+		if(typeof wantedId != "number" || !wantedId){
+			throw new InvalidParamError("Você deve indicar o ID do usuário!");
+		}
+
 		const user = await prisma.user.findFirst({
 			where: {
 				id: wantedId,
@@ -66,7 +68,7 @@ class UserService {
 		});
 
 		if(!user) {
-		    throw new QueryError("Usuário não cadastrado!");
+			throw new QueryError("Usuário não cadastrado!");
 		}
 		return user;
 	}
@@ -80,12 +82,17 @@ class UserService {
 		});
 
 		if(users.length==0) {
-		    throw new QueryError("Nenhum usuário cadastrado!");
+			throw new QueryError("Nenhum usuário cadastrado!");
 		}
 		return users;
 	}
 
 	async updateUser(id: number, body: Partial<User>) {
+
+		if(typeof id != "number" || !id){
+			throw new InvalidParamError("Você deve indicar o ID do usuário!");
+		}
+
 		if(body.id !== undefined || body.id == 0) {
 			throw new PermissionError("ID não pode ser alterado!");
 		}
@@ -131,7 +138,7 @@ class UserService {
 
 	async updateUserPassword(id: number, body: Partial<User>) {
 		if(body.password == null || typeof body.password !== "string") {
-		    throw new InvalidParamError("Formato de senha inválido!");
+			throw new InvalidParamError("Formato de senha inválido!");
 		}
 
 		const encrypted = await this.encryptPassword(body.password);
@@ -147,24 +154,33 @@ class UserService {
 	}
 
 	async linkMusic(idUser: number, idMusic: number) {
+
+		if(typeof idUser != "number" || !idUser){
+			throw new InvalidParamError("Você deve indicar o ID do usuário!");
+		}
+
+		if(typeof idMusic != "number" || !idMusic){
+			throw new InvalidParamError("Você deve indicar o ID da música!");
+		}
+
 		const checkUser = await prisma.user.findUnique({
-		    where: {
-		        id: idUser,
-		    }
+			where: {
+				id: idUser,
+			}
 		});
 
 		if(!checkUser) {
-		    throw new QueryError("Usuário não encontrado!");
+			throw new QueryError("Usuário não encontrado!");
 		}
 
 		const checkMusic = await prisma.music.findUnique({
-		    where: {
-		        id: idMusic,
-		    }
+			where: {
+				id: idMusic,
+			}
 		});
 
 		if(!checkMusic) {
-		    throw new QueryError("Música não encontrada!");
+			throw new QueryError("Música não encontrada!");
 		}
 
 		const link = await prisma.user.update({
@@ -184,24 +200,33 @@ class UserService {
 	}
 
 	async unlinkMusic(idUser: number, idMusic: number) {
+
+		if(typeof idUser != "number" || !idUser){
+			throw new InvalidParamError("Você deve indicar o ID do usuário!");
+		}
+
+		if(typeof idMusic != "number" || !idMusic){
+			throw new InvalidParamError("Você deve indicar o ID da música!");
+		}
+
 		const checkUser = await prisma.user.findUnique({
-		    where: {
-		        id: idUser,
-		    }
+			where: {
+				id: idUser,
+			}
 		});
 
 		if(!checkUser) {
-		    throw new QueryError("Usuário não encontrado!");
+			throw new QueryError("Usuário não encontrado!");
 		}
 
 		const checkMusic = await prisma.music.findUnique({
-		    where: {
-		        id: idMusic,
-		    }
+			where: {
+				id: idMusic,
+			}
 		});
 
 		if(!checkMusic) {
-		    throw new QueryError("Música não encontrada!");
+			throw new QueryError("Música não encontrada!");
 		}
 
 		const unlink = await prisma.user.update({
@@ -222,27 +247,32 @@ class UserService {
 
 	async listenedMusics(wantedId: number) {
 		const checkUser = await prisma.user.findUnique({
-		    where: {
-		        id: wantedId,
-		    }
+			where: {
+				id: wantedId,
+			}
 		});
 
 		if(!checkUser) {
-		    throw new QueryError("Usuário não encontrado!");
+			throw new QueryError("Usuário não encontrado!");
 		}
 
 		const listened = await prisma.user.findFirst({
-		    where: {
+			where: {
 				id: wantedId,
 			},
 			select: {
-			    music: true
+				music: true
 			}
 		});
 		return listened;
 	}
 
 	async delete(wantedId: number) {
+
+		if(typeof wantedId != "number" || !wantedId){
+			throw new InvalidParamError("Você deve indicar o ID do usuário!");
+		}
+
 		const checkUser = await prisma.user.findUnique({
 			where: {
 				id: wantedId,
@@ -250,7 +280,7 @@ class UserService {
 		});
 
 		if(!checkUser) {
-		    throw new QueryError("Usuário que deseja deletar não está cadastrado!");
+			throw new QueryError("Usuário que deseja deletar não está cadastrado!");
 		}
 		const user = await prisma.user.delete({ where: {id: wantedId}});
 		return user;

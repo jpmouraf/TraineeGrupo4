@@ -1,4 +1,3 @@
-/* eslint-disable no-mixed-spaces-and-tabs */
 import prisma from "../../../../config/prismaClient";
 import { User } from "@prisma/client";
 import bcrypt from "bcrypt";
@@ -16,6 +15,9 @@ class AdminService {
 
 	async updateAdmin(id: number, body: Partial<User>) {
 
+		if(typeof id != "number" || !id){
+			throw new InvalidParamError("Você deve indicar o ID do usuário!");
+		}
 
 		if ((typeof body.name !== "string" &&  typeof body.name !== "undefined") ){
 			throw new InvalidParamError("Os nome inserido é inválido!");

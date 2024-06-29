@@ -1,4 +1,3 @@
-/* eslint-disable quotes */
 import { prismaMock } from "../../../../config/singleton";
 import { InvalidParamError } from "../../../../errors/InvalidParamError";
 import { QueryError } from "../../../../errors/QueryError";
@@ -17,11 +16,11 @@ const admin = {
 
 const user = {
 	id: 0,
-	name: 'usuário',
-	email: 'user@gmail.com',
-	password: '12345', 
+	name: "usuário",
+	email: "user@gmail.com",
+	password: "12345", 
 	photo: null,
-	role: 'user'
+	role: "user"
 };
 
 
@@ -104,8 +103,8 @@ describe("updateAdmin", () => {
 });
 
 
-describe('UpdateAdminPassword', () => {
-	test('Atualiza senha com sucesso ==> retorna senha', async () => {
+describe("UpdateAdminPassword", () => {
+	test("Atualiza senha com sucesso ==> retorna senha", async () => {
 
 		const body={
 			password: "123"
@@ -133,7 +132,7 @@ describe('UpdateAdminPassword', () => {
 		});
 		expect(prismaMock.user.findUnique).toHaveBeenCalledWith({where:{id: admin.id}});
 	});      
-	test('Tenta atualizar a senha de um usuário inexistente ==> Lança erro ', async () => {
+	test("Tenta atualizar a senha de um usuário inexistente ==> Lança erro ", async () => {
 		prismaMock.user.findUnique.mockResolvedValue(null);
 		const userID=9;
 		const body={
@@ -149,23 +148,23 @@ describe('UpdateAdminPassword', () => {
 
 });
 
-describe('createByAdmin' , () => {
-	test('Admin cria um usuário com sucesso ==> retorna o usuário cadastrado', async () => {
+describe("createByAdmin" , () => {
+	test("Admin cria um usuário com sucesso ==> retorna o usuário cadastrado", async () => {
 		prismaMock.user.create.mockResolvedValue(user);
 
 		await expect(AdminService.createByAdmin(user)).resolves.toEqual(user);
 	});
 
-	test('Tenta cria um usuário com um email já cadastrado ==> gera erro', async () => {
+	test("Tenta cria um usuário com um email já cadastrado ==> gera erro", async () => {
 		prismaMock.user.findUnique.mockResolvedValue(user);
 
 		const newUser = {
 			id: 0,
-			name: 'usuário2',
-			email: 'user@gmail.com',
-			password: '12345', 
+			name: "usuário2",
+			email: "user@gmail.com",
+			password: "12345", 
 			photo: null,
-			role: 'user'
+			role: "user"
 		};
 
 		prismaMock.user.create.mockRejectedValue(new QueryError("Email já cadastrado.."));
@@ -175,13 +174,13 @@ describe('createByAdmin' , () => {
 		);
 	});
 
-	test('admin informa a senha em um formato errado ==> gera erro', async () => {
+	test("admin informa a senha em um formato errado ==> gera erro", async () => {
 		const user2 : Any = {
-			name: 'usuário',
-			email: 'user@gmail.com',
+			name: "usuário",
+			email: "user@gmail.com",
 			password: 12345, 
 			photo: null,
-			role: 'user'
+			role: "user"
 		};
 
 		prismaMock.user.create.mockResolvedValue(user2);
@@ -191,14 +190,14 @@ describe('createByAdmin' , () => {
 		);
 	});
 
-	test('admin informa o email em um formato errado ==> gera erro', async () => {
+	test("admin informa o email em um formato errado ==> gera erro", async () => {
 		const user2 = {
 			id: 0,
-			name: 'usuário',
-			email: 'user.email',
-			password: '12345', 
+			name: "usuário",
+			email: "user.email",
+			password: "12345", 
 			photo: null,
-			role: 'user'
+			role: "user"
 		};
 
 		prismaMock.user.create.mockResolvedValue(user2);
@@ -208,14 +207,14 @@ describe('createByAdmin' , () => {
 		);
 	});
 
-	test('admin informa uma role em um formato errado ==> gera erro' , async () => {
+	test("admin informa uma role em um formato errado ==> gera erro" , async () => {
 		const user2 = {
 			id: 0,
-			name: 'usuário',
-			email: 'user@gmail.com',
-			password: '12345', 
+			name: "usuário",
+			email: "user@gmail.com",
+			password: "12345", 
 			photo: null,
-			role: 'usuario'
+			role: "usuario"
 		};
 
 		prismaMock.user.create.mockResolvedValue(user2);

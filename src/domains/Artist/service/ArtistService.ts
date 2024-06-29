@@ -1,4 +1,3 @@
-/* eslint-disable no-unexpected-multiline */
 import prisma from "../../../../config/prismaClient";
 import { Artist } from "@prisma/client";
 import { InvalidParamError } from "../../../../errors/InvalidParamError";
@@ -24,8 +23,7 @@ class ArtistService {
 			throw new InvalidParamError("O foto inserida está no formato errado.");
 		}
 
-		const artist = await prisma.artist.create
-		({
+		const artist = await prisma.artist.create({
 			data: {
 				name: body.name,
 				photo: body.photo,
@@ -36,6 +34,10 @@ class ArtistService {
 	}
 
 	async getArtistbyId(wantedId: number) {
+
+		if(typeof wantedId != "number" || !wantedId){
+			throw new InvalidParamError("Você deve indicar o ID do artista!");
+		}
 
 		const artist = await prisma.artist.findFirst({
 			where: {
@@ -67,6 +69,10 @@ class ArtistService {
 	}
 
 	async updateArtist(id: number, body: Artist) {
+
+		if(!id || typeof id != "number"){
+			throw new InvalidParamError("Você deve indicar o ID do artista!");
+		}
 
 		if(body.id){
 			throw new PermissionError("Você não tem autorização para realizar essas mudanças.");
@@ -108,6 +114,10 @@ class ArtistService {
 
 	async delete(wantedId: number) 
 	{
+		if(typeof wantedId != "number" || !wantedId){
+			throw new InvalidParamError("Você deve indicar o ID do artista!");
+		}
+
 		const checkArtist = await prisma.artist.findUnique({
 			where: {
 				id: wantedId,
@@ -123,6 +133,10 @@ class ArtistService {
 	}
 
 	async listArtistMusics(wantedId: number) {
+
+		if(typeof wantedId != "number" || !wantedId){
+			throw new InvalidParamError("Você deve indicar o ID do artista!");
+		}
 
 		const checkArtist = await prisma.artist.findUnique({
 			where: {
