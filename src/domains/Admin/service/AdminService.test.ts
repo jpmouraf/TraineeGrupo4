@@ -175,7 +175,7 @@ describe("createByAdmin" , () => {
 	});
 
 
-	test('admin informa o email em um formato errado ==> gera erro', async () => {
+	test("admin informa o email em um formato errado ==> gera erro", async () => {
 
 		const user2 = {
 			id: 0,
