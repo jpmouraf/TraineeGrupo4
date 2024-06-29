@@ -293,14 +293,14 @@ describe("LinkUserMusic", () => {
 		expect(prismaMock.user.update).not.toHaveBeenCalled();
 	});
 
-	test('Tenta ouvir uma música que já está constada como ouvida ==> Lança erro' , async() => {
+	test("Tenta ouvir uma música que já está constada como ouvida ==> Lança erro" , async() => {
 		prismaMock.user.findUnique.mockResolvedValueOnce(user);
-        prismaMock.music.findUnique.mockResolvedValueOnce(music);
-        prismaMock.user.findFirst.mockResolvedValueOnce(user);
+		prismaMock.music.findUnique.mockResolvedValueOnce(music);
+		prismaMock.user.findFirst.mockResolvedValueOnce(user);
 
-        await expect(UserService.linkMusic(user.id, music.id)).rejects.toThrow(
-            new QueryError("Música já foi ouvida pelo usuário")
-        );
+		await expect(UserService.linkMusic(user.id, music.id)).rejects.toThrow(
+			new QueryError("Música já foi ouvida pelo usuário")
+		);
 	});
 });
 describe("UnlinkUserMusic", () => {
@@ -348,20 +348,20 @@ describe("UnlinkUserMusic", () => {
 		expect(prismaMock.user.update).not.toHaveBeenCalled();
 	});
 
-	test('Tenta desouvir uma música que não foi escutada ==> Lança erro' , async() => {
+	test("Tenta desouvir uma música que não foi escutada ==> Lança erro" , async() => {
 		prismaMock.user.findUnique.mockResolvedValueOnce(user);
-        prismaMock.music.findUnique.mockResolvedValueOnce(music);
-        prismaMock.user.findFirst.mockResolvedValueOnce(null);
+		prismaMock.music.findUnique.mockResolvedValueOnce(music);
+		prismaMock.user.findFirst.mockResolvedValueOnce(null);
 
-        await expect(UserService.unlinkMusic(user.id, music.id)).rejects.toThrow(
-            new QueryError("Música não foi ouvida pelo usuário")
-        );
+		await expect(UserService.unlinkMusic(user.id, music.id)).rejects.toThrow(
+			new QueryError("Música não foi ouvida pelo usuário")
+		);
 	});
 });
 
 
-describe('listenedMusics', () => {
-	test('Tenta listar músicas de um usuário que não existe ==> Lança erro', async () => {
+describe("listenedMusics", () => {
+	test("Tenta listar músicas de um usuário que não existe ==> Lança erro", async () => {
 
 		const userId=9;
 		prismaMock.user.findUnique.mockResolvedValueOnce(null);
