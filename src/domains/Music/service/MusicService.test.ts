@@ -8,7 +8,7 @@ const music = {
 	name: "Nome da Música",
 	genre: "Gênero da Música",
 	album: "Álbum da Música",
-	artistId: 0
+	artistId: 1
 };
 
 const music2 = {
@@ -16,7 +16,7 @@ const music2 = {
 	name: "Nome da Música 2",
 	genre: "Gênero da Música 2",
 	album: "Álbum da Música 2",
-	artistId: 0
+	artistId: 1
 };
 
 const artist = {
