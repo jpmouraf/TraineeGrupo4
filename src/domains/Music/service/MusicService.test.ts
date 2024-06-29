@@ -4,7 +4,7 @@ import { QueryError } from "../../../../errors/QueryError";
 import MusicService from "./MusicService";
 
 const music = {
-	id: 0,
+	id: 2,
 	name: "Nome da Música",
 	genre: "Gênero da Música",
 	album: "Álbum da Música",
@@ -20,7 +20,7 @@ const music2 = {
 };
 
 const artist = {
-	id: 0,
+	id: 1,
 	name: "Nome do Artista",
 	photo: null,
 	streams: 100000
@@ -88,26 +88,26 @@ describe("getMusics", () => {
 describe("updateMusic", () => {
 
 	const updatedMusic = {
-		id: 0,
+		id: 1,
 		name: "Novo Nome Música",
 		genre: "Gênero da Música",
 		album: "Álbum da Música",
-		artistId: 0
+		artistId: 1
 	};
 
 	const body = {
 		name: "Novo Nome Música",
 		genre: "Gênero da Música",
 		album: "Álbum da Música",
-		artistId: 0
+		artistId: 1
 	};
 
 	const bodyId = {
-		id: 0,
+		id: 1,
 		name: "Novo Nome Música",
 		genre: "Gênero da Música",
 		album: "Álbum da Música",
-		artistId: 0
+		artistId: 1
 	};
 
 	test("entrada com os atributos a serem modificados ==> retorno da música com os atributos modificados", async () => {
