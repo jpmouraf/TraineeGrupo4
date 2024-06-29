@@ -173,6 +173,10 @@ class UserService {
 			throw new QueryError("Usuário não encontrado!");
 		}
 
+		if(typeof idMusic != "number") {
+			throw new InvalidParamError("Id da música inválido");
+		}
+
 		const checkMusic = await prisma.music.findUnique({
 			where: {
 				id: idMusic,
@@ -181,6 +185,21 @@ class UserService {
 
 		if(!checkMusic) {
 			throw new QueryError("Música não encontrada!");
+		}
+
+		const checkAlreadyListened = await prisma.user.findFirst({
+			where: {
+				id: idUser,
+				music: {
+					some: {
+						id: idMusic,
+					}
+				}
+			} 
+		});
+
+		if(checkAlreadyListened) {
+			throw new QueryError("Música já foi ouvida pelo usuário");
 		}
 
 		const link = await prisma.user.update({
@@ -219,6 +238,10 @@ class UserService {
 			throw new QueryError("Usuário não encontrado!");
 		}
 
+		if(typeof idMusic != "number") {
+			throw new InvalidParamError("Id da música inválido");
+		}
+
 		const checkMusic = await prisma.music.findUnique({
 			where: {
 				id: idMusic,
@@ -227,6 +250,21 @@ class UserService {
 
 		if(!checkMusic) {
 			throw new QueryError("Música não encontrada!");
+		}
+
+		const checkAlreadyListened = await prisma.user.findFirst({
+			where: {
+				id: idUser,
+				music: {
+					some: {
+						id: idMusic,
+					}
+				}
+			} 
+		});
+
+		if(!checkAlreadyListened) {
+			throw new QueryError("Música não foi ouvida pelo usuário");
 		}
 
 		const unlink = await prisma.user.update({
